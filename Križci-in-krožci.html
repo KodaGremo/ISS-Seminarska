@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Križci in krožci - Tic-Tac-Toe</title>
+  <title>Križci in krožci</title>
   <style>
+    /* Splošne nastavitve za centriranje in estetiko */
     body {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f4f4f9;
       color: #333;
@@ -19,12 +21,16 @@
       text-align: center;
       max-width: 400px;
       margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
     }
 
+    /* Stil za igralno ploščo */
     #board {
       display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
+      grid-template-columns: repeat(3, 1fr);
       gap: 5px;
       margin: 20px auto;
     }
@@ -37,20 +43,37 @@
       align-items: center;
       font-size: 2em;
       background-color: #ecf0f1;
+      border-radius: 4px;
       cursor: pointer;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    #result, #mode-selection, #controls {
-      margin-top: 10px;
-    }
-
-    #mode-selection button, #controls button {
-      margin: 5px;
-      padding: 10px 20px;
+    /* Stil za gumbe in vnose */
+    #mode-selection button,
+    #controls button,
+    #mode-selection input,
+    #mode-selection select {
+      margin: 10px 0;
+      padding: 10px 15px;
       font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       cursor: pointer;
+      display: inline-block;
     }
 
+    #mode-selection button:hover,
+    #controls button:hover {
+      background-color: #f0f0f0;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Skriti elementi */
     .hidden {
       display: none;
     }
@@ -61,37 +84,39 @@
 <div id="game-container">
   <h1>Križci in krožci</h1>
 
+  <!-- Vnosi za imena igralcev in AI -->
   <div id="mode-selection">
     <label>
       Ime igralca 1: 
-      <input type="text" id="player1-name" placeholder="Igralec 1" value="Player 1">
+      <input type="text" id="player1-name" placeholder="Igralec 1" value="Igralec 1">
     </label>
     <br>
     <label>
       Ime igralca 2 / AI: 
-      <input type="text" id="player2-name" placeholder="Igralec 2 / AI" value="Player 2">
+      <input type="text" id="player2-name" placeholder="Igralec 2 / AI" value="Igralec 2">
     </label>
     <br>
     <label>
-      Stopnja AI težavnosti:
+      Stopnja težavnosti AI:
       <select id="ai-difficulty">
-        <option value="easy">Enostavno</option>
-        <option value="normal">Normalno</option>
-        <option value="hard">Težko</option>
+        <option value="easy">Enostavna</option>
+        <option value="normal">Normalna</option>
+        <option value="hard">Težka</option>
       </select>
     </label>
     <br>
-    <button onclick="startGame('PvP')">Player vs Player</button>
-    <button onclick="startGame('PvAI')">Player vs AI</button>
+    <button onclick="startGame('PvP')">Igralec proti igralcu</button>
+    <button onclick="startGame('PvAI')">Igralec proti AI</button>
   </div>
 
+  <!-- Igralna plošča -->
   <div id="board" class="hidden"></div>
   <div id="result"></div>
 
-  <!-- Kontrole za Ponovni začetek, Novo igro in Domov -->
+  <!-- Kontrole igre -->
   <div id="controls" class="hidden">
     <button onclick="resetGame()">Ponovni začetek</button>
-    <button onclick="showStartScreen()">Novo igro</button>
+    <button onclick="showStartScreen()">Nova igra</button>
     <a href="index.html"><button>Domov</button></a>
   </div>
 </div>
@@ -107,10 +132,11 @@
 
   let board, currentPlayer, gameMode, player1, player2;
 
+  // Začetek igre
   function startGame(mode) {
     gameMode = mode;
-    player1 = player1NameInput.value || "Player 1";
-    player2 = mode === "PvP" ? (player2NameInput.value || "Player 2") : (player2NameInput.value || "AI");
+    player1 = player1NameInput.value || "Igralec 1";
+    player2 = mode === "PvP" ? (player2NameInput.value || "Igralec 2") : "AI";
     currentPlayer = "X";
     board = ["", "", "", "", "", "", "", "", ""];
     resultElement.innerHTML = "";
@@ -120,6 +146,7 @@
     renderBoard();
   }
 
+  // Prikaži igralno ploščo
   function renderBoard() {
     boardElement.innerHTML = "";
     board.forEach((cell, index) => {
@@ -131,6 +158,7 @@
     });
   }
 
+  // Premik igralca
   function makeMove(index) {
     if (board[index] || resultElement.textContent) return;
 
@@ -154,6 +182,7 @@
     }
   }
 
+  // Premik AI
   function makeAIMove() {
     const difficulty = aiDifficultySelect.value;
     let move;
@@ -175,6 +204,7 @@
     }
   }
 
+  // Pomožne funkcije za AI in preverjanje zmage
   function getRandomMove() {
     const emptyCells = board.map((cell, index) => cell === "" ? index : null).filter(index => index !== null);
     return emptyCells[Math.floor(Math.random() * emptyCells.length)];
