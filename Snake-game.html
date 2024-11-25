@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #2c3e50;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    #gameCanvas {
+      background-color: #34495e;
+      border: 2px solid #ecf0f1;
+      display: none; /* Skrito dokler se igra ne začne */
+    }
+
+    #score {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    #startButton {
+      padding: 10px 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #2c3e50;
+      background-color: #ecf0f1;
+      border: none;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    #startButton:hover {
+      background-color: #bdc3c7;
+    }
+
+    /* Modalno okno za konec igre */
+    #gameOverModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    #modalContent {
+      background-color: #ecf0f1;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      color: #2c3e50;
+      width: 300px;
+    }
+
+    .modalButton {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: #2c3e50;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    #resetButton {
+      background-color: #2ecc71;
+    }
+
+    #homeButton {
+      background-color: #e74c3c;
+    }
+
+    .modalButton:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+<h1 id="score">Score: 0</h1>
+<canvas id="gameCanvas" width="400" height="400"></canvas>
+<button id="startButton">Start Game</button>
+
+<!-- Modalno okno za konec igre -->
+<div id="gameOverModal">
+  <div id="modalContent">
+    <h2>Game Over</h2>
+    <p>Your score: <span id="finalScore"></span></p>
+    <button id="resetButton" class="modalButton">Reset</button>
+    <a href="index.html" id="homeButton" class="modalButton">Home</a>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const startButton = document.getElementById("startButton");
+  const scoreDisplay = document.getElementById("score");
+  const gameOverModal = document.getElementById("gameOverModal");
+  const finalScore = document.getElementById("finalScore");
+  const resetButton = document.getElementById("resetButton");
+
+  // Nastavitve igre
+  const boxSize = 20;
+  const totalBoxes = (canvas.width * canvas.height) / (boxSize * boxSize);
+
+  // Nastavitve kače
+  let snake = [{ x: 9 * boxSize, y: 9 * boxSize }];
+  let direction = "RIGHT";
+  let score = 0;
+  let game;
+
+  // Položaj hrane
+  let food = {
+    x: Math.floor(Math.random() * (canvas.width / boxSize)) * boxSize,
+    y: Math.floor(Math.random() * (canvas.height / boxSize)) * boxSize
+  };
+
+  // Funkcija za risanje igre
+  function drawGame() {
+    // Počisti platno
+    ctx.fillStyle = "#34495e";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Nariši kačo
+    for (let i = 0; i < snake.length; i++) {
+      ctx.fillStyle = i === 0 ? "#2ecc71" : "#27ae60";
+      ctx.fillRect(snake[i].x, snake[i].y, boxSize, boxSize);
+    }
+
+    // Nariši hrano
+    ctx.fillStyle = "#e74c3c";
+    ctx.fillRect(food.x, food.y, boxSize, boxSize);
+
+    // Posodobi položaj kače
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    // Premik kače v izbrano smer
+    if (direction === "LEFT") snakeX -= boxSize;
+    if (direction === "UP") snakeY -= boxSize;
+    if (direction === "RIGHT") snakeX += boxSize;
+    if (direction === "DOWN") snakeY += boxSize;
+
+    // Preveri, če kača poje hrano
+    if (snakeX === food.x && snakeY === food.y) {
+      score++;
+      scoreDisplay.innerText = "Score: " + score;
+
+      // Ustvari novo pozicijo hrane
+      food = {
+        x: Math.floor(Math.random() * (canvas.width / boxSize)) * boxSize,
+        y: Math.floor(Math.random() * (canvas.height / boxSize)) * boxSize
+      };
+    } else {
+      // Odstrani zadnji del kače, če ni hrane
+      snake.pop();
+    }
+
+    // Nova pozicija glave kače
+    let newHead = { x: snakeX, y: snakeY };
+
+    // Preveri trke
+    if (
+      snakeX < 0 || snakeY < 0 || 
+      snakeX >= canvas.width || snakeY >= canvas.height || 
+      collision(newHead, snake)
+    ) {
+      clearInterval(game);
+      showEndDialog();
+      return;
+    }
+
+    // Dodaj novo glavo kače
+    snake.unshift(newHead);
+
+    // Preveri, če je kača pojedla vso hrano
+    if (snake.length === totalBoxes) {
+      clearInterval(game);
+      alert("Congratulations! You've won!");
+    }
+  }
+
+  // Funkcija za zaznavanje trka
+  function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+      if (head.x === array[i].x && head.y === array[i].y) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Nadzor kače s puščicami
+  document.addEventListener("keydown", directionChange);
+
+  function directionChange(event) {
+    if (event.key === "ArrowLeft" && direction !== "RIGHT") {
+      direction = "LEFT";
+    } else if (event.key === "ArrowUp" && direction !== "DOWN") {
+      direction = "UP";
+    } else if (event.key === "ArrowRight" && direction !== "LEFT") {
+      direction = "RIGHT";
+    } else if (event.key === "ArrowDown" && direction !== "UP") {
+      direction = "DOWN";
+    }
+  }
+
+  // Začni igro ob kliku na gumb
+  startButton.addEventListener("click", startGame);
+
+  function startGame() {
+    score = 0;
+    snake = [{ x: 9 * boxSize, y: 9 * boxSize }];
+    direction = "RIGHT";
+    food = {
+      x: Math.floor(Math.random() * (canvas.width / boxSize)) * boxSize,
+      y: Math.floor(Math.random() * (canvas.height / boxSize)) * boxSize
+    };
+    scoreDisplay.innerText = "Score: 0";
+    canvas.style.display = "block";
+    startButton.style.display = "none";
+    gameOverModal.style.display = "none";
+    game = setInterval(drawGame, 100);
+  }
+
+  // Pokaži modalno okno ob koncu igre
+  function showEndDialog() {
+    finalScore.innerText = score;
+    gameOverModal.style.display = "flex";
+  }
+
+  // Gumb Reset za ponovni začetek igre
+  resetButton.addEventListener("click", startGame);
+</script>
+
+</body>
+</html>
