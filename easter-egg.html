@@ -17,7 +17,7 @@
             cursor: pointer;
         }
 
-        /* Slog za telo in video ozadje */
+        
         body, html {
             margin: 0;
             padding: 0;
@@ -36,7 +36,7 @@
             z-index: -1;
         }
 
-        /* Slog za osrednjo vsebino z obrobo in prosojnim ozadjem */
+        /* Slog za da da vso besedilo na sredino in naredi bolj vidlivo ozadje za basedilo  vsebino  */
         .content {
             position: relative;
             text-align: center;
@@ -47,7 +47,7 @@
             background-color: rgba(255, 255, 255, 0.8); /* Belo ozadje z rahlo prosojnostjo */
             border: 2px solid white; /* Bela obroba */
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Senčenje za boljšo vidljivost */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Senčenje videa za boljšo vidljivost besedilo */
             max-width: 80%;
             margin: auto;
         }
@@ -71,7 +71,7 @@
     </video>
 
     <script>
-        // Seznam pogojev
+        // Seznam mojih težav
         const vse_kaj_sem_dobil = [
             "Acne", "AIDS", "Allergies", "Alice in Wonderland Syndrome (AIWS)", "Alzheimer's disease",
             "Anal abscesses", "Anal Cancer", "Anal Itching", "Anal Tear", "Anxiety disorders", "Arthritis",
@@ -114,7 +114,7 @@
             if (!videoSwitched) {
                 videoElement.querySelector("source").src = "C:/Users/samir/Desktop/mapa_za_html_vaje/Computer breaking Meme.mp4";
                 videoElement.load();
-                videoSwitched = true; // Označimo, da je video zamenjan
+                videoSwitched = true; // Označimo, da je video zamenjan in ga nena spremini nazaj na videjo 1
             }
 
             // Naključna izbira pogojev (min 3, max 9)
@@ -136,7 +136,7 @@
             });
         }
 
-        // Funkcija za naključno barvo
+        // Funkcija za naključno barvo texta
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
