@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Po ustvarjanju tega ♥♥♥♥♥♥♥♥  HTML-ja imam zdaj....</title>
+    <style>
+        /* Slog za gumb */
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 50px;
+            margin: 20px auto;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Slog za telo in video ozadje */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            color: white;
+        }
+
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Slog za osrednjo vsebino z obrobo in prosojnim ozadjem */
+        .content {
+            position: relative;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Belo ozadje z rahlo prosojnostjo */
+            border: 2px solid white; /* Bela obroba */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Senčenje za boljšo vidljivost */
+            max-width: 80%;
+            margin: auto;
+        }
+
+        #randomConditionsDisplay {
+            font-size: 30px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1 style="color: brown;">Po ustvarjanju tega ♥♥♥♥♥♥♥♥  HTML-ja imam zdaj....</h1>
+        <button onclick="switchVideo()">Kaj sem dobil</button>
+        <div id="randomConditionsDisplay"></div>
+    </div>
+
+    <!-- Ozadni video -->
+    <video id="backgroundVideo" class="background-video" autoplay loop muted>
+        <source src="C:/Users/samir/Desktop/mapa_za_html_vaje/10130349-hd_1920_1080_30fps.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        // Seznam pogojev
+        const vse_kaj_sem_dobil = [
+            "Acne", "AIDS", "Allergies", "Alice in Wonderland Syndrome (AIWS)", "Alzheimer's disease",
+            "Anal abscesses", "Anal Cancer", "Anal Itching", "Anal Tear", "Anxiety disorders", "Arthritis",
+            "Asthma", "Astigmatism", "Autism", "Autoimmune diseases", "Auto-Brewery syndrome",
+            "Attention deficit hyperactivity disorder (ADHD)", "Autistic spectrum disorder (ASD)", "Asbestosis",
+            "Bad breath", "Bacterial vaginosis", "Benign prostate hyperplasia (BPH)", "Bipolar disorder",
+            "Body odors", "Bone cancer", "Bone placement disorder", "Bowel cancer", "Bloating", "Brain cancer",
+            "Brain damage", "Brain tumors", "Bronchitis", "Breast cancer", "Candidiasis", "Cataracts",
+            "Carpal tunnel syndrome", "Changes in bowel movements", "Celiac disease", "Cervical cancer",
+            "Chest infection", "Chest pain", "Chicken pox", "Chlamydia", "Chronic fatigue syndrome (CFS)",
+            "Chronic illness", "Cold sores", "Colon cancer", "Coma", "Congenital Insensitivity to Pain",
+            "Conjunctivitis", "Constipation", "Common cold", "COPD", "Cough", "Crippling depression",
+            "Crohn's disease", "Corona Virus", "Cystic fibrosis", "Dehydration", "Dementia", "Dementia","Dementia","Dementia", "Diabetes",
+            "Diarrhea", "Depression", "Down syndrome", "Dry mouth", "Earache", "Eating disorders", "Ebola",
+            "Eczema", "Endometriosis", "Epilepsy", "Erectile dysfunction", "Eye cancer", "Eye disorders",
+            "Fatigue", "Fibroids", "Fibromyalgia", "Foreign Accent Syndrome", "Farting", "Flu", "Food poisoning",
+            "Fungal nail infection", "Gallbladder cancer", "Gallstones", "Genital herpes","Dementia", "Gonorrhea",
+            "Gum disease", "Graves' disease", "Hallucinations", "Hashimoto's thyroiditis", "Hay fever",
+            "Hearing loss", "Hepatitis A, B, C, D and E", "Herpes", "High cholesterol", "HIV", "Hodgkin's disease",
+            "Human Werewolf Syndrome", "Hutchinson-Gilford Progeria Syndrome", "HPV","Dementia","Hypertension",
+            "Immediate bowel syndrome", "Indigestion", "Ingrown toenail", "Itching", "Itchy bottom",
+            "Joint abnormalities", "Kidney cancer", "Kidney infection", "Kidney stones", "Dementia", "Leg cramps",
+            "Liver cancer", "Liver disease", "Lung cancer", "Measles", "Mesothelioma", "Mouth cancer",
+            "Nasal and sinus cancer", "Nosebleed", "Obesity", "Osteoporosis", "Old man syndrome",
+            "Pancreatic cancer", "Panic disorder", "Parkinson's disease", "Personality disorder",
+            "Persistent Sexual Arousal Syndrome", "Prostate cancer", "Radiation poisoning", "Reactive arthritis",
+            "Restless legs syndrome", "Walking Corpse Syndrome", "Shingles","Dementia", "Shortness of breath",
+            "Skin cancer", "Sore throat", "Sugar cravings", "Sunburn", "Stiff Person Syndrome",
+            "Stoneman Syndrome", "Stomach cancer", "Stroke", "Sexually transmitted diseases (STDs)",
+            "Toenail fungus", "Tuberculosis", "T-posing syndrome", "Urinary tract infection",
+            "Vomit disorder", "Whooping cough", "Yellow fever", "Yeast Infection"
+        ];
+
+        let videoSwitched = false; // Spremenljivka za preverjanje stanja videa
+
+        function switchVideo() {
+            const videoElement = document.getElementById("backgroundVideo");
+
+            // Zamenjava videa samo enkrat
+            if (!videoSwitched) {
+                videoElement.querySelector("source").src = "C:/Users/samir/Desktop/mapa_za_html_vaje/Computer breaking Meme.mp4";
+                videoElement.load();
+                videoSwitched = true; // Označimo, da je video zamenjan
+            }
+
+            // Naključna izbira pogojev (min 3, max 9)
+            const minConditions = 3;
+            const maxConditions = 9;
+            const numConditions = Math.floor(Math.random() * (maxConditions - minConditions + 1)) + minConditions;
+            const randomConditions = vse_kaj_sem_dobil.sort(() => 0.5 - Math.random()).slice(0, numConditions);
+
+            // Prikaz naključnih pogojev z naključnimi barvami
+            const randomConditionsDisplay = document.getElementById("randomConditionsDisplay");
+            randomConditionsDisplay.innerHTML = ""; // Počistimo prejšnje pogoje
+            randomConditions.forEach(condition => {
+                const conditionElement = document.createElement("span");
+                const randomColor = getRandomColor();
+                conditionElement.textContent = condition;
+                conditionElement.style.color = randomColor;
+                conditionElement.style.display = "block";
+                randomConditionsDisplay.appendChild(conditionElement);
+            });
+        }
+
+        // Funkcija za naključno barvo
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+<footer>
+</footer>
+</html>
