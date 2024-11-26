@@ -1,175 +1,120 @@
-/* Slog za osnovno postavitev 
-   - Tukaj sem nastavil poravnavo elementov na sredino
-   - Dodal sem slovensko zastavo kot ozadje
-   - Poskrbel sem za enoten izgled pisave in barv
-*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
-    background-image: url('slike-video-itd/eu-flag-clipart-xl.png');
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
-    font-size: 23px;
-    margin: 0;
-    overflow-y: auto;
 }
 
-/* Slog za okvir kviza 
-   - Tukaj sem nastavil širino okvirja
-   - Določil sem belo ozadje z rahlo prosojnostjo
-   - Oblika okvirja ima zaobljene robove in senco
-*/
-#kviz-posoda {
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.9);
+header {
+    background-color: #333;
+    color: #fff;
     padding: 20px;
-    border-radius: 10px;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    background-color: #444;
+    padding: 10px;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Slog za vprašanje 
-   - Tukaj sem nastavil velikost pisave
-   - Dodal sem prostor pod vprašanjem za boljši razmik
-*/
-#vprasanje {
-    font-size: 1.2em;
+h1 {
+    font-size: 2em;
     margin-bottom: 10px;
 }
 
-/* Slog za možnosti odgovora 
-   - Tukaj sem gumbom nastavil navpično postavitev
-   - Dodal sem enoten razmik med posameznimi gumbi
-*/
-.moznosti {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
+h2 {
+    margin-bottom: 15px;
 }
 
-/* Slog za gumbe možnosti odgovora 
-   - Tukaj sem gumbom dodal zaobljene robove
-   - Določil sem zeleno obrobo in prehode pri hover efektu
-*/
-.moznosti button {
-    padding: 12px;
-    margin: 5px 0;
-    font-size: 1em;
-    cursor: pointer;
-    border: 2px solid #28a745;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #28a745;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+ul {
+    list-style-type: none;
+    padding-left: 0;
 }
 
-/* Slog za hover na gumbih 
-   - Tukaj sem spremenil barvo ozadja in besedila ob premiku miške
-   - Dodal sem rahlo senco za boljši vizualni učinek
-*/
-.moznosti button:hover {
-    background-color: #28a745;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+ul li {
+    margin: 10px 0;
 }
 
-/* Slog za kontrolne gumbe 
-   - Tukaj sem gumbom dodal sredinsko poravnavo in razmike
-   - Določil sem zelene obrobe in prehode za hover efekt
-*/
-#kontrole {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* Slog za gumbe v kontrolah 
-   - Tukaj sem nastavil zaobljene robove in zeleno obrobo
-   - Določil sem bele gumbe z zelenim besedilom
-*/
-#kontrole button {
-    padding: 12px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    border: 2px solid #28a745;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #28a745;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Slog za hover na kontrolnih gumbih 
-   - Tukaj sem gumbom spremenil ozadje v zeleno ob premiku miške
-   - Dodal sem belo barvo besedila in rahlo senco za vizualni učinek
-*/
-#kontrole button:hover {
-    background-color: #28a745;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Slog za prikaz rezultata 
-   - Tukaj sem nastavil velikost pisave za izpostavitev rezultata
-   - Dodal sem omejitev višine in možnost drsenja za dolge sezname
-   - Besedilo je poravnano na levo za boljši pregled
-*/
-#rezultat {
-    font-size: 1.2em;
-    margin-top: 15px;
-    max-height: 60vh;
-    overflow-y: auto;
-    text-align: left;
-}
-
-/* Slog za barvo pravilnih odgovorov 
-   - Tukaj sem pravilne odgovore obarval zeleno
-   - Dodal sem poudarjeno besedilo za izpostavitev
-*/
-.pravilno {
-    color: green;
+ul li a {
+    color: #333;
+    text-decoration: none;
     font-weight: bold;
 }
 
-/* Slog za barvo napačnih odgovorov 
-   - Tukaj sem napačne odgovore obarval svetlo rdeče
-   - Dodal sem poudarjeno besedilo za boljši kontrast
-*/
-.napacno {
-    color: lightcoral;
-    font-weight: bold;
+ul li a:hover {
+    color: #007BFF;
 }
 
-/* Slog za gumbe za prilagoditev velikosti pisave 
-   - Tukaj sem gumbom dodal zeleno ozadje in bele barve besedila
-   - Pri hover efektu sem uporabil temnejšo zeleno
-*/
-.font-control {
-    margin: 10px;
-    padding: 8px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
-/* Slog za hover na gumbih za prilagoditev pisave 
-   - Tukaj sem gumbom ob hoverju dodal temnejše zeleno ozadje
-   - Dodal sem rahlo senco za globlji vizualni učinek
-*/
-.font-control:hover {
-    background-color: #218838;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        /* Slog za slike kot gumbe */
+        .image-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .image-container a {
+            flex: 1; /* Omogoča slikam, da se enakomerno porazdelijo znotraj kontejnerja */
+        }
+
+        .image-container img {
+            width: 100%; /* Zasede celotno širino kontejnerja */
+            height: 300px; /* Fiksna višina za enakomerno velikost */
+            object-fit: cover; /* Ohranitev razmerja stranic in zapolnitev območja */
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.50); /* Rahlo povečanje ob prehodu z miško */
+        }
+
+                /* Slog za skriti gumb */
+                .hidden-link {
+                    color: inherit;
+                    text-decoration: none;
+                    cursor: default;
+                    position: relative;
+                }
+                .hidden-link:hover {
+                    cursor: default; /* Nič se ne zgodi na začetku ob prehodu */
+                }
