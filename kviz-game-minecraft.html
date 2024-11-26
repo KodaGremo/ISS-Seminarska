@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft</title>
+  <link rel="stylesheet" href="brez-slik-kviz-game.css">
+  <style>
+        body {
+background-image: url('slike-video-itd/minecraft-1106252_1280.jpg'); /* Pot do zastave */
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+      }
+  </style>
+
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Minecraft</h1>
+  
+  <!-- Gumbi za prilagoditev velikosti pisave -->
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="quizzes.html"><button>Kvizi</button></a>
+    <a href="index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+<script>
+  // Nastavitev začetne velikosti pisave
+  let trenutnaVelikostPisave = 22;
+
+  // Funkcija za prilagajanje velikosti pisave
+  function spremeniVelikostPisave(sprememba) {
+    trenutnaVelikostPisave += sprememba;
+    document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+  }
+
+   // Podatki o vprašanjih v kvizu
+   const podatkiKviz = [
+  { vprasanje: "Kateri blok se uporablja za izdelavo stekla?", moznosti: ["Pesek", "Kamen", "Opeka", "Glina"], odgovor: "Pesek" },
+  { vprasanje: "Kateri sovražnik se pojavi le ponoči in gori podnevi?", moznosti: ["Zombi", "Creeper", "Skelet", "Pajek"], odgovor: "Zombi" },
+  { vprasanje: "Kateri predmet potrebujete za ustvarjanje Nether Porta?", moznosti: ["Obsidian in kresilni kamen", "Diamant in les", "Zlato in ogenj", "Lava in voda"], odgovor: "Obsidian in kresilni kamen" },
+  { vprasanje: "Katera ruda je potrebna za izdelavo oklepa najvišje stopnje?", moznosti: ["Netherite", "Diamant", "Zlato", "Železo"], odgovor: "Netherite" },
+  { vprasanje: "Kateri pasivni mob lahko leti?", moznosti: ["Papiga", "Svinja", "Kravica", "Lama"], odgovor: "Papiga" },
+  { vprasanje: "Kateri blok je bil odstranjen iz igre?", moznosti: ["Zelena volna", "Vrtni palček", "Ruby Ore", "Nizki sneg"], odgovor: "Ruby Ore" },
+  { vprasanje: "Kakšno orodje potrebujete za zbiranje lesa najhitreje?", moznosti: ["Sekiro", "Meč", "Krampar", "Lopato"], odgovor: "Sekiro" },
+  { vprasanje: "Katera rastlina se uporablja za izdelavo papirja?", moznosti: ["Sladkorni trs", "Bambus", "Pšenica", "Rože"], odgovor: "Sladkorni trs" },
+  { vprasanje: "Kako se imenuje najmočnejši mob v Netherju?", moznosti: ["Wither", "Ghast", "Zombi Pigman", "Magma Cube"], odgovor: "Wither" },
+  { vprasanje: "Kateri blok se lahko premika s pomočjo batov?", moznosti: ["Kamen", "Blato", "Mleto tla", "TNT"], odgovor: "TNT" },
+  { vprasanje: "Kako se imenuje struktura, kjer lahko najdete Ender Portal?", moznosti: ["Trdnjava", "Tempelj", "Vas", "Votline"], odgovor: "Trdnjava" },
+  { vprasanje: "Kateri mob pade na tla in eksplodira, če se približate?", moznosti: ["Creeper", "Pajek", "Enderman", "Srebrna ribica"], odgovor: "Creeper" },
+  { vprasanje: "Kateri material je potreben za izdelavo kresa?", moznosti: ["Kamen", "Iron ingot", "Opeka", "Diamant"], odgovor: "Iron ingot" },
+  { vprasanje: "Kateri blok oddaja svetlobo?", moznosti: ["Glowstone", "Kamen", "Les", "Zemlja"], odgovor: "Glowstone" },
+  { vprasanje: "Kako se imenuje pasivni mob, ki proizvaja mleko?", moznosti: ["Krava", "Svinja", "Ovca", "Kozel"], odgovor: "Krava" },
+  { vprasanje: "Katera stvaritev vam omogoča hitro potovanje med svetovi?", moznosti: ["Nether Portal", "Zmajeva glava", "End Portal", "Prevozna postaja"], odgovor: "Nether Portal" },
+  { vprasanje: "Kateri blok vam omogoča izdelavo knjig?", moznosti: ["Usnje", "Zelena volna", "Glina", "Opeka"], odgovor: "Usnje" },
+  { vprasanje: "Kateri mob napade igralca, ko ga pogleda?", moznosti: ["Enderman", "Pajek", "Creeper", "Svinja"], odgovor: "Enderman" },
+  { vprasanje: "Kateri blok je potreben za sajenje sadik?", moznosti: ["Zemlja", "Kamen", "Voda", "Lava"], odgovor: "Zemlja" },
+  { vprasanje: "Katera ruda je bila dodana v posodobitvi 1.17?", moznosti: ["Baker", "Oglje", "Rdeči kamen", "Zlato"], odgovor: "Baker" },
+  { vprasanje: "Kateri predmet omogoča dihanje pod vodo?", moznosti: ["Čelada za dihanje", "Plavuti", "Ščit", "Meč"], odgovor: "Čelada za dihanje" },
+  { vprasanje: "Kako se imenuje redka vrsta rib, ki jo najdemo v oceanih?", moznosti: ["Tropska riba", "Trska", "Zlat ribica", "Krap"], odgovor: "Tropska riba" },
+  { vprasanje: "Katera ruda je potrebna za izdelavo meča?", moznosti: ["Železo", "Premog", "Lapiz lazuli", "Bakra"], odgovor: "Železo" },
+  { vprasanje: "Kateri blok lahko uporabite za izdelavo bakel?", moznosti: ["Oglje", "Železo", "Diamant", "Rdeči kamen"], odgovor: "Oglje" },
+  { vprasanje: "Kako se imenuje portal, ki vodi do Ender zmaja?", moznosti: ["End Portal", "Nether Portal", "Village Portal", "Magma Portal"], odgovor: "End Portal" },
+  { vprasanje: "Kateri blok lahko uporabljate za sajenje nether wart?", moznosti: ["Soul Sand", "Obsidian", "Netherite", "Rdeči pesek"], odgovor: "Soul Sand" },
+  { vprasanje: "Kateri mob pusti za sabo zlato ingot?", moznosti: ["Piglin", "Zombi", "Skelet", "Enderman"], odgovor: "Piglin" },
+  { vprasanje: "Katera ruda je bila prva dodana v igro?", moznosti: ["Premog", "Zlato", "Diamant", "Železo"], odgovor: "Premog" },
+  { vprasanje: "Katera naprava omogoča samodejno prevažanje predmetov?", moznosti: ["Hopper", "Rdeči kamen", "Plavajoči krog", "Zložljiv trak"], odgovor: "Hopper" },
+  { vprasanje: "Katera rastlina se uporablja za pripravo piva v Minecraftu?", moznosti: ["Nether wart", "Sladkorni trs", "Korenje", "Pšenica"], odgovor: "Nether wart" }
+];
+
+
+
+  // Ostala logika kviza ostane enaka
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${podatkiKviz.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = podatkiKviz[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach(moznost => {
+      const gumb = document.createElement("button");
+      gumb.innerText = moznost;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek(); 
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === podatkiKviz[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < podatkiKviz.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${podatkiKviz.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ul>`;
+    podatkiKviz.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}">${index + 1}. ${item.vprasanje} - <strong>${item.odgovor}</strong></li>`;
+    });
+    rezultatHtml += `</ul>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+    document.getElementById("kontrole").style.display = "block";
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("kontrole").style.display = "none";
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+
+</body>
+</html>

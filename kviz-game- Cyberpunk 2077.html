@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft</title>
+  <link rel="stylesheet" href="brez-slik-kviz-game.css">
+  <style>
+        body {
+background-image: url('slike-video-itd/minecraft-1106252_1280.jpg'); /* Pot do zastave */
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+      }
+  </style>
+
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Cyberpunk 2077</h1>
+  
+  <!-- Gumbi za prilagoditev velikosti pisave -->
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="quizzes.html"><button>Kvizi</button></a>
+    <a href="index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+<script>
+  // Nastavitev začetne velikosti pisave
+  let trenutnaVelikostPisave = 22;
+
+  // Funkcija za prilagajanje velikosti pisave
+  function spremeniVelikostPisave(sprememba) {
+    trenutnaVelikostPisave += sprememba;
+    document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+  }
+
+   // Podatki o vprašanjih v kvizu
+   const podatkiKviz = [
+  { vprasanje: "Kdo je glavni protagonist v igri Cyberpunk 2077?", moznosti: ["V", "Johnny Silverhand", "Dexter DeShawn", "Judy Alvarez"], odgovor: "V" },
+  { vprasanje: "Kdo igra lik Johnnyja Silverhanda?", moznosti: ["Keanu Reeves", "Liam Neeson", "Brad Pitt", "Samuel L. Jackson"], odgovor: "Keanu Reeves" },
+  { vprasanje: "V katerem mestu se odvija Cyberpunk 2077?", moznosti: ["Night City", "Los Santos", "Rapture", "Liberty City"], odgovor: "Night City" },
+  { vprasanje: "Katero korporacijo vodi lik Saburo Arasaka?", moznosti: ["Arasaka Corporation", "Militech", "Biotechnica", "Kang Tao"], odgovor: "Arasaka Corporation" },
+  { vprasanje: "Katera vrsta orožja omogoča sledenje tarči?", moznosti: ["Pametno orožje", "Blunt orožje", "Eksplozivno orožje", "Težko orožje"], odgovor: "Pametno orožje" },
+  { vprasanje: "Kateri del telesa V zamenja za kibernetske izboljšave?", moznosti: ["Oči", "Roke", "Noge", "Jetra"], odgovor: "Oči" },
+  { vprasanje: "Kako se imenuje umetna inteligenca, ki pomaga V pri vstopu v 'The Afterlife'?", moznosti: ["Delamain", "Jenkins", "Alt Cunningham", "Rogue Amendiares"], odgovor: "Delamain" },
+  { vprasanje: "Kateri znan lik je bil nekdanji rock zvezdnik?", moznosti: ["Johnny Silverhand", "Panam Palmer", "Jackie Welles", "Victor Vector"], odgovor: "Johnny Silverhand" },
+  { vprasanje: "Kako se imenuje vohunska kibernetska nadgradnja za prikazovanje informacij o svetu?", moznosti: ["Kiroshi Optics", "Arasaka Eye", "Neural Vision", "Tech Eye"], odgovor: "Kiroshi Optics" },
+  { vprasanje: "Kateri frakciji pripada Judy Alvarez?", moznosti: ["Mox", "Maelstrom", "Tyger Claws", "6th Street"], odgovor: "Mox" },
+  { vprasanje: "Katero podjetje proizvaja 'Mantis Blades'?", moznosti: ["Arasaka", "Militech", "Kang Tao", "Biotechnica"], odgovor: "Arasaka" },
+  { vprasanje: "Kateri voznik in prijatelj V se pojavi na začetku igre?", moznosti: ["Jackie Welles", "Panam Palmer", "Dexter DeShawn", "Rogue Amendiares"], odgovor: "Jackie Welles" },
+  { vprasanje: "Katera redka vrsta orožja je Johnny Silverhandova pištola?", moznosti: ["Malorian Arms 3516", "Arasaka Handgun", "Militech Blaster", "Silver Arm"], odgovor: "Malorian Arms 3516" },
+  { vprasanje: "Kateri lik je veteran in zdravnik, ki ponuja kibernetske izboljšave?", moznosti: ["Victor Vector", "Johnny Silverhand", "Jackie Welles", "Panam Palmer"], odgovor: "Victor Vector" },
+  { vprasanje: "Kako se imenuje območje na robu mesta, kjer prevladujejo Nomadi?", moznosti: ["Badlands", "Downtown", "Heywood", "Watson"], odgovor: "Badlands" },
+  { vprasanje: "Kateri predmet morate ukrasti med misijo 'The Heist'?", moznosti: ["Relikvija", "Red Chip", "Data Shard", "Neural Hacking Device"], odgovor: "Relikvija" },
+  { vprasanje: "Katera nadgradnja vam omogoča dvojni skok?", moznosti: ["Lynx Paws", "Kang Tao Legs", "Spring Boosters", "Jet Boots"], odgovor: "Lynx Paws" },
+  { vprasanje: "Kako se imenuje korporacija, ki je glavna tekmica Arasake?", moznosti: ["Militech", "Biotechnica", "Kang Tao", "Night Corp"], odgovor: "Militech" },
+  { vprasanje: "Kateri lik je del Nomad frakcije in pomaga V v Badlands?", moznosti: ["Panam Palmer", "Judy Alvarez", "Dexter DeShawn", "Adam Smasher"], odgovor: "Panam Palmer" },
+  { vprasanje: "Katero vrsto orožja ima Adam Smasher?", moznosti: ["Težko orožje", "Lahko orožje", "Lasersko orožje", "Pametno orožje"], odgovor: "Težko orožje" },
+  { vprasanje: "Kateri lik vodi klub 'The Afterlife'?", moznosti: ["Rogue Amendiares", "Judy Alvarez", "Jackie Welles", "Panam Palmer"], odgovor: "Rogue Amendiares" },
+  { vprasanje: "Kako se imenuje zdravilo za zmanjšanje škode zaradi cyberpsihiatrije?", moznosti: ["Neuroblockers", "Immunoboosters", "Painkillers", "Synaptic Accelerants"], odgovor: "Neuroblockers" },
+  { vprasanje: "Kateri lik je tat in bivša ljubimka Johnnyja Silverhanda?", moznosti: ["Alt Cunningham", "Panam Palmer", "Judy Alvarez", "Rogue Amendiares"], odgovor: "Alt Cunningham" },
+  { vprasanje: "Kako se imenuje natančna borbena tehnika, ki upočasni čas?", moznosti: ["Sandevistan", "Reflex Booster", "Adrenaline Boost", "Stealth Mode"], odgovor: "Sandevistan" },
+  { vprasanje: "Kateri lik je odgovoren za varnost Arasake?", moznosti: ["Adam Smasher", "Saburo Arasaka", "Hanako Arasaka", "Victor Vector"], odgovor: "Adam Smasher" },
+  { vprasanje: "Katera nadgradnja omogoča hitro skeniranje sovražnikov?", moznosti: ["Quickhack", "Neural Scan", "Netwatch Access", "Vision Booster"], odgovor: "Quickhack" },
+  { vprasanje: "Katera organizacija je odgovorna za nadzor nad nezakonitimi kibernetskimi dejavnostmi?", moznosti: ["Netwatch", "Militech", "Biotechnica", "Tyger Claws"], odgovor: "Netwatch" },
+  { vprasanje: "Katero orožje ima nalepko 'Skull Crusher'?", moznosti: ["Hammer", "Pistol", "Rifle", "Knife"], odgovor: "Hammer" },
+  { vprasanje: "Katera nadgradnja omogoča hitro regeneracijo zdravja?", moznosti: ["Biomonitor", "Neural Stimulator", "Health Injector", "Synaptic Booster"], odgovor: "Biomonitor" },
+  { vprasanje: "Kateri lik je hčerka Sabura Arasake?", moznosti: ["Hanako Arasaka", "Judy Alvarez", "Panam Palmer", "Alt Cunningham"], odgovor: "Hanako Arasaka" }
+];
+
+
+
+  // Ostala logika kviza ostane enaka
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${podatkiKviz.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = podatkiKviz[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach(moznost => {
+      const gumb = document.createElement("button");
+      gumb.innerText = moznost;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek(); 
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === podatkiKviz[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < podatkiKviz.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${podatkiKviz.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ul>`;
+    podatkiKviz.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}">${index + 1}. ${item.vprasanje} - <strong>${item.odgovor}</strong></li>`;
+    });
+    rezultatHtml += `</ul>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+    document.getElementById("kontrole").style.display = "block";
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("kontrole").style.display = "none";
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+
+</body>
+</html>
