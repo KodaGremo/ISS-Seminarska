@@ -17,6 +17,8 @@ body {
     background-position: center top;
     background-size: cover;
     font-size: 23px; /* začetna velikost pisave celotne strani */
+   margin: 0;
+    overflow-y: auto; /* to mi je manjkalo zapomni si !!!! */
 }
 
 /* Tukaj nastavim okvir za kviz 
