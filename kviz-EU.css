@@ -1,0 +1,104 @@
+    /* Slog za osnovno postavitev */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        background-image: url('C:/Users/samir/Desktop/html seminarska/slike-video-itd/eu-flag-clipart-xl.png'); /* Pot do zastave */
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: cover;
+        font-size: 23px; /* začetna pisave celotne strani */
+      }
+
+        /* Kviz posoda */
+        #kviz-posoda {
+            width: 500px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          }
+
+  /* Slog za vprašanje */
+  #vprasanje {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+
+  /* Slog za možnosti odgovora */
+  .moznosti {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  /* Gumbi za posamezne odgovore */
+  .moznosti button {
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 1em;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: background-color 0.3s;
+  }
+
+  /* Obarvanje gumba na hover */
+  .moznosti button:hover {
+    background-color: #f0f0f0;
+  }
+
+  /* Kontrolni gumbi na koncu kviza */
+  #kontrole {
+    margin-top: 20px;
+  }
+
+  /* Slog za kontrolne gumbe */
+  #kontrole button {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin: 0 10px;
+    cursor: pointer;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+
+
+
+  /* Slog za prikaz rezultata (skupni rezultat) */
+  #rezultat {
+    font-size: 1.2em;
+    margin-top: 15px;
+  }
+
+  /* Barva za pravilne odgovore */
+  .pravilno {
+    color: green;
+  }
+
+  /* Barva za napačne odgovore */
+  .napacno {
+    color: lightcoral;
+  }
+
+  
+      /* Gumbi za prilagoditev velikosti pisave */
+      .font-control {
+        margin: 10px;
+        padding: 5px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+
+      

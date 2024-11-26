@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geografija Evropske unije 2</title>
+  <link rel="stylesheet" href="kviz-EU.css">
+
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Geografija Evropske unije 2</h1>
+  
+  <!-- Gumbi za prilagoditev velikosti pisave -->
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="quizzes.html"><button>Kvizi</button></a>
+    <a href="index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+<script>
+  // Nastavitev začetne velikosti pisave
+  let trenutnaVelikostPisave = 22;
+
+  // Funkcija za prilagajanje velikosti pisave
+  function spremeniVelikostPisave(sprememba) {
+    trenutnaVelikostPisave += sprememba;
+    document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+  }
+
+   // Podatki o vprašanjih v kvizu
+   const podatkiKviz = [
+   { vprasanje: "Katera država članica EU ima največje število prebivalcev?", moznosti: ["Nemčija", "Francija", "Italija", "Španija"], odgovor: "Nemčija" },
+  { vprasanje: "Katero je glavno mesto Poljske?", moznosti: ["Varšava", "Krakov", "Gdansk", "Poznanj"], odgovor: "Varšava" },
+  { vprasanje: "Katera reka teče skozi Pariz?", moznosti: ["Seina", "Loara", "Rona", "Marna"], odgovor: "Seina" },
+  { vprasanje: "Katera država članica EU ima največjo površino?", moznosti: ["Francija", "Španija", "Nemčija", "Italija"], odgovor: "Francija" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Kolosej?", moznosti: ["Rim", "Atene", "Madrid", "Dunaj"], odgovor: "Rim" },
+  { vprasanje: "V kateri državi se nahajajo Alpe?", moznosti: ["Avstrija", "Francija", "Italija", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katero je glavno mesto Grčije?", moznosti: ["Atene", "Solu", "Patras", "Heraklion"], odgovor: "Atene" },
+  { vprasanje: "Katera država članica EU meji na največ drugih držav?", moznosti: ["Nemčija", "Francija", "Italija", "Poljska"], odgovor: "Nemčija" },
+  { vprasanje: "Katero je glavno mesto Švedske?", moznosti: ["Stockholm", "Göteborg", "Malmö", "Uppsala"], odgovor: "Stockholm" },
+  { vprasanje: "Kateri reki se združita v Beogradu?", moznosti: ["Donava in Sava", "Vltava in Elba", "Loara in Sena", "Rona in Saona"], odgovor: "Donava in Sava" },
+  { vprasanje: "Katera država članica EU leži na Pirenejskem polotoku?", moznosti: ["Španija", "Italija", "Grčija", "Romunija"], odgovor: "Španija" },
+  { vprasanje: "Katero je glavno mesto Madžarske?", moznosti: ["Budimpešta", "Debrecen", "Pecs", "Szeged"], odgovor: "Budimpešta" },
+  { vprasanje: "Kateri grad je znan kot simbol Prage, glavnega mesta Češke?", moznosti: ["Praški grad", "Bratislavski grad", "Grad Windsor", "Neuschwanstein"], odgovor: "Praški grad" },
+  { vprasanje: "Katera je najvišja gora v EU?", moznosti: ["Mont Blanc", "Matterhorn", "Triglav", "Grossglockner"], odgovor: "Mont Blanc" },
+  { vprasanje: "Katero je glavno mesto Finske?", moznosti: ["Helsinki", "Turku", "Espoo", "Tampere"], odgovor: "Helsinki" },
+  { vprasanje: "Katera reka teče skozi Berlin?", moznosti: ["Spree", "Donava", "Ren", "Elba"], odgovor: "Spree" },
+  { vprasanje: "Katera država je znana po svojih fjordih?", moznosti: ["Norveška", "Švedska", "Danska", "Finska"], odgovor: "Norveška" },
+  { vprasanje: "Katera znamenitost se nahaja v Atenah?", moznosti: ["Akropola", "Eifflov stolp", "Kolosej", "Big Ben"], odgovor: "Akropola" },
+  { vprasanje: "V kateri državi se nahaja Transilvanija?", moznosti: ["Romunija", "Poljska", "Slovaška", "Bolgarija"], odgovor: "Romunija" },
+  { vprasanje: "Katero mesto je znano po Atomiumu?", moznosti: ["Bruselj", "Amsterdam", "Madrid", "Lisbon"], odgovor: "Bruselj" }
+];
+  // Ostala logika kviza ostane enaka
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${podatkiKviz.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = podatkiKviz[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach(moznost => {
+      const gumb = document.createElement("button");
+      gumb.innerText = moznost;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek(); 
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === podatkiKviz[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < podatkiKviz.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${podatkiKviz.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ul>`;
+    podatkiKviz.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}">${index + 1}. ${item.vprasanje} - <strong>${item.odgovor}</strong></li>`;
+    });
+    rezultatHtml += `</ul>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+    document.getElementById("kontrole").style.display = "block";
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("kontrole").style.display = "none";
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+
+</body>
+</html>
