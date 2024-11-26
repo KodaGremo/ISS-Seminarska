@@ -3,12 +3,13 @@
    - Pisava: Arial, sans-serif
    - Barve: ozadje z belo, slovensko zastavo kot sliko v ozadju
    - Višina: stran pokriva celoten zaslon
+   - Drsenje: omogočeno za daljšo vsebino
 */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
@@ -17,18 +18,21 @@ body {
     background-position: center top;
     background-size: cover;
     font-size: 23px; /* začetna velikost pisave celotne strani */
-   margin: 0;
-    overflow-y: auto; /* to mi je manjkalo zapomni si !!!! */
+    margin: 0;
+    overflow-y: auto; /* Omogoča drsenje za daljšo vsebino */
 }
 
 /* Tukaj nastavim okvir za kviz 
-   - Velikost: širina 500px
+   - Velikost: širina 90%, max širina 500px
+   - Višina: omogočeno drsenje za večjo vsebino (max višina 90% zaslona)
    - Ozadje: bela z rahlo prosojnostjo
    - Oblika: zaobljeni robovi in senca
-   - Razmiki: 20px padding za vsebino
 */
 #kviz-posoda {
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto; /* Omogoča drsenje, če je vsebine preveč */
     text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
     padding: 20px;
@@ -102,10 +106,14 @@ body {
 /* Tukaj nastavim slog za prikaz rezultata 
    - Velikost pisave: nekoliko večja za izpostavitev rezultata
    - Razmik: prostor nad rezultatom
+   - Drsenje: omogočeno, če je rezultat predolg
 */
 #rezultat {
     font-size: 1.2em;
     margin-top: 15px;
+    max-height: 60vh; /* Omejimo višino rezultata za lepši prikaz */
+    overflow-y: auto; /* Omogočimo drsenje za dolge sezname */
+    text-align: left; /* Poravnava besedila za boljši pregled */
 }
 
 /* Tukaj nastavim barvo za pravilne odgovore 
@@ -136,3 +144,4 @@ body {
     border: none;
     border-radius: 5px;
 }
+
