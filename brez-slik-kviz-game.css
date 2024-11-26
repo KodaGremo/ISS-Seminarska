@@ -1,100 +1,155 @@
 
+/* Tukaj nastavim osnovne stile za celotno stran 
+   - Poravnava: elementi so na sredini vodoravno in navpično za boljšo vidlivost in bolj dumišljivi izgled 
+   - Pisava: Arial, sans-serif ker je to bilo ze default  
+   - Barve: svetlo sivo ozadje in črno besedilo
+   - Višina: stran pokriva celoten zaslon
+   - Drsenje: omogočeno za daljšo vsebino
+*/
 body {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-font-family: Arial, sans-serif;
-background-color: #f4f4f9;
-color: #333;
-font-size: 23px; /* začetna pisave celotne strani */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  font-size: 23px;
+  margin: 0;
+  overflow-y: auto; /* to mi je manjkalo zapomni si !!!! */
 }
 
-/* Kviz posoda */
-        #kviz-posoda {
-            width: 500px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-          }
+/* Tukaj nastavim okvir za kviz 
+   - Širina in višina: prilagodljiva širina (90%), max širina 600px, max višina 90% zaslona
+   - Ozadje: belo z rahlo vidiljivostjo 
+   - Oblika:  robovi in senca
+   - Drsenje: omogočeno za boljšo  vsebino pisave
+*/
+#kviz-posoda {
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+}
 
-  /* Slog za vprašanje */
-  #vprasanje {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-  }
+/* Tukaj določim slog za vprašanje 
+   - Velikost pisave: nekoliko večja za poudarek
+   - Razmik: pod vprašanjem
+*/
+#vprasanje {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
 
-  /* Slog za možnosti odgovora */
-  .moznosti {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-  }
+/* Tukaj določim slog za možnosti odgovora 
+   - Razporeditev: navpična postavitev z razmikom med gumbi
+*/
+.moznosti {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
 
-  /* Gumbi za posamezne odgovore */
-  .moznosti button {
-    padding: 10px;
-    margin: 5px 0;
-    font-size: 1em;
-    cursor: pointer;
-    border: 1px solid #333;
-    border-radius: 5px;
-    background-color: #fff;
-    transition: background-color 0.3s;
-  }
+/* Tukaj nastavim slog za gumbe možnosti odgovora 
+   - Oblika: srednje veliki gumbi z  robovi
+   - Interaktivnost: spreminjanje ozadja ob premiku miške (hover) za boljšo vidlivost 
+*/
+.moznosti button {
+  padding: 12px;
+  margin: 5px 0;
+  font-size: 1em;
+  cursor: pointer;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-  /* Obarvanje gumba na hover */
-  .moznosti button:hover {
-    background-color: #f0f0f0;
-  }
+/* Tukaj določim slog za hover na gumbih 
+   - Spreminjanje barve ozadja in dodajanje rahle sence za vtis za uporabnika da izbira pravilno zadevo 
+*/
+.moznosti button:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  /* Kontrolni gumbi na koncu kviza */
-  #kontrole {
-    margin-top: 20px;
-  }
+/* Tukaj nastavim slog za kontrolne gumbe (npr. ponovni začetek) 
+   - Oblika: večji gumbi z  robovi
+   - Razporeditev: prostor med gumbi
+*/
+#kontrole {
+  margin-top: 20px;
+}
 
-  /* Slog za kontrolne gumbe */
-  #kontrole button {
-    padding: 10px 20px;
-    font-size: 1em;
-    margin: 0 10px;
-    cursor: pointer;
-    border: 1px solid #333;
-    border-radius: 5px;
-    background-color: #fff;
-  }
+/* Tukaj določim slog za gumbe znotraj kontrol 
+   - Oblika: srednje veliki gumbi z  robovi
+   - Interaktivnost: spreminjanje barve ozadja ob premiku miške (hover)
+*/
+#kontrole button {
+  padding: 12px 20px;
+  font-size: 1em;
+  margin: 0 10px;
+  cursor: pointer;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
 
+#kontrole button:hover {
+  background-color: #f0f0f0;
+}
 
+/* Tukaj nastavim slog za rezultat 
+   - Velikost pisave: nekoliko večja za izpostavitev
+   - Razmik: prostor nad rezultatom
+*/
+#rezultat {
+  font-size: 1.2em;
+  margin-top: 15px;
+}
 
-  /* Slog za prikaz rezultata (skupni rezultat) */
-  #rezultat {
-    font-size: 1.2em;
-    margin-top: 15px;
-  }
+/* Tukaj določimo barvo za pravilne odgovore 
+   - Barva: zelena
+   - Stil: poudarjeno (bold)
+*/
+.pravilno {
+  color: green;
+  font-weight: bold;
+}
 
-  /* Barva za pravilne odgovore */
-  .pravilno {
-    color: green;
-  }
+/* Tukaj določimo barvo za napačne odgovore 
+   - Barva: svetlo rdeča
+   - Stil: poudarjeno (bold)
+*/
+.napacno {
+  color: lightcoral;
+  font-weight: bold;
+}
 
-  /* Barva za napačne odgovore */
-  .napacno {
-    color: lightcoral;
-  }
+/* Tukaj nastavimo slog za gumbe za prilagoditev pisave 
+   - Oblika: gumbi z modrim ozadjem in belim besedilom
+   - Interaktivnost: sprememba barve ozadja ob premiku miške (hover)
+*/
+.font-control {
+  margin: 10px;
+  padding: 8px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 
-  
-      /* Gumbi za prilagoditev velikosti pisave */
-      .font-control {
-        margin: 10px;
-        padding: 5px 20px;
-        font-size: 1em;
-        cursor: pointer;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 5px;
-      }
-
-      
+.font-control:hover {
+  background-color: #0056b3;
+}
