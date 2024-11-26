@@ -1,104 +1,175 @@
-    /* Slog za osnovno postavitev */
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-        background-image: url('slike-video-itd/eu-flag-clipart-xl.png'); /* Pot do zastave */
-        background-repeat: no-repeat;
-        background-position: center top;
-        background-size: cover;
-        font-size: 23px; /* začetna pisave celotne strani */
-      }
+/* Slog za osnovno postavitev 
+   - Tukaj sem nastavil poravnavo elementov na sredino
+   - Dodal sem slovensko zastavo kot ozadje
+   - Poskrbel sem za enoten izgled pisave in barv
+*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    background-image: url('slike-video-itd/eu-flag-clipart-xl.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    font-size: 23px;
+    margin: 0;
+    overflow-y: auto;
+}
 
-        /* Kviz okvir */
-        #kviz-posoda {
-            width: 500px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-          }
+/* Slog za okvir kviza 
+   - Tukaj sem nastavil širino okvirja
+   - Določil sem belo ozadje z rahlo prosojnostjo
+   - Oblika okvirja ima zaobljene robove in senco
+*/
+#kviz-posoda {
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
 
-  /* Slog za vprašanje */
-  #vprasanje {
+/* Slog za vprašanje 
+   - Tukaj sem nastavil velikost pisave
+   - Dodal sem prostor pod vprašanjem za boljši razmik
+*/
+#vprasanje {
     font-size: 1.2em;
     margin-bottom: 10px;
-  }
+}
 
-  /* Slog za možnosti odgovora */
-  .moznosti {
+/* Slog za možnosti odgovora 
+   - Tukaj sem gumbom nastavil navpično postavitev
+   - Dodal sem enoten razmik med posameznimi gumbi
+*/
+.moznosti {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-  }
+}
 
-  /* Gumbi za posamezne odgovore */
-  .moznosti button {
-    padding: 10px;
+/* Slog za gumbe možnosti odgovora 
+   - Tukaj sem gumbom dodal zaobljene robove
+   - Določil sem zeleno obrobo in prehode pri hover efektu
+*/
+.moznosti button {
+    padding: 12px;
     margin: 5px 0;
     font-size: 1em;
     cursor: pointer;
-    border: 1px solid #333;
+    border: 2px solid #28a745;
     border-radius: 5px;
     background-color: #fff;
-    transition: background-color 0.3s;
-  }
+    color: #28a745;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
 
-  /* Obarvanje gumba na hover */
-  .moznosti button:hover {
-    background-color: #f0f0f0;
-  }
+/* Slog za hover na gumbih 
+   - Tukaj sem spremenil barvo ozadja in besedila ob premiku miške
+   - Dodal sem rahlo senco za boljši vizualni učinek
+*/
+.moznosti button:hover {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-  /* Kontrolni gumbi na koncu kviza */
-  #kontrole {
+/* Slog za kontrolne gumbe 
+   - Tukaj sem gumbom dodal sredinsko poravnavo in razmike
+   - Določil sem zelene obrobe in prehode za hover efekt
+*/
+#kontrole {
     margin-top: 20px;
-  }
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
 
-  /* Slog za kontrolne gumbe */
-  #kontrole button {
-    padding: 10px 20px;
+/* Slog za gumbe v kontrolah 
+   - Tukaj sem nastavil zaobljene robove in zeleno obrobo
+   - Določil sem bele gumbe z zelenim besedilom
+*/
+#kontrole button {
+    padding: 12px 20px;
     font-size: 1em;
-    margin: 0 10px;
     cursor: pointer;
-    border: 1px solid #333;
+    border: 2px solid #28a745;
     border-radius: 5px;
     background-color: #fff;
-  }
+    color: #28a745;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
 
+/* Slog za hover na kontrolnih gumbih 
+   - Tukaj sem gumbom spremenil ozadje v zeleno ob premiku miške
+   - Dodal sem belo barvo besedila in rahlo senco za vizualni učinek
+*/
+#kontrole button:hover {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
-
-  /* Slog za prikaz rezultata (skupni rezultat) */
-  #rezultat {
+/* Slog za prikaz rezultata 
+   - Tukaj sem nastavil velikost pisave za izpostavitev rezultata
+   - Dodal sem omejitev višine in možnost drsenja za dolge sezname
+   - Besedilo je poravnano na levo za boljši pregled
+*/
+#rezultat {
     font-size: 1.2em;
     margin-top: 15px;
-  }
+    max-height: 60vh;
+    overflow-y: auto;
+    text-align: left;
+}
 
-  /* Barva za pravilne odgovore */
-  .pravilno {
+/* Slog za barvo pravilnih odgovorov 
+   - Tukaj sem pravilne odgovore obarval zeleno
+   - Dodal sem poudarjeno besedilo za izpostavitev
+*/
+.pravilno {
     color: green;
-  }
+    font-weight: bold;
+}
 
-  /* Barva za napačne odgovore */
-  .napacno {
+/* Slog za barvo napačnih odgovorov 
+   - Tukaj sem napačne odgovore obarval svetlo rdeče
+   - Dodal sem poudarjeno besedilo za boljši kontrast
+*/
+.napacno {
     color: lightcoral;
-  }
+    font-weight: bold;
+}
 
-  
-      /* Gumbi za prilagoditev velikosti pisave */
-      .font-control {
-        margin: 10px;
-        padding: 5px 20px;
-        font-size: 1em;
-        cursor: pointer;
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        border-radius: 5px;
-      }
+/* Slog za gumbe za prilagoditev velikosti pisave 
+   - Tukaj sem gumbom dodal zeleno ozadje in bele barve besedila
+   - Pri hover efektu sem uporabil temnejšo zeleno
+*/
+.font-control {
+    margin: 10px;
+    padding: 8px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-      
+/* Slog za hover na gumbih za prilagoditev pisave 
+   - Tukaj sem gumbom ob hoverju dodal temnejše zeleno ozadje
+   - Dodal sem rahlo senco za globlji vizualni učinek
+*/
+.font-control:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
