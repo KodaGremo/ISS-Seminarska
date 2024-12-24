@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O nas - Multi zabava</title>
+    <link rel="stylesheet" href="index-game-info-druge-osnovne-strani.css">
+    </style>
+</head>
+<body>
+    <header>
+        <h1>O nas</h1>
+    </header>
+
+    <nav>
+        <ul class="ul-2">
+            <li class="green"><a href="index.html">Domov</a></li>
+            <li class="yellow"><a href="quizzes.html">Kvizi</a></li>
+            <li class="red"><a href="games.html">Igre</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <h2>
+            <a href="easter-egg.html" class="hidden-link" id="easterEggLink" onclick="return false;">
+                O spletni strani Multi zabava
+            </a>
+        </h2>
+        <p>Dobrodošli na spletni strani <strong>Multi zabava</strong> – mestu za zabavne in poučne igre ter kvize. Na tej strani boste našli osnovne igre in kvize, ki obsegajo široko paleto tem, povezanih z geografskimi in zgodovinskimi osnovami Slovenije. Naša spletna stran je posebej zasnovana za vse, ki želijo na preprost način preveriti svoje znanje in se pri tem zabavati.</p><br>
+
+        <h3>Namen spletne strani</h3>
+        <p>Multi zabava ni zgolj spletna stran za igranje in učenje, temveč je tudi del <strong>seminarske naloge</strong> pri predmetu <strong>ISS</strong>. Zasnovana je za uspešno opravljanje drugega letnika informatike, kjer se študentje učimo o izdelavi spletnih aplikacij in njihovih funkcionalnostih.</p><br>
+
+        <h3>Kaj lahko pričakujete</h3>
+        <p>Na strani boste našli raznovrstne igre in kvize, ki bodo zajemali:</p>
+        <ul>
+            <li>Osnovne geografske informacije o Sloveniji</li>
+            <li>Zgodovinske osnovne informacije o pomembnih dogodkih in osebah</li>
+            <li>Interaktivne igre za preizkus spomina, hitrosti in znanja</li>
+        </ul>
+        <p>Upamo, da boste uživali v raziskovanju naše spletne strani in preizkušanju svojih znanj. Hvala, ker nas podpirate pri našem izobraževalnem projektu!</p>
+    </main>
+
+    <footer>
+        <p class="p-2">&copy; Šola 2024-2025</p>
+    </footer>
+    
+    <script>
+
+        let holdTimer;
+        const easterEggLink = document.getElementById('easterEggLink');
+
+
+        easterEggLink.addEventListener('mouseenter', () => {
+            holdTimer = setTimeout(() => {
+
+                window.location.href = 'easter-egg.html';
+            }, 10000); 
+        });
+
+
+        easterEggLink.addEventListener('mouseleave', () => {
+            clearTimeout(holdTimer);
+        });
+    </script>
+</body>
+</html>
+
