@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+  <link rel="stylesheet" href="kviz-zanimive-teorijecss.css">
+  <style>
+    body {
+background-image: url('slike-teory-vse/slika-eu-teo.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Evropske resnice, ki jih niso hoteli razkriti</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="C:/Users/samir\Desktop/seminarska popravki/quizzes.html"><button>Kvizi</button></a>
+    <a href="C:/Users/samir/Desktop/seminarska popravki/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+  const podatkiKviz = [
+
+{  
+  vprasanje: "Kaj je bila Operacija Gladio?", 
+  moznosti: ["Tajna mreža vojaških enot v Evropi", "Projekt nadzora misli CIA", "Poskus atentata na Adolfa Hitlerja", "Program razvoja jedrskega orožja v Evropi"], 
+  odgovor: "Tajna mreža vojaških enot v Evropi" 
+}, 
+{  
+  vprasanje: "Kdo je priznal obstoj Operacije Gladio?", 
+  moznosti: ["Winston Churchill", "Giulio Andreotti", "Margaret Thatcher", "François Mitterrand"], 
+  odgovor: "Giulio Andreotti" 
+}, 
+{  
+  vprasanje: "Kaj je bil požig Reichstaga leta 1933?", 
+  moznosti: ["Komunistični napad na parlament", "Načrt nacistov za utrditev moči", "Naravna katastrofa", "Poskus atentata na Hitlerja"], 
+  odgovor: "Načrt nacistov za utrditev moči" 
+}, 
+{  
+  vprasanje: "Kateri evropski škandal je vključeval kontaminacijo hrane z dioksinom?", 
+  moznosti: ["Belgijska afera z dioksinom", "Francoska mlečna kriza", "Nemška svinjska gripa", "Italijanska afera s pesticidi"], 
+  odgovor: "Belgijska afera z dioksinom" 
+},
+{  
+  vprasanje: "Katera organizacija je vzpostavila tajne mreže v Evropi za boj proti komunizmu?", 
+  moznosti: ["NATO", "EU", "OZN", "Interpol"], 
+  odgovor: "NATO" 
+}, 
+{  
+  vprasanje: "Katera država je bila središče Operacije Gladio?", 
+  moznosti: ["Italija", "Nemčija", "Francija", "Velika Britanija"], 
+  odgovor: "Italija" 
+}, 
+{  
+  vprasanje: "Kaj je belgijska dioksinska kriza povzročila v javnosti?", 
+  moznosti: ["Izgubo zaupanja v hrano", "Politično nestabilnost", "Izbruh bolezni", "Vse navedeno"], 
+  odgovor: "Vse navedeno" 
+}, 
+{  
+  vprasanje: "Katera država je razkrila delovanje Operacije Gladio?", 
+  moznosti: ["Italija", "Francija", "Švica", "Nemčija"], 
+  odgovor: "Italija" 
+}, 
+{  
+  vprasanje: "Katera organizacija je izvajala skrivne misije v Evropi med hladno vojno?", 
+  moznosti: ["NATO", "Varšavski pakt", "Interpol", "Evropska unija"], 
+  odgovor: "NATO" 
+}, 
+{  
+  vprasanje: "Katera država je bila prizorišče škandala Dieselgate?", 
+  moznosti: ["Nemčija", "Francija", "Italija", "Avstrija"], 
+  odgovor: "Nemčija" 
+}, 
+{  
+  vprasanje: "Kaj je bila Dieselgate afera?", 
+  moznosti: ["Manipulacija podatkov o izpustih vozil", "Prikrivanje vojaških napadov", "Nezakonito prisluškovanje", "Uvoz prepovedanih kemikalij"], 
+  odgovor: "Manipulacija podatkov o izpustih vozil" 
+},
+{  
+  vprasanje: "Kateri evropski škandal je vključeval prisluškovanje telefonskim pogovorom politikov?", 
+  moznosti: ["Afera Snowden", "Afera Pegasus", "Afera Watergate", "Dioksinska afera"], 
+  odgovor: "Afera Pegasus" 
+}, 
+{  
+  vprasanje: "Katera država je bila središče afere LuxLeaks o izogibanju davkom?", 
+  moznosti: ["Luksemburg", "Nemčija", "Francija", "Nizozemska"], 
+  odgovor: "Luksemburg" 
+}, 
+{  
+  vprasanje: "Katera afera je razkrila tajne davčne dogovore v EU?", 
+  moznosti: ["LuxLeaks", "Panamski dokumenti", "Dieselgate", "AfD škandal"], 
+  odgovor: "LuxLeaks" 
+}, 
+{  
+  vprasanje: "Katera država je bila središče finančnega škandala CumEx?", 
+  moznosti: ["Nemčija", "Avstrija", "Švica", "Švedska"], 
+  odgovor: "Nemčija" 
+}, 
+{  
+  vprasanje: "Kaj je afera CumEx razkrila?", 
+  moznosti: ["Nezakonite sheme vračil davkov", "Skrite vojaške operacije", "Nadzor nad državljani", "Nezakonito prisluškovanje"], 
+  odgovor: "Nezakonite sheme vračil davkov" 
+}, 
+{  
+  vprasanje: "Katera evropska država je bila povezana z izbruhom konjskega mesa v prehranskih izdelkih?", 
+  moznosti: ["Francija", "Belgija", "Nizozemska", "Italija"], 
+  odgovor: "Francija" 
+}, 
+{  
+  vprasanje: "Kaj je bil škandal s konjskim mesom?", 
+  moznosti: ["Neoznačevanje konjskega mesa v izdelkih", "Uvoz prepovedanih kemikalij", "Prikrivanje bolezni pri živini", "Kršitve pravic potrošnikov"], 
+  odgovor: "Neoznačevanje konjskega mesa v izdelkih" 
+}, 
+{  
+  vprasanje: "Katera evropska država je bila povezana s tihotapljenjem umetnin med drugo svetovno vojno?", 
+  moznosti: ["Nemčija", "Italija", "Francija", "Avstrija"], 
+  odgovor: "Nemčija" 
+}, 
+{  
+  vprasanje: "Katera država je bila povezana z afere Panama Papers?", 
+  moznosti: ["Velika Britanija", "Nemčija", "Španija", "Francija"], 
+  odgovor: "Velika Britanija" 
+},
+{
+  vprasanje: "Kaj je bila Operacija Gladio?",
+  moznosti: [
+    "Tajna mreža vojaških enot v Evropi",
+    "Projekt nadzora misli CIA",
+    "Poskus atentata na Adolfa Hitlerja",
+    "Program razvoja jedrskega orožja v Evropi"
+  ],
+  odgovor: "Tajna mreža vojaških enot v Evropi"
+},
+{
+  vprasanje: "Kdo je priznal obstoj Operacije Gladio?",
+  moznosti: [  "Winston Churchill", "Giulio Andreotti","Margaret Thatcher","François Mitterrand"
+  ],
+  odgovor: "Giulio Andreotti"
+},
+{
+  vprasanje: "Kaj je bil požig Reichstaga leta 1933?",
+  moznosti: [ "Komunistični napad na parlament",  "Načrt nacistov za utrditev moči","Naravna katastrofa", "Poskus atentata na Hitlerja"
+  ],
+  odgovor: "Načrt nacistov za utrditev moči"
+},
+{
+  vprasanje: "Kateri evropski škandal je vključeval kontaminacijo hrane z dioksinom?",
+  moznosti: [ "Belgijska afera z dioksinom", "Francoska mlečna kriza","Nemška svinjska gripa","Italijanska afera s pesticidi"
+  ],
+  odgovor: "Belgijska afera z dioksinom"
+},
+{
+  vprasanje: "Katera organizacija je vzpostavila tajne mreže v Evropi za boj proti komunizmu?",
+  moznosti: ["NATO", "EU", "OZN","Interpol"
+  ],
+  odgovor: "NATO"
+},
+{
+  vprasanje: "Katera država je bila središče Operacije Gladio?",
+  moznosti: [  "Italija","Nemčija","Francija","Velika Britanija"
+  ],
+  odgovor: "Italija"
+},
+{
+  vprasanje: "Kaj je bil namen Operacije Gladio?",
+  moznosti: [ "Preprečiti sovjetsko invazijo", "Okrepiti jedrsko obrambo Evrope", "Ustanoviti evropsko unijo",  "Izvesti tajne umore"
+  ],
+  odgovor: "Preprečiti sovjetsko invazijo"
+},
+{
+  vprasanje: "Kateri dogodek je sprožil domneve o sodelovanju belgijskih oblasti v skrivnih vojaških projektih?",
+  moznosti: [  "Dioksinska kriza",  "Belgijski kraljevi škandal","Napadi na nočne klube","Afere z orožjem"
+  ],
+  odgovor: "Dioksinska kriza"
+},
+{
+  vprasanje: "Katera teorija zarote vključuje tajno paravojaško mrežo v zahodni Evropi?",
+  moznosti: ["Operacija Gladio","Operacija Northwoods","Projekt Manhattan", "Projekt Stargate"
+  ],
+  odgovor: "Operacija Gladio"
+},
+{
+  vprasanje: "Kateri projekt je izvajal kemične poskuse na ljudeh v Evropi?",
+  moznosti: [ "MKULTRA","Operacija Sea-Spray","Projekt Plumbbob","Projekt Bluebird"
+  ],
+  odgovor: "MKULTRA"
+},
+{
+  vprasanje: "Kaj je belgijska dioksinska kriza povzročila v javnosti?",
+  moznosti: [ "Izgubo zaupanja v hrano","Politično nestabilnost","Izbruh bolezni", "Vse navedeno"
+  ],
+  odgovor: "Vse navedeno"
+},
+{
+  vprasanje: "Katera država je razkrila delovanje Operacije Gladio?",
+  moznosti: [  "Italija","Francija", "Švica", "Nemčija"
+  ],
+  odgovor: "Italija"
+},
+{
+  vprasanje: "Katera organizacija je izvajala skrivne misije v Evropi med hladno vojno?",
+  moznosti: [ "NATO",  "Varšavski pakt", "Interpol",  "Evropska unija"
+  ],
+  odgovor: "NATO"
+},
+{
+  vprasanje: "Katera evropska država je skrivala jedrsko orožje pod okriljem NATO?",
+  moznosti: [   "Belgija",  "Španija", "Italija", "Grčija"
+  ],
+  odgovor: "Belgija"
+},
+{
+  vprasanje: "Katera vojaška operacija je vključevala uprizorjene teroristične napade v Evropi?",
+  moznosti: [  "Operacija Gladio", "Operacija Chaos",   "Operacija Mockingbird", "Operacija Northwoods"
+  ],
+  odgovor: "Operacija Gladio"
+},
+{
+  vprasanje: "Katera država je bila prizorišče požiga Reichstaga?",
+  moznosti: ["Nemčija",  "Avstrija",    "Poljska",  "Francija"
+  ],
+  odgovor: "Nemčija"
+},
+{
+  vprasanje: "Katera evropska država je bila znana po prikrivanju vojaških eksperimentov med hladno vojno?",
+  moznosti: [ "Velika Britanija",  "Španija","Francija","Norveška"
+  ],
+  odgovor: "Velika Britanija"
+},
+{
+  vprasanje: "Kateri dogodek je bil povod za uvedbo izrednih razmer v Nemčiji leta 1933?",
+  moznosti: ["Požig Reichstaga","Hitlerjev atentat","Začetek druge svetovne vojne","Ustanovitev Gestapa"
+  ],
+  odgovor: "Požig Reichstaga"
+},
+{
+  vprasanje: "Katera država je med hladno vojno gostila skrivne NATO baze za boj proti komunizmu?",
+  moznosti: ["Italija","Grčija","Belgija","Španija"
+  ],
+  odgovor: "Italija"
+},
+{
+  vprasanje: "Katera država je sodelovala pri dioksinskem škandalu v Evropi?",
+  moznosti: ["Belgija","Nizozemska","Francija","Italija"
+  ],
+  odgovor: "Belgija"
+},
+{  
+  vprasanje: "Kateri dogodek je zaznamoval začetek hladne vojne?", 
+  moznosti: ["Berlinska blokada", "Požig Reichstaga", "Operacija Gladio", "Ustanovitev NATO"], 
+  odgovor: "Berlinska blokada" 
+},
+{  
+  vprasanje: "Katera afera je razkrila tajne bančne račune švicarskih bank?", 
+  moznosti: ["SwissLeaks", "LuxLeaks", "Panamski dokumenti", "Dieselgate"], 
+  odgovor: "SwissLeaks" 
+},
+{  
+  vprasanje: "Katera država je bila središče afere Panama Papers?", 
+  moznosti: ["Panama", "Nemčija", "Luksemburg", "Italija"], 
+  odgovor: "Panama" 
+},
+{  
+  vprasanje: "Kaj je razkril škandal Snowden?", 
+  moznosti: ["Obsežno prisluškovanje državljanom", "Tajne vojaške operacije", "Finančne malverzacije", "Prikrivanje zdravstvenih tveganj"], 
+  odgovor: "Obsežno prisluškovanje državljanom" 
+},
+{  
+  vprasanje: "Katera država je razkrila tajne programe NSA?", 
+  moznosti: ["ZDA", "Nemčija", "Rusija", "Švica"], 
+  odgovor: "ZDA" 
+},
+{  
+  vprasanje: "Katera vojaška operacija je vključevala kemijske poskuse na civilistih?", 
+  moznosti: ["Operacija Sea-Spray", "Operacija Gladio", "Projekt MKULTRA", "Operacija Northwoods"], 
+  odgovor: "Operacija Sea-Spray" 
+},
+{  
+  vprasanje: "Katera država je bila povezana s tajnimi vojaškimi operacijami med hladno vojno?", 
+  moznosti: ["Italija", "Francija", "Nemčija", "Velika Britanija"], 
+  odgovor: "Italija" 
+},
+{  
+  vprasanje: "Kateri evropski škandal je povezan z napačnim označevanjem gensko spremenjene hrane?", 
+  moznosti: ["Francoska genska kriza", "Škandal z gensko spremenjenimi izdelki", "Belgijska dioksinska kriza", "Afere z pesticidi"], 
+  odgovor: "Škandal z gensko spremenjenimi izdelki" 
+},
+{  
+  vprasanje: "Kaj je bil cilj Operacije Mockingbird?", 
+  moznosti: ["Nadzor medijev", "Vojaške invazije", "Raziskovanje miselne kontrole", "Razkritje korupcije"], 
+  odgovor: "Nadzor medijev" 
+},
+{  
+  vprasanje: "Kateri projekt CIA je raziskoval miselno kontrolo?", 
+  moznosti: ["Projekt MKULTRA", "Operacija Chaos", "Projekt Bluebird", "Projekt Plumbbob"], 
+  odgovor: "Projekt MKULTRA" 
+},
+{  
+  vprasanje: "Katera država je bila znana po eksperimentih z gensko spremenjenimi organizmi?", 
+  moznosti: ["Francija", "Nemčija", "Italija", "Španija"], 
+  odgovor: "Francija" 
+},
+{  
+  vprasanje: "Kaj je bil škandal s PCB kontaminacijo?", 
+  moznosti: ["Zastrupitev hrane s kemikalijami", "Vojaški eksperimenti", "Korupcija v EU", "Okoljski zločini"], 
+  odgovor: "Zastrupitev hrane s kemikalijami" 
+},
+{  
+  vprasanje: "Katera organizacija je izvajala vojaške operacije brez vednosti EU?", 
+  moznosti: ["NATO", "Interpol", "Varšavski pakt", "OZN"], 
+  odgovor: "NATO" 
+},
+{  
+  vprasanje: "Kateri dogodek je bil osrednjega pomena za razkritje Operacije Gladio?", 
+  moznosti: ["Attentat Aldo Moro", "Belgijska kriza", "Požig Reichstaga", "Nemški škandal CumEx"], 
+  odgovor: "Attentat Aldo Moro" 
+},
+{  
+  vprasanje: "Kateri škandal je razkril manipulacijo s podatki o emisijah vozil?", 
+  moznosti: ["Dieselgate", "LuxLeaks", "SwissLeaks", "Dioksinska kriza"], 
+  odgovor: "Dieselgate" 
+},
+{  
+  vprasanje: "Kaj je bila Operacija Chaos?", 
+  moznosti: ["Program za destabilizacijo civilnih gibanj", "Raziskovanje miselne kontrole", "Projekt za razvoj orožja", "Projekt za nadzor medijev"], 
+  odgovor: "Program za destabilizacijo civilnih gibanj" 
+},
+{  
+  vprasanje: "Kateri škandal je bil povezan s tihotapljenjem orožja?", 
+  moznosti: ["Iran-Contra", "CumEx", "Panama Papers", "SwissLeaks"], 
+  odgovor: "Iran-Contra" 
+},
+{  
+  vprasanje: "Kateri projekt CIA je vključil kemične poskuse na ljudeh?", 
+  moznosti: ["Projekt MKULTRA", "Projekt Bluebird", "Operacija Chaos", "Operacija Gladio"], 
+  odgovor: "Projekt MKULTRA" 
+},
+{  
+  vprasanje: "Kaj je bil cilj afere LuxLeaks?", 
+  moznosti: ["Razkritje davčnih olajšav", "Razkritje vojaških operacij", "Razkritje korupcije", "Manipulacija s hrano"], 
+  odgovor: "Razkritje davčnih olajšav" 
+},
+{  
+  vprasanje: "Katera država je bila povezana s škandalom CumEx?", 
+  moznosti: ["Nemčija", "Francija", "Španija", "Nizozemska"], 
+  odgovor: "Nemčija" 
+},
+{  
+  vprasanje: "Kateri dogodek je zaznamoval razkritje tajnih dogovorov med EU državami?", 
+  moznosti: ["LuxLeaks", "Dieselgate", "CumEx", "Panama Papers"], 
+  odgovor: "LuxLeaks" 
+},
+{  
+  vprasanje: "Katera država je bila središče škandala s tihotapljenjem drog v 80. letih?", 
+  moznosti: ["Kolumbija", "Italija", "Francija", "Nemčija"], 
+  odgovor: "Kolumbija" 
+},
+{  
+  vprasanje: "Kaj je bil cilj afere Panama Papers?", 
+  moznosti: ["Razkritje offshore računov", "Zastrupitev hrane", "Manipulacija podatkov", "Prikrivanje emisij"], 
+  odgovor: "Razkritje offshore računov" 
+},
+{  
+  vprasanje: "Kateri evropski škandal je vključeval prisluškovanje mobilnim telefonom?", 
+  moznosti: ["Afera Pegasus", "Afera Watergate", "Dieselgate", "LuxLeaks"], 
+  odgovor: "Afera Pegasus" 
+},
+{  
+  vprasanje: "Katera država je bila središče tajnih NATO baz?", 
+  moznosti: ["Italija", "Belgija", "Francija", "Švica"], 
+  odgovor: "Italija" 
+},
+{  
+  vprasanje: "Kateri škandal je razkril davčne sheme za multinacionalke?", 
+  moznosti: ["LuxLeaks", "CumEx", "Panama Papers", "SwissLeaks"], 
+  odgovor: "LuxLeaks" 
+},
+{  
+  vprasanje: "Kaj je bil cilj projekta Bluebird?", 
+  moznosti: ["Raziskovanje miselne kontrole", "Razkritje korupcije", "Razvoj jedrskega orožja", "Manipulacija medijev"], 
+  odgovor: "Raziskovanje miselne kontrole" 
+},
+{  
+  vprasanje: "Katera država je bila središče afere z označevanjem hrane?", 
+  moznosti: ["Francija", "Italija", "Nemčija", "Belgija"], 
+  odgovor: "Francija" 
+}
+];
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

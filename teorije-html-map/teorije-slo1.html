@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+  <link rel="stylesheet" href="kviz-zanimive-teorijecss.css">
+  <style>
+    body {
+background-image: url('slike-teory-vse/slika1-dell.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Kviz Skritih Resnic: Slovenija</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="C:/Users/samir\Desktop/seminarska popravki/quizzes.html"><button>Kvizi</button></a>
+    <a href="C:/Users/samir/Desktop/seminarska popravki/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+const podatkiKviz = [
+
+{ 
+      vprasanje: "Katere slovenske gore naj bi skrivale izgubljeno zakladnico starodavnih Keltov?", 
+      moznosti: ["Julijske Alpe", "Karavanke", "Pohorje", "Kamniško-Savinjske Alpe"], 
+      odgovor: "Pohorje" 
+    },
+    { 
+      vprasanje: "Kateri slovenski grad je znan po legendi o 'krvavi grofici', ki je mučila svoje podložnike?", 
+      moznosti: ["Grad Bogenšperk", "Ljubljanski grad", "Celjski grad", "Predjamski grad"], 
+      odgovor: "Celjski grad" 
+    },
+    { 
+      vprasanje: "Katero jezero v Sloveniji naj bi bilo dom starodavnega bitja podobnega zmaju?", 
+      moznosti: ["Blejsko jezero", "Bohinjsko jezero", "Divje jezero", "Cerknica"], 
+      odgovor: "Divje jezero" 
+    },
+    { 
+      vprasanje: "Kateri hrib v Sloveniji naj bi bil v starih časih središče poganskih ritualov?", 
+      moznosti: ["Šmarna gora", "Gradišče", "Boč", "Kum"], 
+      odgovor: "Gradišče" 
+    },
+    { 
+      vprasanje: "Katera slovenska reka je po legendah dom morskih deklic?", 
+      moznosti: ["Soča", "Sava", "Krka", "Drava"], 
+      odgovor: "Krka" 
+    },
+    { 
+      vprasanje: "Katera jama v Sloveniji je po legendi vhod v podzemno kraljestvo Škratov?", 
+      moznosti: ["Pekel", "Postojnska jama", "Škocjanske jame", "Križna jama"], 
+      odgovor: "Pekel" 
+    },
+    { 
+      vprasanje: "Katero mesto v Sloveniji naj bi imelo skrivne katakombe, ki jih je zgradila skrivnostna sekta?", 
+      moznosti: ["Ptuj", "Škofja Loka", "Koper", "Novo mesto"], 
+      odgovor: "Ptuj" 
+    },
+    { 
+      vprasanje: "Kateri starodavni slovenski simbol naj bi po teorijah oddajal posebno energijo?", 
+      moznosti: ["Vaška situla", "Triglavski simbol", "Šentviška rozeta", "Lipov list"], 
+      odgovor: "Šentviška rozeta" 
+    },
+    { 
+      vprasanje: "Katera slovenska legenda govori o 'zmajevem templju' pod Ljubljanskim gradom?", 
+      moznosti: ["Zmaj pod Ljubljano", "Zlati zmaj", "Kralj Matjaž", "Ljubljanski vitez"], 
+      odgovor: "Zmaj pod Ljubljano" 
+    },
+    { 
+      vprasanje: "Katero drevo v Sloveniji naj bi imelo čarobne zdravilne moči?", 
+      moznosti: ["Lipa v Lipici", "Kostanjevo drevo pri Postojni", "Lipov drevored na Bledu", "Jablana na Planini"], 
+      odgovor: "Lipa v Lipici" 
+    },
+    { 
+      vprasanje: "Katerega slovenskega kraja se izogibajo domačini zaradi legend o duhovih in prekletstvih?", 
+      moznosti: ["Hudičev most", "Zaplana", "Črna vas", "Kostanjevica na Krki"], 
+      odgovor: "Hudičev most" 
+    },
+    { 
+      vprasanje: "Katera slovenska reka naj bi bila po teorijah pod vplivom starodavnih zvezdnih linij (ley lines)?", 
+      moznosti: ["Drava", "Sava", "Soča", "Krka"], 
+      odgovor: "Sava" 
+    },
+    { 
+      vprasanje: "Kateri slovenski grad naj bi bil prizorišče alkimističnih eksperimentov?", 
+      moznosti: ["Predjamski grad", "Ljubljanski grad", "Grad Snežnik", "Bogenšperk"], 
+      odgovor: "Bogenšperk" 
+    },
+    { 
+      vprasanje: "Katero slovensko jezero naj bi po legendah 'izginjalo' zaradi vpliva mističnih sil?", 
+      moznosti: ["Cerknica", "Blejsko jezero", "Bohinjsko jezero", "Divje jezero"], 
+      odgovor: "Cerknica" 
+    },
+    { 
+      vprasanje: "Katera gora v Sloveniji naj bi bila kraj srečanja med čarovnicami?", 
+      moznosti: ["Kum", "Nanos", "Pohorje", "Triglav"], 
+      odgovor: "Nanos" 
+    },
+    { 
+      vprasanje: "Katera slovenska reka je po legendah mesto, kjer se prepletata svet živih in mrtvih?", 
+      moznosti: ["Drava", "Mura", "Krka", "Soča"], 
+      odgovor: "Mura" 
+    },
+    { 
+      vprasanje: "Katero mesto v Sloveniji je po legendah povezano z 'vampirji'?", 
+      moznosti: ["Ljubljana", "Ptuj", "Maribor", "Celje"], 
+      odgovor: "Ptuj" 
+    },
+    { 
+      vprasanje: "Kateri simbol iz Slovenije naj bi bil ključ za odklepanje starodavnih skrivnosti?", 
+      moznosti: ["Vaška situla", "Triglavski simbol", "Kozorog", "Šentviška rozeta"], 
+      odgovor: "Vaška situla" 
+    },
+    { 
+      vprasanje: "Kateri kraj v Sloveniji je povezan s skrivnostnimi lučmi in neznanimi letečimi predmeti?", 
+      moznosti: ["Postojna", "Bela krajina", "Pekel pri Laškem", "Ljubljansko barje"], 
+      odgovor: "Ljubljansko barje" 
+    },
+    { 
+      vprasanje: "Katera slovenska jeskina naj bi bila po legendah vhod v pekel?", 
+      moznosti: ["Jama Pekel", "Postojnska jama", "Škocjanske jame", "Križna jama"], 
+      odgovor: "Jama Pekel" 
+    },
+  { 
+    vprasanje: "Katere slovenske gore naj bi skrivale izgubljeno zakladnico starodavnih Keltov?", 
+    moznosti: ["Julijske Alpe", "Karavanke", "Pohorje", "Kamniško-Savinjske Alpe"], 
+    odgovor: "Pohorje" 
+  },
+  { 
+    vprasanje: "Kateri slovenski grad je znan po legendi o 'krvavi grofici', ki je mučila svoje podložnike?", 
+    moznosti: ["Grad Bogenšperk", "Ljubljanski grad", "Celjski grad", "Predjamski grad"], 
+    odgovor: "Celjski grad" 
+  },
+  { 
+    vprasanje: "Katero jezero v Sloveniji naj bi bilo dom starodavnega bitja podobnega zmaju?", 
+    moznosti: ["Blejsko jezero", "Bohinjsko jezero", "Divje jezero", "Cerknica"], 
+    odgovor: "Divje jezero" 
+  },
+  { 
+    vprasanje: "Kateri hrib v Sloveniji naj bi bil v starih časih središče poganskih ritualov?", 
+    moznosti: ["Šmarna gora", "Gradišče", "Boč", "Kum"], 
+    odgovor: "Gradišče" 
+  },
+  { 
+    vprasanje: "Katera slovenska reka je po legendah dom morskih deklic?", 
+    moznosti: ["Soča", "Sava", "Krka", "Drava"], 
+    odgovor: "Krka" 
+  },
+  { 
+    vprasanje: "Katera jama v Sloveniji je po legendi vhod v podzemno kraljestvo Škratov?", 
+    moznosti: ["Pekel", "Postojnska jama", "Škocjanske jame", "Križna jama"], 
+    odgovor: "Pekel" 
+  },
+  { 
+    vprasanje: "Katero mesto v Sloveniji naj bi imelo skrivne katakombe, ki jih je zgradila skrivnostna sekta?", 
+    moznosti: ["Ptuj", "Škofja Loka", "Koper", "Novo mesto"], 
+    odgovor: "Ptuj" 
+  },
+  { 
+    vprasanje: "Kateri starodavni slovenski simbol naj bi po teorijah oddajal posebno energijo?", 
+    moznosti: ["Vaška situla", "Triglavski simbol", "Šentviška rozeta", "Lipov list"], 
+    odgovor: "Šentviška rozeta" 
+  },
+  { 
+    vprasanje: "Katera slovenska legenda govori o 'zmajevem templju' pod Ljubljanskim gradom?", 
+    moznosti: ["Zmaj pod Ljubljano", "Zlati zmaj", "Kralj Matjaž", "Ljubljanski vitez"], 
+    odgovor: "Zmaj pod Ljubljano" 
+  },
+  { 
+    vprasanje: "Katero drevo v Sloveniji naj bi imelo čarobne zdravilne moči?", 
+    moznosti: ["Lipa v Lipici", "Kostanjevo drevo pri Postojni", "Lipov drevored na Bledu", "Jablana na Planini"], 
+    odgovor: "Lipa v Lipici" 
+  },
+  { 
+    vprasanje: "Katerega slovenskega kraja se izogibajo domačini zaradi legend o duhovih in prekletstvih?", 
+    moznosti: ["Hudičev most", "Zaplana", "Črna vas", "Kostanjevica na Krki"], 
+    odgovor: "Hudičev most" 
+  },
+  { 
+    vprasanje: "Katera slovenska reka naj bi bila po teorijah pod vplivom starodavnih zvezdnih linij (ley lines)?", 
+    moznosti: ["Drava", "Sava", "Soča", "Krka"], 
+    odgovor: "Sava" 
+  },
+  { 
+    vprasanje: "Kateri slovenski grad naj bi bil prizorišče alkimističnih eksperimentov?", 
+    moznosti: ["Predjamski grad", "Ljubljanski grad", "Grad Snežnik", "Bogenšperk"], 
+    odgovor: "Bogenšperk" 
+  },
+  { 
+    vprasanje: "Katero slovensko jezero naj bi po legendah 'izginjalo' zaradi vpliva mističnih sil?", 
+    moznosti: ["Cerknica", "Blejsko jezero", "Bohinjsko jezero", "Divje jezero"], 
+    odgovor: "Cerknica" 
+  },
+  { 
+    vprasanje: "Katera gora v Sloveniji naj bi bila kraj srečanja med čarovnicami?", 
+    moznosti: ["Kum", "Nanos", "Pohorje", "Triglav"], 
+    odgovor: "Nanos" 
+  },
+  { 
+    vprasanje: "Katera slovenska reka je po legendah mesto, kjer se prepletata svet živih in mrtvih?", 
+    moznosti: ["Drava", "Mura", "Krka", "Soča"], 
+    odgovor: "Mura" 
+  },
+  { 
+    vprasanje: "Katero mesto v Sloveniji je po legendah povezano z 'vampirji'?", 
+    moznosti: ["Ljubljana", "Ptuj", "Maribor", "Celje"], 
+    odgovor: "Ptuj" 
+  },
+  { 
+    vprasanje: "Kateri simbol iz Slovenije naj bi bil ključ za odklepanje starodavnih skrivnosti?", 
+    moznosti: ["Vaška situla", "Triglavski simbol", "Kozorog", "Šentviška rozeta"], 
+    odgovor: "Vaška situla" 
+  },
+  { 
+    vprasanje: "Kateri kraj v Sloveniji je povezan s skrivnostnimi lučmi in neznanimi letečimi predmeti?", 
+    moznosti: ["Postojna", "Bela krajina", "Pekel pri Laškem", "Ljubljansko barje"], 
+    odgovor: "Ljubljansko barje" 
+  },
+  { 
+    vprasanje: "Katera slovenska jeskina naj bi bila po legendah vhod v pekel?", 
+    moznosti: ["Jama Pekel", "Postojnska jama", "Škocjanske jame", "Križna jama"], 
+    odgovor: "Jama Pekel" 
+  },
+  { 
+    vprasanje: "Katera vas v Sloveniji je povezana z mitom o zlatem volu?", 
+    moznosti: ["Volčji Potok", "Zgornja Polskava", "Sela pri Kamniku", "Zavrh"], 
+    odgovor: "Volčji Potok" 
+  },
+  { 
+    vprasanje: "Kateri slap v Sloveniji naj bi bil ustvarjen z udarcem starodavnega velikana?", 
+    moznosti: ["Savica", "Peričnik", "Rinka", "Kozjak"], 
+    odgovor: "Rinka" 
+  },
+  { 
+    vprasanje: "Katera jama v Sloveniji je povezana z legendo o pogumni deklici?", 
+    moznosti: ["Vilenica", "Planinska jama", "Pekel", "Postojnska jama"], 
+    odgovor: "Planinska jama" 
+  },
+  { 
+    vprasanje: "Katera gora v Sloveniji je po legendi varuh starega zaklada?", 
+    moznosti: ["Triglav", "Krn", "Kum", "Grintovec"], 
+    odgovor: "Triglav" 
+  },
+  { 
+    vprasanje: "Kateri slovenski grad je povezan s skrivnostno knjigo, ki naj bi prinašala nesrečo?", 
+    moznosti: ["Ljubljanski grad", "Grad Podsreda", "Celjski grad", "Grad Predjama"], 
+    odgovor: "Grad Podsreda" 
+  },
+  { 
+    vprasanje: "Katera reka v Sloveniji je po legendah dom skrivnostnega podvodnega bitja?", 
+    moznosti: ["Krka", "Soča", "Drava", "Mura"], 
+    odgovor: "Krka" 
+  },
+  { 
+    vprasanje: "Katero mesto v Sloveniji je povezano z legendo o zmajevem kralju?", 
+    moznosti: ["Ljubljana", "Celje", "Novo mesto", "Kranj"], 
+    odgovor: "Ljubljana" 
+  },
+  { 
+    vprasanje: "Kateri slap v Sloveniji je znan po legendi o skriti votlini?", 
+    moznosti: ["Savica", "Peričnik", "Rinka", "Kozjak"], 
+    odgovor: "Kozjak" 
+  },
+  { 
+    vprasanje: "Katero slovensko mesto je znano po skrivnostnih energijskih točkah?", 
+    moznosti: ["Ptuj", "Škofja Loka", "Bled", "Maribor"], 
+    odgovor: "Bled" 
+  },
+  { 
+    vprasanje: "Katera jama v Sloveniji skriva legende o zmajevi krvi?", 
+    moznosti: ["Postojnska jama", "Planinska jama", "Pekel", "Škocjanske jame"], 
+    odgovor: "Postojnska jama" 
+  }
+];
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+  <link rel="stylesheet" href="kviz-zanimive-teorijecss.css">
+  <style>
+    body {
+background-image: url('slike-teory-vse/zda-te.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Ameriške resnice, ki jih niso hoteli razkriti</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="C:/Users/samir\Desktop/seminarska popravki/quizzes.html"><button>Kvizi</button></a>
+    <a href="C:/Users/samir/Desktop/seminarska popravki/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+const podatkiKviz = [
+      { 
+        vprasanje: "Katera ameriška obveščevalna agencija je izvajala tajni program nadzora misli, znan kot MKULTRA?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Kateri dogodek iz leta 1933 v Nemčiji je bil načrtovan s strani nacistov za utrditev moči?", 
+        moznosti: ["Požig Reichstaga", "Noč dolgih nožev", "Kristalna noč", "Bitka za Berlin"], 
+        odgovor: "Požig Reichstaga" 
+      },
+      { 
+        vprasanje: "Katera ameriška operacija je vključevala testiranje učinkov radioaktivnih snovi na nič hudega slutečih ljudeh?", 
+        moznosti: ["Operacija Sea-Spray", "Projekt Manhattan", "Operacija Northwoods", "Projekt MKULTRA"], 
+        odgovor: "Operacija Sea-Spray" 
+      },
+      { 
+        vprasanje: "Katera tobačna podjetja so desetletja prikrivala dokaze o škodljivosti kajenja?", 
+        moznosti: ["Philip Morris", "R.J. Reynolds", "Lorillard", "Vse navedeno"], 
+        odgovor: "Vse navedeno" 
+      },
+      { 
+        vprasanje: "Katera ameriška agencija je tihotapila kokain v ZDA za financiranje nikaragovskih upornikov?", 
+        moznosti: ["CIA", "FBI", "DEA", "ATF"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera operacija je načrtovala teroristične napade na ZDA za vojno proti Kubi?", 
+        moznosti: ["Operacija Northwoods", "Operacija Mongoose", "Operacija Zapata", "Operacija Ajax"], 
+        odgovor: "Operacija Northwoods" 
+      },
+      { 
+        vprasanje: "Katera farmacevtska podjetja so prikrivala škodljive učinke zdravila Vioxx?", 
+        moznosti: ["Merck & Co.", "Pfizer", "Johnson & Johnson", "Eli Lilly"], 
+        odgovor: "Merck & Co." 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju iranskega premierja Mohameda Mosadeka?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju čilskega predsednika Salvadorja Allendeja?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju guatemalskega predsednika Jacoba Arbenza?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju indonezijskega predsednika Sukarna?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju kongovskega premierja Patricea Lumumbe?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju haitijskega predsednika Jeana-Bertranda Aristida?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju honduraškega predsednika Manuela Zelaye?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju libijskega voditelja Moamerja Gadafija?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju ukrajinskega predsednika Viktorja Janukoviča?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju bolivijskega predsednika Eva Moralesa?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju venezuelskega predsednika Huga Cháveza?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera operacija je vključevala tajno spremljanje Američanov med protesti proti vojni v Vietnamu?", 
+        moznosti: ["COINTELPRO", "Operacija Chaos", "Operacija Northwoods", "Projekt MKULTRA"], 
+        odgovor: "COINTELPRO" 
+      },
+      { 
+        vprasanje: "Katera agencija je skrivaj zbirala telefonske podatke milijonov Američanov?", 
+        moznosti: ["NSA", "CIA", "FBI", "DIA"], 
+        odgovor: "NSA" 
+      },
+      { 
+        vprasanje: "Katera ameriška regija je znana po kemičnih eksperimentih na vojakih v Fort Detricku?", 
+        moznosti: ["Maryland", "Nevada", "Texas", "Arizona"], 
+        odgovor: "Maryland" 
+      },
+      { 
+        vprasanje: "Katera letalska družba je sodelovala z ameriško vlado za tihotapljenje orožja v Nikaragvo?", 
+        moznosti: ["Air America", "Pan Am", "Delta", "United Airlines"], 
+        odgovor: "Air America" 
+      },
+      { 
+        vprasanje: "Katera organizacija je izvajala nadzor nad ameriškimi državljani v 1960-ih in 1970-ih letih?", 
+        moznosti: ["COINTELPRO", "FBI", "CIA", "NSA"], 
+        odgovor: "COINTELPRO" 
+      },
+      { 
+        vprasanje: "Katera operacija je poskušala vplivati na volitve v tujini v prid ameriških interesov?", 
+        moznosti: ["Operacija Gladio", "Operacija Chaos", "Operacija Zapata", "Operacija Ajax"], 
+        odgovor: "Operacija Gladio" 
+      },
+	      { 
+        vprasanje: "Katera ameriška obveščevalna agencija je izvajala tajni program nadzora misli, znan kot MKULTRA?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+    },
+    { 
+        vprasanje: "Kateri dogodek iz leta 1933 v Nemčiji je bil načrtovan s strani nacistov za utrditev moči?", 
+        moznosti: ["Požig Reichstaga", "Noč dolgih nožev", "Kristalna noč", "Bitka za Berlin"], 
+        odgovor: "Požig Reichstaga" 
+    },
+    { 
+        vprasanje: "Katera ameriška operacija je vključevala testiranje učinkov radioaktivnih snovi na nič hudega slutečih ljudeh?", 
+        moznosti: ["Operacija Sea-Spray", "Projekt Manhattan", "Operacija Northwoods", "Projekt MKULTRA"], 
+        odgovor: "Operacija Sea-Spray" 
+    },
+    { 
+        vprasanje: "Katera tobačna podjetja so desetletja prikrivala dokaze o škodljivosti kajenja?", 
+        moznosti: ["Philip Morris", "R.J. Reynolds", "Lorillard", "Vse navedeno"], 
+        odgovor: "Vse navedeno" 
+    },
+    { 
+        vprasanje: "Katera ameriška agencija je tihotapila kokain v ZDA za financiranje nikaragovskih upornikov?", 
+        moznosti: ["CIA", "FBI", "DEA", "ATF"], 
+        odgovor: "CIA" 
+    },
+    { 
+        vprasanje: "Katera operacija je načrtovala teroristične napade na ZDA za vojno proti Kubi?", 
+        moznosti: ["Operacija Northwoods", "Operacija Mongoose", "Operacija Zapata", "Operacija Ajax"], 
+        odgovor: "Operacija Northwoods" 
+    },
+    { 
+        vprasanje: "Katera farmacevtska podjetja so prikrivala škodljive učinke zdravila Vioxx?", 
+        moznosti: ["Merck & Co.", "Pfizer", "Johnson & Johnson", "Eli Lilly"], 
+        odgovor: "Merck & Co." 
+    },
+    { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju iranskega premierja Mohameda Mosadeka?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+    },
+    { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju čilskega predsednika Salvadorja Allendeja?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+    },
+    { 
+        vprasanje: "Katera agencija je sodelovala pri strmoglavljenju guatemalskega predsednika Jacoba Arbenza?", 
+        moznosti: ["CIA", "FBI", "NSA", "DIA"], 
+        odgovor: "CIA" 
+    },
+    { 
+        vprasanje: "Katera ameriška operacija je tajno odstranjevala politične disidente v tujini?", 
+        moznosti: ["Operacija Condor", "Operacija Gladio", "Operacija Ajax", "Operacija Chaos"], 
+        odgovor: "Operacija Condor" 
+    },
+    { 
+        vprasanje: "Kateri dokument je razkril obsežno vohunsko mrežo, ki jo je vodila NSA?", 
+        moznosti: ["Snowdnove razkritja", "Pentagonski dokumenti", "Panamski dokumenti", "Watergate poročilo"], 
+        odgovor: "Snowdnove razkritja" 
+    },
+    { 
+        vprasanje: "Kateri eksperiment je prikazal vpliv medijev na manipulacijo javnega mnenja?", 
+        moznosti: ["Eksperiment Asch", "Projekt Bluebird", "Projekt Mockingbird", "Eksperiment Milgram"], 
+        odgovor: "Projekt Mockingbird" 
+    },
+    { 
+        vprasanje: "Katera korporacija je odgovorna za izlitje nafte v Mehiškem zalivu leta 2010?", 
+        moznosti: ["BP", "ExxonMobil", "Chevron", "Shell"], 
+        odgovor: "BP" 
+    },
+    { 
+        vprasanje: "Katera operacija je bila povezana s tihotapljenjem orožja iranskim silam med iransko-iraško vojno?", 
+        moznosti: ["Operacija Iran-Contra", "Operacija Chaos", "Operacija Gladio", "Operacija Condor"], 
+        odgovor: "Operacija Iran-Contra" 
+    },
+    { 
+        vprasanje: "Kateri dokumenti so razkrili ameriške vojaške napake med vietnamsko vojno?", 
+        moznosti: ["Pentagonski dokumenti", "Snowdnove razkritja", "Watergate poročilo", "Operacija Mockingbird"], 
+        odgovor: "Pentagonski dokumenti" 
+    },
+    { 
+        vprasanje: "Katera farmacevtska podjetja so prikrivala tveganja uporabe talidomida?", 
+        moznosti: ["Chemie Grünenthal", "Pfizer", "Johnson & Johnson", "Merck & Co."], 
+        odgovor: "Chemie Grünenthal" 
+    },
+    { 
+        vprasanje: "Katera regija je bila prizorišče jedrskih poskusov ZDA v 20. stoletju?", 
+        moznosti: ["Nevada", "Aljaska", "Kalifornija", "Havaji"], 
+        odgovor: "Nevada" 
+    },
+    { 
+        vprasanje: "Katera letalska nesreča je sprožila razprave o varnosti Boeingovih letal leta 2019?", 
+        moznosti: ["Lion Air Flight 610", "Air France Flight 447", "Malaysia Airlines Flight 370", "Ethiopian Airlines Flight 302"], 
+        odgovor: "Ethiopian Airlines Flight 302" 
+    },
+    { 
+        vprasanje: "Kateri projekt je bil povezan z razvojem jedrske bombe?", 
+        moznosti: ["Projekt Manhattan", "Operacija Sea-Spray", "Projekt Mockingbird", "Operacija Chaos"], 
+        odgovor: "Projekt Manhattan" 
+    },
+    { 
+        vprasanje: "Katera operacija je bila povezana z ameriško podporo talibanom med sovjetsko okupacijo Afganistana?", 
+        moznosti: ["Operacija Cyclone", "Operacija Gladio", "Operacija Condor", "Operacija Ajax"], 
+        odgovor: "Operacija Cyclone" 
+    },
+    { 
+        vprasanje: "Katera korporacija je odgovorna za kemično onesnaženje Love Canal?", 
+        moznosti: ["Hooker Chemical", "Dow Chemical", "Monsanto", "ExxonMobil"], 
+        odgovor: "Hooker Chemical" 
+    },
+    { 
+        vprasanje: "Katera ameriška operacija je tajno nadzirala komunikacije tujih vlad?", 
+        moznosti: ["Operacija Echelon", "Operacija Chaos", "Operacija Ajax", "Operacija Condor"], 
+        odgovor: "Operacija Echelon" 
+    },
+    { 
+        vprasanje: "Kateri dogodek je sprožil okoljsko gibanje v ZDA v 1960-ih?", 
+        moznosti: ["Izlitje nafte v Santa Barbari", "Izlitje Exxon Valdez", "Razlitje v Mehiškem zalivu", "Razlitje BP"], 
+        odgovor: "Izlitje nafte v Santa Barbari" 
+    },
+    { 
+        vprasanje: "Katera ameriška korporacija je bila povezana s prisilnim delom v Amazoniji?", 
+        moznosti: ["Ford Motor Company", "Chevron", "ExxonMobil", "Coca-Cola"], 
+        odgovor: "Ford Motor Company" 
+    },
+    { 
+        vprasanje: "Kateri dogodek je znan kot pričetek moderne dobe vojaškega nadzora?", 
+        moznosti: ["Operacija Desert Storm", "9/11", "Operacija Iraqi Freedom", "Operacija Enduring Freedom"], 
+        odgovor: "9/11" 
+    }
+];
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

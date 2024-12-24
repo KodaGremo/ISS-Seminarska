@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+  <link rel="stylesheet" href="kviz-zanimive-teorijecss.css">
+  <style>
+    body {
+background-image: url('slike-teory-vse/zda-2-vesolje.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Nerešene skrivnosti: ZDA izdaja</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+    <a href="C:/Users/samir\Desktop/seminarska popravki/quizzes.html"><button>Kvizi</button></a>
+    <a href="C:/Users/samir/Desktop/seminarska popravki/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+const podatkiKviz = [
+      { 
+        vprasanje: "Kateri kraj v Nevadi je najbolj povezan z teorijami o UFO-jih in nezemljanih?", 
+        moznosti: ["Area 51", "Roswell", "Sedona", "Las Vegas"], 
+        odgovor: "Area 51" 
+      },
+      { 
+        vprasanje: "Katera ameriška baza je znana po incidentu iz leta 1947, povezanem z domnevnim strmoglavljenjem UFO-ja?", 
+        moznosti: ["Roswell", "Dulce Base", "Area 51", "Edwards Air Force Base"], 
+        odgovor: "Roswell" 
+      },
+      { 
+        vprasanje: "Katero ameriško mesto naj bi bilo pod vplivom skrivnih iluminatskih simbolov?", 
+        moznosti: ["Washington D.C.", "New York City", "Los Angeles", "Chicago"], 
+        odgovor: "Washington D.C." 
+      },
+      { 
+        vprasanje: "Kateri naravni spomenik je po teorijah dom prehodov v druge dimenzije?", 
+        moznosti: ["Mount Shasta", "Grand Canyon", "Yellowstone", "Mount Rainier"], 
+        odgovor: "Mount Shasta" 
+      },
+      { 
+        vprasanje: "Kateri kraj je povezan z nenavadnimi svetlobnimi pojavi, imenovanimi 'Marfa Lights'?", 
+        moznosti: ["Texas", "Arizona", "Nevada", "Utah"], 
+        odgovor: "Texas" 
+      },
+      { 
+        vprasanje: "Katera ameriška organizacija naj bi po teorijah nadzorovala um ljudi z eksperimentom MKUltra?", 
+        moznosti: ["CIA", "FBI", "NSA", "NASA"], 
+        odgovor: "CIA" 
+      },
+      { 
+        vprasanje: "Katera gora v ZDA je povezana z mističnimi legendami in domnevnimi pojavami Bigfoota?", 
+        moznosti: ["Mount Shasta", "Mount Hood", "Mount Rainier", "Rocky Mountains"], 
+        odgovor: "Mount Shasta" 
+      },
+      { 
+        vprasanje: "Kateri otok je po teorijah mesto, kjer so se izvajali nezakoniti biološki poskusi na živalih?", 
+        moznosti: ["Plum Island", "Alcatraz", "Catalina Island", "Mackinac Island"], 
+        odgovor: "Plum Island" 
+      },
+      { 
+        vprasanje: "Katero ameriško mesto je središče teorij o podzemnem kraljestvu Agartha?", 
+        moznosti: ["Dulce", "Sedona", "Denver", "Las Vegas"], 
+        odgovor: "Dulce" 
+      },
+      { 
+        vprasanje: "Katero mesto ima letališče, za katerega mnogi verjamejo, da skriva podzemne baze iluminatov?", 
+        moznosti: ["Denver", "Dallas", "Atlanta", "Los Angeles"], 
+        odgovor: "Denver" 
+      },
+      { 
+        vprasanje: "Katera ameriška regija je znana po skrivnostnih izginotjih letal in ladij?", 
+        moznosti: ["Bermudski trikotnik", "Hudson River", "Lake Michigan", "Gulf of Mexico"], 
+        odgovor: "Bermudski trikotnik" 
+      },
+      { 
+        vprasanje: "Katera skrivnostna ameriška organizacija je povezana s teorijami o globalni dominaciji?", 
+        moznosti: ["Skull and Bones", "Freemasons", "Bohemian Grove", "Illuminati"], 
+        odgovor: "Illuminati" 
+      },
+      { 
+        vprasanje: "Kateri kraj v Kaliforniji je povezan z legendami o skritih tunelih in zakladih templjarjev?", 
+        moznosti: ["Oak Island", "Mount Shasta", "Napa Valley", "Los Angeles"], 
+        odgovor: "Oak Island" 
+      },
+      { 
+        vprasanje: "Katera teorija govori o skrivnem planetu, ki naj bi trčil z Zemljo?", 
+        moznosti: ["Planet X (Nibiru)", "Venus Effect", "Dark Star", "Wormwood"], 
+        odgovor: "Planet X (Nibiru)" 
+      },
+      { 
+        vprasanje: "Katera vojaška baza je povezana z domnevnim razvojem časovnega potovanja?", 
+        moznosti: ["Montauk", "Area 51", "Wright-Patterson", "Fort Knox"], 
+        odgovor: "Montauk" 
+      },
+      { 
+        vprasanje: "Kateri kraj v ZDA je povezan z rituali elitne skrivne družbe?", 
+        moznosti: ["Bohemian Grove", "Skull Island", "Alcatraz", "Roswell"], 
+        odgovor: "Bohemian Grove" 
+      },
+      { 
+        vprasanje: "Katera ameriška reka je povezana z nenavadnimi svetlobnimi pojavi?", 
+        moznosti: ["Hudson River", "Mississippi", "Colorado", "Rio Grande"], 
+        odgovor: "Hudson River" 
+      },
+      { 
+        vprasanje: "Katera teorija zarote govori o skrivnostnem uničenju nebotičnikov 11. septembra?", 
+        moznosti: ["Controlled Demolition", "Missile Theory", "Alien Intervention", "Shadow Government"], 
+        odgovor: "Controlled Demolition" 
+      },
+      { 
+        vprasanje: "Kateri kraj v ZDA je povezan z nenavadnimi in nepojasnjenimi požari?", 
+        moznosti: ["Centralia", "Chicago", "Los Angeles", "Napa Valley"], 
+        odgovor: "Centralia" 
+      },
+      { 
+        vprasanje: "Katera znamenita ameriška lokacija naj bi bila domovanje mističnih energij in UFO-jev?", 
+        moznosti: ["Sedona", "Roswell", "Area 51", "Grand Canyon"], 
+        odgovor: "Sedona" 
+      },
+      { 
+      vprasanje: "Katera ameriška zvezna država je povezana z nenavadnimi krogi v poljih, ki so pogosto pripisani nezemljanom?", 
+      moznosti: ["Kansas", "Nebraska", "Ohio", "Arizona"], 
+      odgovor: "Kansas" 
+    },
+    { 
+      vprasanje: "Katera reka v ZDA je po teorijah dom skrivnostnih bitij, podobnih kačam?", 
+      moznosti: ["Mississippi", "Colorado", "Rio Grande", "Hudson"], 
+      odgovor: "Mississippi" 
+    },
+    { 
+      vprasanje: "Kateri kraj v Kentuckyju je povezan s pojavi nenavadnih svetlobnih krogel?", 
+      moznosti: ["Mammoth Cave", "Pineville", "Hopkinsville", "Paducah"], 
+      odgovor: "Hopkinsville" 
+    },
+    { 
+      vprasanje: "Katero ameriško jezero naj bi skrivala skrivnostna podvodna bitja?", 
+      moznosti: ["Lake Tahoe", "Lake Michigan", "Great Salt Lake", "Crater Lake"], 
+      odgovor: "Lake Tahoe" 
+    },
+    { 
+      vprasanje: "Katera gora v ZDA je po legendah domovanje duhov starodavnih plemen?", 
+      moznosti: ["Mount Rainier", "Mount Shasta", "Mount Whitney", "Mount Hood"], 
+      odgovor: "Mount Shasta" 
+    },
+    { 
+      vprasanje: "Kateri narodni park v ZDA je povezan z nenavadnimi izginotji obiskovalcev?", 
+      moznosti: ["Yosemite", "Yellowstone", "Grand Canyon", "Great Smoky Mountains"], 
+      odgovor: "Yosemite" 
+    },
+    { 
+      vprasanje: "Katero mesto v ZDA je povezano s teorijo o podzemnih bitjih imenovanih 'Lizard People'?", 
+      moznosti: ["Los Angeles", "Phoenix", "Las Vegas", "Denver"], 
+      odgovor: "Los Angeles" 
+    },
+    { 
+      vprasanje: "Kateri kraj je znan po nenavadnih signalih, za katere nekateri menijo, da so nezemeljskega izvora?", 
+      moznosti: ["Green Bank Observatory", "Mount Wilson", "Arecibo", "SETI Institute"], 
+      odgovor: "Green Bank Observatory" 
+    },
+    { 
+      vprasanje: "Katera ameriška baza je povezana s testi, ki naj bi vključevali teleportacijo ladij?", 
+      moznosti: ["Philadelphia Naval Yard", "Wright-Patterson", "Montauk", "Area 51"], 
+      odgovor: "Philadelphia Naval Yard" 
+    },
+    { 
+      vprasanje: "Kateri kraj v Ohiu je povezan s pojavljanjem nenavadnega bitja, znanega kot 'Mothman'?", 
+      moznosti: ["Point Pleasant", "Chillicothe", "Athens", "Cleveland"], 
+      odgovor: "Point Pleasant" 
+    },
+    { 
+      vprasanje: "Katero ameriško mesto je središče legend o nenavadnem bitju z velikanskimi rdečimi očmi?", 
+      moznosti: ["Point Pleasant", "Roswell", "Sedona", "Portland"], 
+      odgovor: "Point Pleasant" 
+    },
+    { 
+      vprasanje: "Kateri kraj v Teksasu je znan po nenavadnih pojavljanjih lebdečih svetlobnih krogel?", 
+      moznosti: ["Marfa", "Dallas", "Amarillo", "Austin"], 
+      odgovor: "Marfa" 
+    },
+    { 
+      vprasanje: "Katera reka v ZDA naj bi bila po legendah povezana z duhovnimi prehodi?", 
+      moznosti: ["Hudson", "Mississippi", "Columbia", "Rio Grande"], 
+      odgovor: "Mississippi" 
+    },
+    { 
+      vprasanje: "Katera jama v ZDA je povezana z legendami o starodavnih zakladih?", 
+      moznosti: ["Mammoth Cave", "Carlsbad Caverns", "Luray Caverns", "Wind Cave"], 
+      odgovor: "Mammoth Cave" 
+    },
+    { 
+      vprasanje: "Katera ameriška država je povezana s skrivnostnimi kamni, ki se premikajo brez razlage?", 
+      moznosti: ["Nevada", "California", "Arizona", "Utah"], 
+      odgovor: "Nevada" 
+    },
+    { 
+      vprasanje: "Katero mesto v Kaliforniji je povezano z nenavadnimi svetlobnimi pojavi?", 
+      moznosti: ["Sedona", "San Diego", "San Jose", "Los Angeles"], 
+      odgovor: "Sedona" 
+    },
+    { 
+      vprasanje: "Katera ameriška zvezna država je znana po skrivnostnem trikotniku, kjer izginjajo ladje in letala?", 
+      moznosti: ["Florida", "Alaska", "Hawaii", "California"], 
+      odgovor: "Alaska" 
+    },
+    { 
+      vprasanje: "Katero jezero v ZDA je povezano z legendami o podvodnih mestih?", 
+      moznosti: ["Lake Tahoe", "Lake Michigan", "Lake Superior", "Crater Lake"], 
+      odgovor: "Lake Superior" 
+    },
+    { 
+      vprasanje: "Katero ameriško mesto je povezano z nenavadnimi simboli na denarju?", 
+      moznosti: ["Washington D.C.", "New York", "Philadelphia", "Denver"], 
+      odgovor: "Washington D.C." 
+    },
+    { 
+      vprasanje: "Kateri kraj v Montani je povezan z nenavadnimi znaki na nebu?", 
+      moznosti: ["Helena", "Billings", "Great Falls", "Bozeman"], 
+      odgovor: "Great Falls" 
+    },
+    { 
+      vprasanje: "Kateri narodni park v ZDA je povezan z legendami o izgubljenih zlatiščih?", 
+      moznosti: ["Yellowstone", "Grand Canyon", "Arches", "Death Valley"], 
+      odgovor: "Grand Canyon" 
+    },
+    { 
+      vprasanje: "Kateri ameriški kraj je povezan z glasovi, ki jih slišijo obiskovalci?", 
+      moznosti: ["Death Valley", "Mammoth Cave", "Yosemite", "Great Smoky Mountains"], 
+      odgovor: "Death Valley" 
+    },
+    { 
+      vprasanje: "Kateri otok v Maineu je povezan z legendami o duhovih mornarjev?", 
+      moznosti: ["Appledore Island", "Isle au Haut", "Mount Desert Island", "Monhegan Island"], 
+      odgovor: "Monhegan Island" 
+    },
+    { 
+      vprasanje: "Katera ameriška reka je povezana z nenavadnimi poročili o bitjih?", 
+      moznosti: ["Ohio", "Mississippi", "Hudson", "Rio Grande"], 
+      odgovor: "Ohio" 
+    },
+    { 
+      vprasanje: "Katero ameriško mesto naj bi bilo središče iluminatskih simbolov?", 
+      moznosti: ["Washington D.C.", "Los Angeles", "Denver", "Seattle"], 
+      odgovor: "Denver" 
+    }
+    ];
+    
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>
