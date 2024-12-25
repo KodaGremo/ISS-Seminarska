@@ -13,14 +13,15 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: url('mapa-slik-v-2/o-nas.png');
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
+    background: linear-gradient(120deg, #1abc9c, #16a085, #3498db, #9b59b6);
+    background-size: 200% 200%;
+    animation: dynamic-gradient 10s infinite alternate;
+    position: relative;
     font-size: 23px;
     margin: 0;
     overflow-y: auto;
 }
+
 
 header {
     background-color: #333;
