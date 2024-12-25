@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-slovenija.css">
+  <style>
+    body {
+background-image: url('slike/mitolo.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Slovenska mitologija</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+  { vprasanje: "Katero bitje v slovenski mitologiji straži vhod v Postojnsko jamo?", moznosti: ["Zmaj", "Škrat", "Divja baba", "Povodni mož"], odgovor: "Zmaj" },
+  { vprasanje: "Kako se imenuje vodno bitje, ki naj bi živelo v Ljubljanici?", moznosti: ["Povodni mož", "Zmaj", "Vila", "Škrat"], odgovor: "Povodni mož" },
+  { vprasanje: "Katera mitološka bitja naj bi prebivala v Triglavskem narodnem parku?", moznosti: ["Vile", "Zmaji", "Škrati", "Kozorogi"], odgovor: "Vile" },
+  { vprasanje: "Kateri slovenski junak je znan po tem, da je premagal zmaja?", moznosti: ["Kralj Matjaž", "Martin Krpan", "Peter Klepec", "Ledenik Brin"], odgovor: "Kralj Matjaž" },
+  { vprasanje: "Kako se imenuje slovenski junak, ki je znan po svoji izjemni moči?", moznosti: ["Martin Krpan", "Peter Klepec", "Kralj Matjaž", "Divja baba"], odgovor: "Martin Krpan" },
+  { vprasanje: "Katera bitja naj bi živela v jamah pod slovenskimi gorami?", moznosti: ["Škrati", "Povodni možje", "Divje babe", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Katero mitološko bitje naj bi živelo v Cerkniškem jezeru?", moznosti: ["Povodni mož", "Zmaj", "Škrat", "Vila"], odgovor: "Povodni mož" },
+  { vprasanje: "Kje naj bi prebival slovenski kralj Matjaž?", moznosti: ["Pod Peco", "V Postojnski jami", "Na Triglavu", "V Bohinju"], odgovor: "Pod Peco" },
+  { vprasanje: "Kako se imenuje žensko bitje iz slovenske mitologije, ki ima nadnaravne moči in pomaga ljudem?", moznosti: ["Vila", "Škratinja", "Divja baba", "Kraljica gora"], odgovor: "Vila" },
+  { vprasanje: "Kateri slovenski junak je bil po legendi tako močan, da je lahko premikal gore?", moznosti: ["Peter Klepec", "Martin Krpan", "Kralj Matjaž", "Zlatorog"], odgovor: "Peter Klepec" },
+  { vprasanje: "Kako se imenuje zlati kozorog iz slovenske mitologije?", moznosti: ["Zlatorog", "Triglavski škrat", "Gorski kralj", "Divji mož"], odgovor: "Zlatorog" },
+  { vprasanje: "Kaj je varovalo Zlatorogovo bogastvo?", moznosti: ["Zlatorog", "Triglavski škratje", "Divje babe", "Zmaji"], odgovor: "Zlatorog" },
+  { vprasanje: "Kateri kraj je znan po legendi o zmaju?", moznosti: ["Ljubljana", "Bled", "Postojna", "Cerkniško jezero"], odgovor: "Ljubljana" },
+  { vprasanje: "Kako se imenuje moški vodni duh v slovenski mitologiji?", moznosti: ["Povodni mož", "Zmaj", "Škrat", "Vodna vila"], odgovor: "Povodni mož" },
+  { vprasanje: "Katera bitja so v slovenski mitologiji znana po tem, da prinašajo srečo?", moznosti: ["Vile", "Škrati", "Zmaji", "Divje babe"], odgovor: "Škrati" },
+  { vprasanje: "Kje naj bi zlatorog imel svoje zlato rogove?", moznosti: ["Na Triglavu", "Na Mangartu", "V Bohinju", "Na Nanosu"], odgovor: "Na Triglavu" },
+  { vprasanje: "Kaj je po legendi povzročilo nastanek Blejskega jezera?", moznosti: ["Solze vil", "Potres", "Zmaj", "Božja kazen"], odgovor: "Solze vil" },
+  { vprasanje: "Katera gora je povezana z zgodbo o Kralju Matjažu?", moznosti: ["Peca", "Triglav", "Nanos", "Razor"], odgovor: "Peca" },
+  { vprasanje: "Katera mitološka bitja naj bi živela v slovenskih gozdovih in pomagali ali nagajali ljudem?", moznosti: ["Škrati", "Povodni možje", "Zmaji", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kateri slovenski mitološki kraj je znan po Zlatorogu in njegovi zakladnici?", moznosti: ["Triglav", "Mangart", "Bohinj", "Kanin"], odgovor: "Triglav" },
+{ vprasanje: "Kako se imenujejo ženske duhove v slovenskih rekah in jezerih?", moznosti: ["Vodne vile", "Divje babe", "Škratinje", "Morske deklice"], odgovor: "Vodne vile" },
+  { vprasanje: "Katera mitološka bitja v slovenskih legendah povzročajo nevihte?", moznosti: ["Divji možje", "Povodni možje", "Vile", "Zmaji"], odgovor: "Zmaji" },
+  { vprasanje: "Katero bitje iz slovenske mitologije ima moč spreminjati vreme?", moznosti: ["Divji mož", "Vila", "Škrat", "Povodni mož"], odgovor: "Divji mož" },
+  { vprasanje: "Kje naj bi vile prirejale svoje plese?", moznosti: ["Na gorskih planotah", "V jamah", "Ob rekah", "V gozdovih"], odgovor: "Na gorskih planotah" },
+  { vprasanje: "Kako se imenujejo bitja, ki naj bi po slovenski mitologiji preganjala zle duhove?", moznosti: ["Škrati", "Divji možje", "Vile", "Povodni možje"], odgovor: "Škrati" },
+  { vprasanje: "Katera mitološka bitja so poznana po svojem svetlečem izgledu?", moznosti: ["Vile", "Škrati", "Divje babe", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Kako se imenuje slovenska mitološka zgodba, kjer divji mož nauči ljudi orati?", moznosti: ["Legenda o Divjem možu", "Kralj Matjaž", "Peter Klepec", "Zlatorog"], odgovor: "Legenda o Divjem možu" },
+  { vprasanje: "Katera mitološka bitja v Sloveniji varujejo zaklade?", moznosti: ["Škrati", "Zmaji", "Divji možje", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kako so v slovenskih mitih imenovane skrivnostne ženske s skrivnostnimi močmi?", moznosti: ["Vile", "Škratinje", "Divje babe", "Povodne žene"], odgovor: "Vile" },
+  { vprasanje: "Katero mitološko bitje je v slovenskih legendah znano po ustvarjanju jam?", moznosti: ["Zmaj", "Škrat", "Divja baba", "Povodni mož"], odgovor: "Zmaj" },
+  { vprasanje: "Kdo je bil v slovenskih legendah zaščitnik pastirjev?", moznosti: ["Triglavski škrat", "Divji mož", "Zlatorog", "Povodni mož"], odgovor: "Zlatorog" },
+  { vprasanje: "Kje so po legendi vile najpogosteje pomagale pastirjem?", moznosti: ["Na Veliki Planini", "V Bohinju", "Na Triglavu", "Ob Cerkniškem jezeru"], odgovor: "Na Veliki Planini" },
+  { vprasanje: "Katero mitološko bitje je znano po svoji sposobnosti, da prikliče dež?", moznosti: ["Divji mož", "Vila", "Škrat", "Povodni mož"], odgovor: "Divji mož" },
+  { vprasanje: "Katera bitja v slovenskih mitih pomagajo ženam pri ročnem delu?", moznosti: ["Škrati", "Vile", "Divje babe", "Povodni možje"], odgovor: "Vile" },
+  { vprasanje: "Kako se imenuje gora, kjer naj bi prebival Zlatorog?", moznosti: ["Triglav", "Mangart", "Kanin", "Razor"], odgovor: "Triglav" },
+  { vprasanje: "Kaj naj bi vile najpogosteje prinašale ljudem?", moznosti: ["Srečo", "Bogastvo", "Kazni", "Ljubezen"], odgovor: "Srečo" },
+  { vprasanje: "Katera mitološka bitja naj bi bila strašna, a pravična?", moznosti: ["Divji možje", "Zmaji", "Škrati", "Vile"], odgovor: "Divji možje" },
+  { vprasanje: "Kako se imenuje slovenski mit, povezan z zmajem in Ljubljano?", moznosti: ["Legenda o ljubljanskem zmaju", "Legenda o Cerkniškem zmaju", "Zgodba o Zlatorogu", "Peter Klepec in zmaj"], odgovor: "Legenda o ljubljanskem zmaju" },
+  { vprasanje: "Kateri mitološki kraj je povezan s povodnimi možmi?", moznosti: ["Cerkniško jezero", "Blejsko jezero", "Soča", "Triglav"], odgovor: "Cerkniško jezero" },
+  { vprasanje: "Kako se imenujejo bitja, ki naj bi čuvala vhod v gore?", moznosti: ["Škrati", "Vile", "Zmaji", "Divje babe"], odgovor: "Škrati" },
+  { vprasanje: "Kaj po legendi varuje zaklade slovenskih gora?", moznosti: ["Zlatorog", "Škratje", "Divji možje", "Vile"], odgovor: "Zlatorog" },
+  { vprasanje: "Katera mitološka bitja so v slovenskih zgodbah pogosto naseljena v jezerih?", moznosti: ["Povodni možje", "Zmaji", "Škrati", "Divje babe"], odgovor: "Povodni možje" },
+  { vprasanje: "Katera slovenska mitološka bitja so znana po svoji lepoti?", moznosti: ["Vile", "Divje babe", "Škratinje", "Povodne žene"], odgovor: "Vile" },
+  { vprasanje: "Kako so imenovali slovenske mitološke žene, ki živijo v jamah?", moznosti: ["Divje babe", "Škratke", "Zmajčice", "Povodne žene"], odgovor: "Divje babe" },
+  { vprasanje: "Katera bitja so v slovenski mitologiji varuhi podzemnih zakladov?", moznosti: ["Škrati", "Zmaji", "Divji možje", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kaj je značilno za Zlatorogove rogove?", moznosti: ["So zlati", "So čarobni", "Sijajo v temi", "So nedotakljivi"], odgovor: "So zlati" },
+  { vprasanje: "Katera gora je po legendi povezana z Divjim možem?", moznosti: ["Peca", "Triglav", "Mangart", "Razor"], odgovor: "Peca" },
+  { vprasanje: "Katera bitja so v slovenskih mitih pogosto varovala planinske poti?", moznosti: ["Vile", "Škrati", "Divje babe", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Katera mitološka bitja naj bi plesala ob polni luni?", moznosti: ["Vile", "Divje babe", "Škrati", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Kako se imenujejo bitja, ki po legendah čuvajo gorske prelaze?", moznosti: ["Škrati", "Divji možje", "Zmaji", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kje naj bi bile Divje babe najpogosteje naseljene?", moznosti: ["V jamah", "V rekah", "Na gorah", "V gozdovih"], odgovor: "V jamah" },
+  { vprasanje: "Kaj je po legendi povzročilo nastanek Cerkniškega jezera?", moznosti: ["Dejanje povodnega moža", "Potres", "Solze vil", "Zmaj"], odgovor: "Dejanje povodnega moža" },
+  { vprasanje: "Kdo je po legendi bil sposoben ukrotiti divje zveri?", moznosti: ["Peter Klepec", "Martin Krpan", "Kralj Matjaž", "Divji mož"], odgovor: "Peter Klepec" },
+  { vprasanje: "Katera mitološka bitja so znana po svoji modrosti?", moznosti: ["Divji možje", "Škrati", "Zmaji", "Vile"], odgovor: "Divji možje" },
+  { vprasanje: "Kateri kraj je znan po legendi o povodnem možu?", moznosti: ["Cerkniško jezero", "Ljubljanica", "Blejsko jezero", "Soča"], odgovor: "Cerkniško jezero" },
+  { vprasanje: "Kaj po slovenski mitologiji povzroči nevihto na gorah?", moznosti: ["Zmaj", "Divji mož", "Škrati", "Vile"], odgovor: "Zmaj" },
+  { vprasanje: "Kako se imenujejo bitja, ki naj bi živela na vrhovih slovenskih gora?", moznosti: ["Vile", "Škrati", "Divje babe", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Katera bitja v slovenski mitologiji so znana kot varuhi dreves?", moznosti: ["Divji možje", "Vile", "Škrati", "Zmaji"], odgovor: "Divji možje" },
+  { vprasanje: "Kako se imenuje skrivnostni jamski prebivalec, ki pomaga ljudem v stiski?", moznosti: ["Škrat", "Divji mož", "Povodni mož", "Zmaj"], odgovor: "Škrat" },
+  { vprasanje: "Katera mitološka bitja v Sloveniji naj bi bila poznana po izdelovanju orodja?", moznosti: ["Škrati", "Divji možje", "Zmaji", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kako se imenujejo ženske duhove, ki prebivajo ob slovenskih jezerih?", moznosti: ["Vodne vile", "Divje babe", "Povodne žene", "Škratke"], odgovor: "Vodne vile" },
+  { vprasanje: "Kateri slovenski junak je znan po premikanju ogromnih skal?", moznosti: ["Peter Klepec", "Martin Krpan", "Kralj Matjaž", "Zlatorog"], odgovor: "Peter Klepec" },
+  { vprasanje: "Kaj po legendi škrati pogosto skrivajo v gorah?", moznosti: ["Zlato in dragulje", "Hrano", "Skrivne poti", "Zmaje"], odgovor: "Zlato in dragulje" },
+  { vprasanje: "Katera mitološka bitja so znana po plesu ob mesečini?", moznosti: ["Vile", "Divje babe", "Škratke", "Povodne žene"], odgovor: "Vile" },
+  { vprasanje: "Kako se imenujejo bitja, ki v slovenskih mitih pomagajo pastirjem?", moznosti: ["Škrati", "Vile", "Zmaji", "Divji možje"], odgovor: "Vile" },
+  { vprasanje: "Kateri kraj je povezan z legendami o Divjih babah?", moznosti: ["Cerkniško jezero", "Postojnska jama", "Peca", "Triglav"], odgovor: "Postojnska jama" },
+  { vprasanje: "Katera bitja so znana po varovanju planinskih zakladov?", moznosti: ["Zlatorog", "Škrati", "Vile", "Zmaji"], odgovor: "Škrati" },
+  { vprasanje: "Katera slovenska mitološka bitja prinašajo srečo ob porokah?", moznosti: ["Vile", "Divji možje", "Povodne žene", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Kaj naj bi Zlatorog naredil s svojimi rogovi?", moznosti: ["Odprl zaklade", "Oslepil sovražnike", "Zgradil mostove", "Priklical dež"], odgovor: "Odprl zaklade" },
+  { vprasanje: "Kako se imenuje gora, kjer naj bi se zadrževali Divji možje?", moznosti: ["Peca", "Triglav", "Kanin", "Razor"], odgovor: "Peca" },
+  { vprasanje: "Kateri slovenski mitološki junak je znan po reševanju kmetov pred lakoto?", moznosti: ["Martin Krpan", "Peter Klepec", "Kralj Matjaž", "Divji mož"], odgovor: "Martin Krpan" },
+  { vprasanje: "Kako so imenovana bitja, ki živijo v rekah in pomagajo ribičem?", moznosti: ["Povodni možje", "Vodne vile", "Divji možje", "Škrati"], odgovor: "Povodni možje" },
+  { vprasanje: "Kaj naj bi povzročilo razpoke v slovenskih gorah?", moznosti: ["Zmajevi kremplji", "Dejanja škratov", "Divji mož", "Vile"], odgovor: "Zmajevi kremplji" },
+  { vprasanje: "Kako so imenovana bitja, ki varujejo gorske poti?", moznosti: ["Škrati", "Divji možje", "Vile", "Zmaji"], odgovor: "Škrati" },
+  { vprasanje: "Kje po legendi prebivajo najlepše vile?", moznosti: ["Ob Blejskem jezeru", "Na Triglavu", "V Postojnski jami", "V Bohinju"], odgovor: "Ob Blejskem jezeru" },
+  { vprasanje: "Kaj naj bi povodni mož prinašal vodo na Cerkniško jezero?", moznosti: ["S čarobnim vedrom", "Z mavrico", "Z zlato sekiro", "S svojim glasom"], odgovor: "S čarobnim vedrom" },
+  { vprasanje: "Kako so imenovana bitja, ki po legendah nagajajo ljudem v gozdovih?", moznosti: ["Škrati", "Divji možje", "Povodni možje", "Zmaji"], odgovor: "Škrati" },
+  { vprasanje: "Kako se imenujejo bitja, ki varujejo zlate rogove?", moznosti: ["Zlatorog", "Škrati", "Vile", "Divji možje"], odgovor: "Zlatorog" },
+  { vprasanje: "Katera bitja v slovenskih mitih prebivajo na visokih planinah?", moznosti: ["Vile", "Škrati", "Zmaji", "Divje babe"], odgovor: "Vile" },
+  { vprasanje: "Kaj po legendi Divji mož deli z ljudmi?", moznosti: ["Modrost", "Zlato", "Čarobne moči", "Hrano"], odgovor: "Modrost" },
+  { vprasanje: "Katera bitja po legendah pomagajo pri iskanju skritih poti?", moznosti: ["Škrati", "Vile", "Povodni možje", "Zmaji"], odgovor: "Škrati" },
+  { vprasanje: "Kateri kraj je povezan z legendami o Zlatorogu?", moznosti: ["Triglav", "Mangart", "Bohinj", "Kanin"], odgovor: "Triglav" },
+  { vprasanje: "Kaj se zgodi z vilo, ki izgubi svoje krilo?", moznosti: ["Postane smrtnica", "Postane zmaj", "Izgubi moč", "Ostane na zemlji"], odgovor: "Postane smrtnica" },
+  { vprasanje: "Kako so imenovana bitja, ki po slovenskih mitih pomagajo pri setvi?", moznosti: ["Vile", "Divji možje", "Škrati", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Katera bitja so znana po varovanju kraških jam?", moznosti: ["Škrati", "Zmaji", "Divji možje", "Vile"], odgovor: "Škrati" },
+  { vprasanje: "Kaj po legendi povzroči deževje v slovenskih gorah?", moznosti: ["Zmajevi glasovi", "Škratjevo žvižganje", "Vile", "Divji mož"], odgovor: "Zmajevi glasovi" },
+  { vprasanje: "Katera bitja so znana po svojih zdravilnih močeh?", moznosti: ["Vile", "Škrati", "Divji možje", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Kaj naj bi vile podarjale kmetom v stiski?", moznosti: ["Hrano in semena", "Čarobne moči", "Zlato", "Skrivne poti"], odgovor: "Hrano in semena" },
+  { vprasanje: "Kje po legendah prebivajo najstarejši škrati?", moznosti: ["V kraških jamah", "Na Triglavu", "V Postojni", "Ob Cerkniškem jezeru"], odgovor: "V kraških jamah" },
+  { vprasanje: "Kako so imenovana bitja, ki prebivajo ob Cerkniškem jezeru?", moznosti: ["Povodni možje", "Vodne vile", "Divji možje", "Škrati"], odgovor: "Povodni možje" },
+  { vprasanje: "Kaj po legendi povzroča vetrove na visokih gorah?", moznosti: ["Divji možje", "Zmaji", "Vile", "Škrati"], odgovor: "Zmaji" },
+  { vprasanje: "Kako se imenujejo bitja, ki po slovenskih mitih zdravijo živali?", moznosti: ["Vile", "Škrati", "Povodni možje", "Divji možje"], odgovor: "Vile" },
+  { vprasanje: "Kateri junak je povezan z legendami o gorskih silah?", moznosti: ["Martin Krpan", "Peter Klepec", "Kralj Matjaž", "Divji mož"], odgovor: "Peter Klepec" },
+  { vprasanje: "Katera bitja so v slovenskih mitih povezana z zvezdami?", moznosti: ["Vile", "Zmaji", "Škrati", "Povodni možje"], odgovor: "Vile" },
+  { vprasanje: "Kako se imenujejo bitja, ki naj bi prebivala na Triglavu?", moznosti: ["Vile", "Divji možje", "Škrati", "Zmaji"], odgovor: "Vile" },
+  { vprasanje: "Kaj po legendi varuje zaklade slovenskih dolin?", moznosti: ["Škrati", "Vile", "Divji možje", "Zmaji"], odgovor: "Škrati" },
+  { vprasanje: "Katera bitja so v slovenskih mitih povezovana z lunino svetlobo?", moznosti: ["Vile", "Divje babe", "Škratinje", "Povodni možje"], odgovor: "Vile" }
+];
+
+
+
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

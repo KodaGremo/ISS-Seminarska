@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-slovenija.css">
+  <style>
+    body {
+background-image: url('slike/geo-slo.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Geografija Slovenije</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+  { vprasanje: "Katera reka teče skozi Ljubljano?", moznosti: ["Sava", "Krka", "Ljubljanica", "Mura"], odgovor: "Ljubljanica" },
+  { vprasanje: "Katera je najvišja gora v Sloveniji?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Grintovec"], odgovor: "Triglav" },
+  { vprasanje: "Kateri je največji naravni park v Sloveniji?", moznosti: ["Triglavski narodni park", "Kozjanski park", "Škocjanske jame", "Sečoveljske soline"], odgovor: "Triglavski narodni park" },
+  { vprasanje: "S katero državo Slovenija nima meje?", moznosti: ["Italija", "Avstrija", "Hrvaška", "Madžarska"], odgovor: "Madžarska" },
+  { vprasanje: "Katero je največje jezero v Sloveniji?", moznosti: ["Bohinjsko jezero", "Blejsko jezero", "Cerkniško jezero", "Ptujско jezero"], odgovor: "Cerkniško jezero" },
+  { vprasanje: "Kateri slovenski kraj je znan po solinah?", moznosti: ["Piran", "Koper", "Izola", "Portorož"], odgovor: "Piran" },
+  { vprasanje: "Katera gora se nahaja ob Bohinjskem jezeru?", moznosti: ["Triglav", "Vogel", "Mangart", "Grintovec"], odgovor: "Vogel" },
+  { vprasanje: "Katera reka tvori del meje med Slovenijo in Avstrijo?", moznosti: ["Drava", "Sava", "Mura", "Soča"], odgovor: "Mura" },
+  { vprasanje: "Katera jama v Sloveniji je znana po najdaljšem podzemnem kanjonu?", moznosti: ["Škocjanske jame", "Postojnska jama", "Križna jama", "Vilenica"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Kje se nahaja slovensko največje rudarsko mesto?", moznosti: ["Velenje", "Trbovlje", "Idrija", "Mežica"], odgovor: "Velenje" },
+  { vprasanje: "Kateri je največji otok v Sloveniji?", moznosti: ["Bled", "Blejski otok", "Portorož", "Izola"], odgovor: "Blejski otok" },
+  { vprasanje: "Katera reka izvira v Sloveniji in teče skozi Italijo?", moznosti: ["Soča", "Sava", "Krka", "Ljubljanica"], odgovor: "Soča" },
+  { vprasanje: "Katero mesto v Sloveniji je znano po termalnih vrelcih?", moznosti: ["Laško", "Bled", "Postojna", "Novo mesto"], odgovor: "Laško" },
+  { vprasanje: "Kateri slovenski kraj je znan po vinorodni pokrajini?", moznosti: ["Goriška Brda", "Kranjska Gora", "Bled", "Izola"], odgovor: "Goriška Brda" },
+  { vprasanje: "Kateri park se nahaja na meji med Italijo in Slovenijo?", moznosti: ["Kras", "Sečoveljske soline", "Triglavski narodni park", "Kozjanski park"], odgovor: "Kras" },
+  { vprasanje: "Katera reka teče skozi mesto Maribor?", moznosti: ["Sava", "Drava", "Mura", "Krka"], odgovor: "Drava" },
+  { vprasanje: "Katera dolina je znana po ledenikih?", moznosti: ["Logarska dolina", "Soška dolina", "Savska dolina", "Pivška dolina"], odgovor: "Logarska dolina" },
+  { vprasanje: "Kateri kraj je znan po festivalu narodno-zabavne glasbe?", moznosti: ["Ljutomer", "Idrija", "Velenje", "Murska Sobota"], odgovor: "Ljutomer" },
+  { vprasanje: "Katera gora je znana kot najvišja gora Julijskih Alp?", moznosti: ["Triglav", "Mangart", "Škrlatica", "Jalovec"], odgovor: "Triglav" },
+  { vprasanje: "Katera reka teče skozi Novo mesto?", moznosti: ["Sava", "Krka", "Ljubljanica", "Mura"], odgovor: "Krka" },
+  { vprasanje: "Katera reka teče skozi mesto Celje?", moznosti: ["Savinja", "Sava", "Drava", "Mura"], odgovor: "Savinja" },
+  { vprasanje: "Kateri vrh v Sloveniji je znan kot kralj slovenskih gora?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Grintovec"], odgovor: "Triglav" },
+  { vprasanje: "Kateri slovenski kraj je znan po Plečnikovi cerkvi?", moznosti: ["Bogojina", "Ljubljana", "Bled", "Radovljica"], odgovor: "Bogojina" },
+  { vprasanje: "Katera dolina v Sloveniji je znana po hmeljarstvu?", moznosti: ["Savinjska dolina", "Logarska dolina", "Soška dolina", "Pivška dolina"], odgovor: "Savinjska dolina" },
+  { vprasanje: "Katero jezero v Sloveniji je znano po otočku s cerkvijo?", moznosti: ["Blejsko jezero", "Bohinjsko jezero", "Cerkniško jezero", "Ptujsko jezero"], odgovor: "Blejsko jezero" },
+  { vprasanje: "Katera jama je največja turistična jama v Sloveniji?", moznosti: ["Postojnska jama", "Škocjanske jame", "Križna jama", "Planinska jama"], odgovor: "Postojnska jama" },
+  { vprasanje: "Katera reka teče skozi mesto Ptuj?", moznosti: ["Drava", "Mura", "Sava", "Krka"], odgovor: "Drava" },
+  { vprasanje: "Katera slovenska pokrajina je znana po burji?", moznosti: ["Primorska", "Gorenjska", "Štajerska", "Prekmurje"], odgovor: "Primorska" },
+  { vprasanje: "Kateri slovenski kraj je znan po Lipicancih?", moznosti: ["Lipica", "Postojna", "Škocjan", "Sežana"], odgovor: "Lipica" },
+  { vprasanje: "Katero mesto v Sloveniji je znano kot prestolnica Gorenjske?", moznosti: ["Kranj", "Bled", "Radovljica", "Jesenice"], odgovor: "Kranj" },
+  { vprasanje: "Kateri je največji otok v Blejskem jezeru?", moznosti: ["Blejski otok", "Otok ljubezni", "Otok želja", "Otok svobode"], odgovor: "Blejski otok" },
+  { vprasanje: "Katera reka je znana po smaragdni barvi vode?", moznosti: ["Soča", "Sava", "Krka", "Drava"], odgovor: "Soča" },
+  { vprasanje: "Katera gora je priljubljena izletniška točka v Kamniško-Savinjskih Alpah?", moznosti: ["Velika Planina", "Grintovec", "Kočna", "Kokrško sedlo"], odgovor: "Velika Planina" },
+  { vprasanje: "Katera dolina je znana po termalnih vrelcih?", moznosti: ["Dolenjska", "Štajerska", "Gorenjska", "Prekmurje"], odgovor: "Dolenjska" },
+  { vprasanje: "Katera slovenska reka tvori del meje s Hrvaško?", moznosti: ["Kolpa", "Krka", "Sava", "Drava"], odgovor: "Kolpa" },
+  { vprasanje: "Katera slovenska regija je znana po rudniku živega srebra?", moznosti: ["Idrija", "Trbovlje", "Mežica", "Velenje"], odgovor: "Idrija" },
+  { vprasanje: "Kateri slovenski kraj je znan po termalnem zdravilišču?", moznosti: ["Rogaška Slatina", "Radenci", "Dobrna", "Laško"], odgovor: "Rogaška Slatina" },
+  { vprasanje: "Kateri naravni pojav je značilen za Planinsko polje?", moznosti: ["Poplave", "Ledeniki", "Podzemne jame", "Burja"], odgovor: "Poplave" },
+  { vprasanje: "Kateri vrh je drugi najvišji v Sloveniji?", moznosti: ["Škrlatica", "Triglav", "Mangart", "Grintovec"], odgovor: "Škrlatica" },
+  { vprasanje: "Katera dolina je znana po pohodniških poteh in alpskem značaju?", moznosti: ["Soška dolina", "Logarska dolina", "Pivška dolina", "Savska dolina"], odgovor: "Soška dolina" },
+  { vprasanje: "Kateri slovenski kraj je znan po prazniku kostanja?", moznosti: ["Dolenjske Toplice", "Postojna", "Litija", "Bled"], odgovor: "Litija" },
+  { vprasanje: "Katera slovenska reka izvira pod Triglavom?", moznosti: ["Sava Dolinka", "Soča", "Krka", "Drava"], odgovor: "Sava Dolinka" },
+  { vprasanje: "Katera regija v Sloveniji je znana po bučnem olju?", moznosti: ["Štajerska", "Primorska", "Prekmurje", "Dolenjska"], odgovor: "Štajerska" },
+  { vprasanje: "Katera gora je znana po planinski poti Aljažev stolp?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Grintovec"], odgovor: "Triglav" },
+  { vprasanje: "Kateri slovenski kraj je znan po smučarskih skakalnicah?", moznosti: ["Planica", "Kranjska Gora", "Maribor", "Bled"], odgovor: "Planica" },
+  { vprasanje: "Katero jezero v Sloveniji občasno presahne?", moznosti: ["Cerkniško jezero", "Blejsko jezero", "Bohinjsko jezero", "Ptujsko jezero"], odgovor: "Cerkniško jezero" },
+  { vprasanje: "Kateri kraj je znan kot izhodišče za obisk Postojnske jame?", moznosti: ["Postojna", "Pivka", "Sežana", "Škocjan"], odgovor: "Postojna" },
+  { vprasanje: "Katera reka je najdaljša v Sloveniji?", moznosti: ["Sava", "Drava", "Mura", "Krka"], odgovor: "Sava" },
+  { vprasanje: "Katera slovenska regija je znana po pridelavi terana?", moznosti: ["Kras", "Primorska", "Gorenjska", "Štajerska"], odgovor: "Kras" },
+  { vprasanje: "Katera dolina v Sloveniji je znana po značilni obliki črke U?", moznosti: ["Logarska dolina", "Savska dolina", "Soška dolina", "Pivška dolina"], odgovor: "Logarska dolina" },
+  { vprasanje: "Kateri slovenski kraj je znan po kamnitem mostu čez Sočo?", moznosti: ["Kobarid", "Tolmin", "Bovec", "Nova Gorica"], odgovor: "Kobarid" },
+  { vprasanje: "Kateri kraj je znan kot prestolnica slovenskega Prekmurja?", moznosti: ["Murska Sobota", "Ljutomer", "Gornja Radgona", "Beltinci"], odgovor: "Murska Sobota" },
+  { vprasanje: "Katera gora v Sloveniji je priljubljena med jadralnimi padalci?", moznosti: ["Vogel", "Krvavec", "Velika Planina", "Mangart"], odgovor: "Vogel" },
+  { vprasanje: "Katera slovenska reka ima izvir v Bohinjskem kotu?", moznosti: ["Sava Bohinjka", "Sava Dolinka", "Soča", "Krka"], odgovor: "Sava Bohinjka" },
+  { vprasanje: "Kateri kraj je znan po festivalu vin v Sloveniji?", moznosti: ["Gornja Radgona", "Šentjernej", "Novo mesto", "Bled"], odgovor: "Gornja Radgona" },
+  { vprasanje: "Kateri slovenski park je znan po zaščiti volkov in medvedov?", moznosti: ["Kočevski gozdovi", "Triglavski narodni park", "Kozjanski park", "Sečoveljske soline"], odgovor: "Kočevski gozdovi" },
+  { vprasanje: "Katera reka tvori sotočje v Ljubljani?", moznosti: ["Sava in Ljubljanica", "Krka in Sava", "Drava in Mura", "Sava in Mura"], odgovor: "Sava in Ljubljanica" },
+  { vprasanje: "Kateri kraj je znan po tradicionalni ribiški fešti?", moznosti: ["Izola", "Piran", "Koper", "Portorož"], odgovor: "Izola" },
+  { vprasanje: "Katera dolina je znana po razgledni točki Solčava?", moznosti: ["Logarska dolina", "Soška dolina", "Savska dolina", "Pivška dolina"], odgovor: "Logarska dolina" },
+   { vprasanje: "Katera reka je znana po slapovih pri Kozjaku?", moznosti: ["Soča", "Krka", "Drava", "Sava"], odgovor: "Soča" },
+  { vprasanje: "Katera pokrajina v Sloveniji je znana po kraških pojavih?", moznosti: ["Kras", "Gorenjska", "Štajerska", "Dolenjska"], odgovor: "Kras" },
+  { vprasanje: "Kateri kraj v Sloveniji je znan po spomeniku Napoleonu?", moznosti: ["Vrhnika", "Šentilj", "Idrija", "Logatec"], odgovor: "Vrhnika" },
+  { vprasanje: "Katera gora v Sloveniji je znana po kamniti strehi?", moznosti: ["Grintovec", "Mangart", "Triglav", "Škrlatica"], odgovor: "Mangart" },
+  { vprasanje: "Katera dolina je znana po Tolminskih koritih?", moznosti: ["Soška dolina", "Logarska dolina", "Savska dolina", "Dravska dolina"], odgovor: "Soška dolina" },
+  { vprasanje: "Katero jezero je znano po prireditvi 'Noč na Bledu'?", moznosti: ["Blejsko jezero", "Bohinjsko jezero", "Cerkniško jezero", "Ptujsko jezero"], odgovor: "Blejsko jezero" },
+  { vprasanje: "Kateri slovenski park je del UNESCO dediščine?", moznosti: ["Škocjanske jame", "Triglavski narodni park", "Sečoveljske soline", "Kozjanski park"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Kateri vrh je tretji najvišji v Sloveniji?", moznosti: ["Mangart", "Triglav", "Škrlatica", "Jalovec"], odgovor: "Mangart" },
+  { vprasanje: "Katera reka ima svoje sotočje pri Dobovi?", moznosti: ["Krka", "Sava", "Kolpa", "Drava"], odgovor: "Krka" },
+  { vprasanje: "Kateri slovenski kraj je znan po prazniku vina in grozdja?", moznosti: ["Ljutomer", "Gornja Radgona", "Maribor", "Ptuj"], odgovor: "Gornja Radgona" },
+  { vprasanje: "Katera gora je znana po najdaljšem plezalnem vzponu?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Jalovec"], odgovor: "Triglav" },
+  { vprasanje: "Katera reka teče skozi mesto Brežice?", moznosti: ["Sava", "Krka", "Kolpa", "Drava"], odgovor: "Sava" },
+  { vprasanje: "Kateri kraj v Sloveniji je znan po festivalu Narave in vina?", moznosti: ["Nova Gorica", "Vipava", "Kobarid", "Sežana"], odgovor: "Vipava" },
+  { vprasanje: "Kateri je največji grad v Sloveniji?", moznosti: ["Ljubljanski grad", "Grad Snežnik", "Ptuj Grad", "Predjamski grad"], odgovor: "Ljubljanski grad" },
+  { vprasanje: "Katera reka teče skozi mesto Lendava?", moznosti: ["Mura", "Drava", "Sava", "Krka"], odgovor: "Mura" },
+  { vprasanje: "Katera dolina je znana po svoji alpski flore in favni?", moznosti: ["Logarska dolina", "Savska dolina", "Soška dolina", "Pivška dolina"], odgovor: "Logarska dolina" },
+  { vprasanje: "Kateri kraj je znan po največji vinski kleti v Sloveniji?", moznosti: ["Ormož", "Ptuj", "Gornja Radgona", "Ljutomer"], odgovor: "Ptuj" },
+  { vprasanje: "Katera gora je znana kot kraljica slovenskih Alp?", moznosti: ["Škrlatica", "Triglav", "Mangart", "Grintovec"], odgovor: "Škrlatica" },
+  { vprasanje: "Katera reka izvira v Sloveniji in se izliva v Jadransko morje?", moznosti: ["Soča", "Krka", "Sava", "Kolpa"], odgovor: "Soča" },
+  { vprasanje: "Kateri slovenski kraj je znan po rudarskem muzeju?", moznosti: ["Idrija", "Velenje", "Mežica", "Trbovlje"], odgovor: "Idrija" },
+  { vprasanje: "Kateri kraj v Sloveniji je znan po kostanjevem prazniku?", moznosti: ["Litija", "Vrhnika", "Novo mesto", "Celje"], odgovor: "Litija" },
+  { vprasanje: "Katera dolina v Sloveniji je znana po smučarskih tekmovanjih?", moznosti: ["Planica", "Logarska dolina", "Soška dolina", "Savska dolina"], odgovor: "Planica" },
+  { vprasanje: "Katera jama je znana po najdaljšem podzemnem kanjonu?", moznosti: ["Škocjanske jame", "Postojnska jama", "Planinska jama", "Vilenica"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Katera reka teče skozi mesto Slovenj Gradec?", moznosti: ["Mislinja", "Drava", "Mura", "Sava"], odgovor: "Mislinja" },
+  { vprasanje: "Kateri kraj je znan po pridelavi soline?", moznosti: ["Piran", "Sečovlje", "Portorož", "Izola"], odgovor: "Sečovlje" },
+  { vprasanje: "Katera slovenska pokrajina je znana po kraškem teranu?", moznosti: ["Kras", "Primorska", "Gorenjska", "Štajerska"], odgovor: "Kras" },
+  { vprasanje: "Katera gora je znana po razgledni točki Kredarica?", moznosti: ["Triglav", "Škrlatica", "Grintovec", "Mangart"], odgovor: "Triglav" },
+  { vprasanje: "Kateri kraj je znan po prireditvi 'Vinska kraljica'?", moznosti: ["Ptuj", "Ljutomer", "Gornja Radgona", "Ormož"], odgovor: "Ptuj" },
+  { vprasanje: "Katera reka izvira v Sloveniji in tvori del meje z Avstrijo?", moznosti: ["Mura", "Drava", "Sava", "Kolpa"], odgovor: "Mura" },
+  { vprasanje: "Katera dolina je znana po ledenikih in alpskih vrhovih?", moznosti: ["Logarska dolina", "Savska dolina", "Soška dolina", "Pivška dolina"], odgovor: "Logarska dolina" },
+  { vprasanje: "Katera reka je najdaljša v Sloveniji?", moznosti: ["Sava", "Drava", "Mura", "Krka"], odgovor: "Sava" },
+  { vprasanje: "Kateri kraj je znan po mineralni vodi Radenska?", moznosti: ["Radenci", "Laško", "Rogaška Slatina", "Podčetrtek"], odgovor: "Radenci" },
+  { vprasanje: "Katera slovenska pokrajina je znana po gradovih in dvorcih?", moznosti: ["Štajerska", "Dolenjska", "Primorska", "Prekmurje"], odgovor: "Štajerska" },
+  { vprasanje: "Kateri kraj je znan po alpski kulisi in smučarskih poteh?", moznosti: ["Kranjska Gora", "Planica", "Bovec", "Tolmin"], odgovor: "Kranjska Gora" },
+  { vprasanje: "Katera reka je znana po tradicionalnem spustu z ladjami?", moznosti: ["Krka", "Kolpa", "Sava", "Drava"], odgovor: "Krka" },
+  { vprasanje: "Kateri slovenski kraj je znan po srednjeveškem sejmu?", moznosti: ["Šentjernej", "Ptuj", "Celje", "Novo mesto"], odgovor: "Ptuj" },
+  { vprasanje: "Katera dolina je znana po termalnih kopališčih?", moznosti: ["Dolenjska", "Prekmurje", "Štajerska", "Gorenjska"], odgovor: "Dolenjska" },
+  { vprasanje: "Katera gora v Sloveniji je priljubljena med jadralnimi padalci?", moznosti: ["Krvavec", "Velika Planina", "Mangart", "Vogel"], odgovor: "Vogel" },
+  { vprasanje: "Katera dolina je znana po naravnih mostovih?", moznosti: ["Soška dolina", "Logarska dolina", "Savska dolina", "Pivška dolina"], odgovor: "Soška dolina" },
+  { vprasanje: "Katera reka izvira pod Triglavom in teče skozi Bohinj?", moznosti: ["Sava Bohinjka", "Sava Dolinka", "Krka", "Soča"], odgovor: "Sava Bohinjka" },
+  { vprasanje: "Katera gora je znana po planinski koči Aljažev dom?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Vogel"], odgovor: "Triglav" },
+  { vprasanje: "Kateri kraj v Sloveniji je znan po pridelavi soline?", moznosti: ["Sečovlje", "Piran", "Izola", "Koper"], odgovor: "Sečovlje" },
+  { vprasanje: "Kateri kraj je znan po festivalu 'Cviček fest'?", moznosti: ["Novo mesto", "Laško", "Celje", "Radenci"], odgovor: "Novo mesto" },
+  { vprasanje: "Katera slovenska pokrajina je znana po kozolcih?", moznosti: ["Dolenjska", "Gorenjska", "Štajerska", "Primorska"], odgovor: "Dolenjska" },
+  { vprasanje: "Katera reka teče skozi mesto Radovljica?", moznosti: ["Sava", "Drava", "Mura", "Krka"], odgovor: "Sava" }
+
+];
+
+
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

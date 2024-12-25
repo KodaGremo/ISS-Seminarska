@@ -1,0 +1,109 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Tahoma', sans-serif;
+  background: linear-gradient(120deg, #005f73, #0a9396, #94d2bd);
+  color: #001219;
+  font-size: 18px;
+  margin: 0;
+  overflow-y: auto;
+}
+
+#kviz-posoda {
+  width: 550px;
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  border: 2px solid #005f73;
+  margin: 0;
+}
+
+#vprasanje {
+  font-size: 1.6em;
+  margin-bottom: 15px;
+  color: #001219;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.moznosti {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.moznosti button {
+  padding: 12px;
+  margin: 5px 0;
+  font-size: 1em;
+  cursor: pointer;
+  border: 1px solid #005f73;
+  border-radius: 8px;
+  background-color: #e9d8a6;
+  transition: background-color 0.3s, transform 0.2s;
+  color: #001219;
+}
+
+.moznosti button:hover {
+  background-color: #94d2bd;
+  transform: scale(1.03);
+}
+
+#kontrole {
+  margin-top: 20px;
+}
+
+#kontrole button {
+  padding: 10px 20px;
+  font-size: 1em;
+  margin: 0 10px;
+  cursor: pointer;
+  border: 1px solid #005f73;
+  border-radius: 8px;
+  background-color: #ee9b00;
+  color: #001219;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+#kontrole button:hover {
+  background-color: #ca6702;
+  transform: scale(1.05);
+}
+
+#rezultat {
+  font-size: 1.3em;
+  margin-top: 15px;
+  color: #001219;
+  font-style: italic;
+}
+
+.pravilno {
+  color: #2a9d8f;
+  font-weight: bold;
+}
+
+.napacno {
+  color: #e63946;
+  font-weight: bold;
+}
+
+.font-control {
+  margin: 10px;
+  padding: 5px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #0a9396;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.font-control:hover {
+  background-color: #005f73;
+  transform: scale(1.1);
+}

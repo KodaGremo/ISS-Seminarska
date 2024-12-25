@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-slovenija.css">
+  <style>
+    body {
+background-image: url('slike/slov-izum.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Slovenska znanost in izumi</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+{ vprasanje: "Kdo je bil slovenski fizik, znan po svojem prispevku k teoriji atomskih orbit?", moznosti: ["Jožef Stefan", "Herman Potočnik", "Anton Codelli", "Edvard Rusjan"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski izumitelj je zaslužen za enega prvih poskusov letalstva?", moznosti: ["Edvard Rusjan", "Herman Potočnik", "Jožef Štefan", "Anton Codelli"], odgovor: "Edvard Rusjan" },
+  { vprasanje: "Kdo je bil slovenski pionir vesoljske tehnologije, znan tudi kot Noordung?", moznosti: ["Herman Potočnik", "Edvard Rusjan", "Jožef Stefan", "Janez Puhar"], odgovor: "Herman Potočnik" },
+  { vprasanje: "Kaj je izumil Janez Puhar, ki je pomembno prispeval k fotografiji?", moznosti: ["Tehniko za fotografijo na steklu", "Tehniko za barvno fotografijo", "Prvi fotografski aparat", "Občutljivejši film"], odgovor: "Tehniko za fotografijo na steklu" },
+  { vprasanje: "Po katerem slovenskem znanstveniku je poimenovana Stefan-Boltzmannova konstanta?", moznosti: ["Jožef Stefan", "Herman Potočnik", "Janez Puhar", "Anton Codelli"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski inovator je zaslužen za razvoj avtomobilskega diferenciala?", moznosti: ["Peter Florjančič", "Herman Potočnik", "Janez Puhar", "Jože Peterlin"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kdo je bil slovenski konstruktor prvega uspešnega letala na ozemlju Jugoslavije?", moznosti: ["Edvard Rusjan", "Jožef Stefan", "Peter Florjančič", "Herman Potočnik"], odgovor: "Edvard Rusjan" },
+  { vprasanje: "Kateri slovenski izumitelj je razvil napredno teleskopsko puško?", moznosti: ["Anton Codelli", "Edvard Rusjan", "Janez Puhar", "Jože Plečnik"], odgovor: "Anton Codelli" },
+  { vprasanje: "Herman Potočnik Noordung je znan po načrtu prvega:", moznosti: ["Vesoljskega plovila", "Teleskopa", "Letala", "Podmornice"], odgovor: "Vesoljskega plovila" },
+  { vprasanje: "Po katerem slovenskem inovatorju je poimenovan zakon o črnem telesu?", moznosti: ["Jožef Stefan", "Janez Puhar", "Anton Codelli", "Peter Florjančič"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski znanstvenik je bil pionir na področju biokemije in vitaminov?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Edvard Rusjan", "Janez Puhar"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski znanstvenik je prejel Nobelovo nagrado za kemijo leta 1923?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Janez Puhar", "Anton Codelli"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Peter Florjančič, slovenski izumitelj, je znan po razvoju:", moznosti: ["Razpršilca za parfume", "Digitalnega fotoaparata", "Sončne celice", "Kvarčne ure"], odgovor: "Razpršilca za parfume" },
+  { vprasanje: "Kdo je bil slovenski pionir na področju kibernetike in računalništva?", moznosti: ["Marjan Novak", "Peter Florjančič", "Jožef Stefan", "Matija Čop"], odgovor: "Marjan Novak" },
+  { vprasanje: "Kateri slovenski znanstvenik je znan po raziskavah termodinamike in toplotne prevodnosti?", moznosti: ["Jožef Stefan", "Edvard Rusjan", "Friderik Pregl", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski izumitelj je razvil metode za analizo mikroskopskih vzorcev?", moznosti: ["Friderik Pregl", "Janez Puhar", "Jožef Stefan", "Peter Florjančič"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kaj je bil velik dosežek Janeza Puharja v 19. stoletju?", moznosti: ["Fotografija na steklu", "Prva slovenska knjiga", "Teorija relativnosti", "Letač na vodikov pogon"], odgovor: "Fotografija na steklu" },
+  { vprasanje: "Kdo je avtor knjige 'Problem vožnje po vesolju'?", moznosti: ["Herman Potočnik", "Jožef Stefan", "Janez Puhar", "Anton Codelli"], odgovor: "Herman Potočnik" },
+  { vprasanje: "Kateri slovenski znanstvenik je prispeval k razvoju medicinske diagnostike s spektrografijo?", moznosti: ["Friderik Pregl", "Janez Puhar", "Peter Florjančič", "Anton Codelli"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski znanstvenik je prvi dokazal obstoj fosforilacije v energijski presnovi celic?", moznosti: ["Jože Peterlin", "Friderik Pregl", "Janez Puhar", "Herman Potočnik"], odgovor: "Jože Peterlin" },
+ { vprasanje: "Kdo je bil slovenski znanstvenik, ki je prispeval k razvoju molekularne biologije?", moznosti: ["Aleš Bavec", "Friderik Pregl", "Jožef Stefan", "Janez Puhar"], odgovor: "Aleš Bavec" },
+  { vprasanje: "Kateri slovenski znanstvenik je prejel Nobelovo nagrado za kemijo?", moznosti: ["Friderik Pregl", "Janez Puhar", "Jožef Stefan", "Peter Florjančič"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kdo je razvil prvi slovenski mikroprocesor?", moznosti: ["Marjan Novak", "Aleksander Pregl", "Jože Peterlin", "Friderik Pregl"], odgovor: "Marjan Novak" },
+  { vprasanje: "Kateri slovenski inovator je prispeval k razvoju umetnih materialov?", moznosti: ["Peter Florjančič", "Janez Puhar", "Jožef Stefan", "Herman Potočnik"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kateri slovenski znanstvenik je bil pionir na področju astrofizike?", moznosti: ["Jožef Stefan", "Herman Potočnik", "Janez Puhar", "Friderik Pregl"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski fizik je raziskoval sevanje črnega telesa?", moznosti: ["Jožef Stefan", "Anton Codelli", "Peter Florjančič", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kaj je bil največji prispevek Hermana Potočnika k vesoljski znanosti?", moznosti: ["Orbitalne postaje", "Jedrski pogon", "Sateliti", "Marsova kolonija"], odgovor: "Orbitalne postaje" },
+  { vprasanje: "Kateri slovenski inovator je razvil prvi avtomatski razpršilec za parfume?", moznosti: ["Peter Florjančič", "Friderik Pregl", "Jožef Stefan", "Janez Puhar"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kateri slovenski izumitelj je razvil tehnologijo za izboljšanje leč?", moznosti: ["Marjan Novak", "Anton Codelli", "Friderik Pregl", "Peter Florjančič"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kdo je bil prvi slovenski avtor knjige o vesoljskih potovanjih?", moznosti: ["Herman Potočnik", "Janez Puhar", "Jožef Stefan", "Friderik Pregl"], odgovor: "Herman Potočnik" },
+  { vprasanje: "Kateri slovenski znanstvenik je prispeval k razvoju optičnih instrumentov?", moznosti: ["Anton Codelli", "Jožef Stefan", "Peter Florjančič", "Janez Puhar"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kateri slovenski izumitelj je razvil več kot 400 patentov?", moznosti: ["Peter Florjančič", "Jožef Stefan", "Herman Potočnik", "Friderik Pregl"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kateri slovenski znanstvenik je pionir na področju spektralne analize?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Janez Puhar", "Peter Florjančič"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kdo je bil prvi slovenski fizik, ki je raziskoval sevanje in termodinamiko?", moznosti: ["Jožef Stefan", "Friderik Pregl", "Anton Codelli", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Katera inovacija Janeza Puharja je postavila temelje moderni fotografiji?", moznosti: ["Fotografija na steklu", "Barvna fotografija", "Digitalni fotoaparat", "Občutljivi film"], odgovor: "Fotografija na steklu" },
+  { vprasanje: "Kdo je bil slovenski pionir na področju mikroskopije?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Anton Codelli", "Janez Puhar"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski znanstvenik je raziskoval lastnosti plinov in tekočin?", moznosti: ["Jožef Stefan", "Friderik Pregl", "Peter Florjančič", "Anton Codelli"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kdo je bil prvi slovenski avtor znanstvenofantastične literature?", moznosti: ["Herman Potočnik", "Janez Puhar", "Jožef Stefan", "Anton Codelli"], odgovor: "Herman Potočnik" },
+  { vprasanje: "Kateri slovenski inovator je razvil tehnologijo za izboljšanje teleskopov?", moznosti: ["Anton Codelli", "Friderik Pregl", "Janez Puhar", "Jožef Stefan"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kaj je največji dosežek slovenskega izumitelja Hermana Potočnika?", moznosti: ["Prvi orbitalni načrti", "Razvoj jedrskega pogona", "Zgraditev rakete", "Raziskave Marsa"], odgovor: "Prvi orbitalni načrti" },
+  { vprasanje: "Katera slovenska znanstvena institucija je imenovana po Jožefu Stefanu?", moznosti: ["Inštitut Jožef Stefan", "Inštitut za fiziko", "Kemijski inštitut", "Zavod za vesoljske raziskave"], odgovor: "Inštitut Jožef Stefan" },
+  { vprasanje: "Kateri slovenski znanstvenik je razvil napredno metodo za analizo mikrodelcev?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Peter Florjančič", "Janez Puhar"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski inovator je bil znan po svojih izumih na področju optike?", moznosti: ["Anton Codelli", "Peter Florjančič", "Friderik Pregl", "Jožef Stefan"], odgovor: "Anton Codelli" },
+  { vprasanje: "Katera slovenska univerza nosi ime po znanem znanstveniku?", moznosti: ["Univerza Jožefa Stefana", "Ljubljanska univerza", "Univerza Maribor", "Univerza Primorska"], odgovor: "Univerza Jožefa Stefana" },
+  { vprasanje: "Kateri slovenski fizik je prispeval k razvoju termodinamičnih zakonov?", moznosti: ["Jožef Stefan", "Anton Codelli", "Friderik Pregl", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kaj je bil največji prispevek Friderika Pregla k kemiji?", moznosti: ["Razvoj mikrokemije", "Raziskave plinov", "Izum optičnih leč", "Fotografija na steklu"], odgovor: "Razvoj mikrokemije" },
+  { vprasanje: "Kateri slovenski izumitelj je razvil patent za avtomatske zapiralke steklenic?", moznosti: ["Peter Florjančič", "Anton Codelli", "Jožef Stefan", "Janez Puhar"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kateri slovenski znanstvenik je bil pionir na področju raziskav energije?", moznosti: ["Jožef Stefan", "Friderik Pregl", "Janez Puhar", "Peter Florjančič"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kdo je razvil metodo za določanje mase molekul?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Anton Codelli", "Janez Puhar"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski inovator je bil aktiven tudi v umetni industriji?", moznosti: ["Peter Florjančič", "Friderik Pregl", "Anton Codelli", "Jožef Stefan"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kaj je bil pomemben izum Antona Codellija na področju telekomunikacij?", moznosti: ["Prva radijska antena", "Telegraf", "Optični kabel", "Fotografski film"], odgovor: "Prva radijska antena" },
+{ vprasanje: "Kateri slovenski znanstvenik je prvi opisal zakon o črnem telesu?", moznosti: ["Jožef Stefan", "Anton Codelli", "Friderik Pregl", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kateri slovenski znanstvenik je razvil metode za analizo mikrodelcev?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Peter Florjančič", "Anton Codelli"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Katera slovenska institucija je ključna na področju znanstvenih raziskav?", moznosti: ["Inštitut Jožef Stefan", "Kemijski inštitut", "Biološki inštitut", "Fizikalni inštitut"], odgovor: "Inštitut Jožef Stefan" },
+  { vprasanje: "Kdo je bil slovenski pionir na področju satelitskih komunikacij?", moznosti: ["Anton Codelli", "Peter Florjančič", "Janez Puhar", "Jožef Stefan"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kateri slovenski fizik je raziskoval termodinamiko in prevodnost toplote?", moznosti: ["Jožef Stefan", "Friderik Pregl", "Janez Puhar", "Peter Florjančič"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kdo je bil znan po prvih eksperimentih z vakuumskimi tehnologijami v Sloveniji?", moznosti: ["Anton Codelli", "Friderik Pregl", "Peter Florjančič", "Herman Potočnik"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kateri slovenski inovator je bil znan po razvoju industrijskih patentov?", moznosti: ["Peter Florjančič", "Friderik Pregl", "Jožef Stefan", "Anton Codelli"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kaj je bil ključen dosežek Janeza Puharja?", moznosti: ["Fotografija na steklu", "Prvi avtomobil", "Razvoj letala", "Izum radia"], odgovor: "Fotografija na steklu" },
+  { vprasanje: "Kdo je bil slovenski pionir na področju vesoljskih tehnologij?", moznosti: ["Herman Potočnik", "Jožef Stefan", "Janez Puhar", "Peter Florjančič"], odgovor: "Herman Potočnik" },
+  { vprasanje: "Kateri slovenski znanstvenik je prispeval k razvoju kemijskih analiz?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Anton Codelli", "Janez Puhar"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kaj je bil velik dosežek Hermana Potočnika Noordunga?", moznosti: ["Prvi načrti za orbitalno postajo", "Razvoj podmornic", "Gradnja letala", "Optične naprave"], odgovor: "Prvi načrti za orbitalno postajo" },
+  { vprasanje: "Kateri slovenski znanstvenik je raziskoval energijske procese v celicah?", moznosti: ["Jože Peterlin", "Friderik Pregl", "Janez Puhar", "Anton Codelli"], odgovor: "Jože Peterlin" },
+  { vprasanje: "Kdo je bil slovenski inovator, ki je razvil razpršilec za parfume?", moznosti: ["Peter Florjančič", "Janez Puhar", "Anton Codelli", "Jožef Stefan"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kateri slovenski znanstvenik je prispeval k teoriji plazme?", moznosti: ["Jožef Stefan", "Jože Peterlin", "Friderik Pregl", "Anton Codelli"], odgovor: "Jože Peterlin" },
+  { vprasanje: "Katera slovenska znanstvena institucija je vodilna na področju fizike?", moznosti: ["Inštitut Jožef Stefan", "Kemijski inštitut", "Zavod za znanost", "Fakulteta za fiziko"], odgovor: "Inštitut Jožef Stefan" },
+  { vprasanje: "Kdo je bil slovenski znanstvenik, znan po pionirskem delu v mikroanalizi?", moznosti: ["Friderik Pregl", "Janez Puhar", "Jože Peterlin", "Peter Florjančič"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Kateri slovenski znanstvenik je bil med pionirji molekularne biologije?", moznosti: ["Aleš Bavec", "Jožef Stefan", "Anton Codelli", "Friderik Pregl"], odgovor: "Aleš Bavec" },
+  { vprasanje: "Kateri slovenski fizik je raziskoval toplotno sevanje?", moznosti: ["Jožef Stefan", "Janez Puhar", "Peter Florjančič", "Anton Codelli"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kaj je bil ključni prispevek Friderika Pregla k znanosti?", moznosti: ["Mikrokemijske analize", "Razvoj optičnih leč", "Prva radijska antena", "Izum vakuumske cevi"], odgovor: "Mikrokemijske analize" },
+  { vprasanje: "Kdo je bil slovenski inovator, ki je izumil več kot 300 patentov?", moznosti: ["Peter Florjančič", "Jožef Stefan", "Herman Potočnik", "Anton Codelli"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Katera slovenska znanstvena institucija je poimenovana po pionirju fizike?", moznosti: ["Inštitut Jožef Stefan", "Inštitut za napredno znanost", "Univerza v Ljubljani", "Inštitut za energijo"], odgovor: "Inštitut Jožef Stefan" },
+  { vprasanje: "Kateri slovenski izumitelj je bil znan po razvoju avtomobilskih tehnologij?", moznosti: ["Anton Codelli", "Peter Florjančič", "Jožef Stefan", "Friderik Pregl"], odgovor: "Anton Codelli" },
+  { vprasanje: "Kdo je bil prvi slovenski znanstvenik, ki je raziskoval optične spektre?", moznosti: ["Anton Codelli", "Jožef Stefan", "Friderik Pregl", "Janez Puhar"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Kaj je bil največji dosežek Janeza Puharja?", moznosti: ["Izum fotografije na steklu", "Prva termoelektrarna", "Razvoj letala", "Gradnja mostov"], odgovor: "Izum fotografije na steklu" },
+  { vprasanje: "Kateri slovenski inovator je bil znan po razvoju avtomatskih naprav?", moznosti: ["Peter Florjančič", "Anton Codelli", "Jože Peterlin", "Friderik Pregl"], odgovor: "Peter Florjančič" },
+  { vprasanje: "Kaj je bil velik dosežek Hermana Potočnika?", moznosti: ["Načrtovanje orbitalnih postaj", "Razvoj jedrskih reaktorjev", "Gradnja optičnih teleskopov", "Izdelava satelitov"], odgovor: "Načrtovanje orbitalnih postaj" },
+  { vprasanje: "Kateri slovenski znanstvenik je razvil teorijo mikrospektrografije?", moznosti: ["Friderik Pregl", "Jožef Stefan", "Anton Codelli", "Peter Florjančič"], odgovor: "Friderik Pregl" },
+  { vprasanje: "Katera slovenska institucija se ukvarja z naprednimi vesoljskimi raziskavami?", moznosti: ["Vesoljski center Hermana Potočnika", "Inštitut Jožef Stefan", "Univerza v Ljubljani", "Zavod za astrofiziko"], odgovor: "Vesoljski center Hermana Potočnika" },
+  { vprasanje: "Kdo je bil slovenski pionir na področju termodinamike?", moznosti: ["Jožef Stefan", "Janez Puhar", "Anton Codelli", "Friderik Pregl"], odgovor: "Jožef Stefan" },
+  { vprasanje: "Katera inovacija je bila pomembna za fotografsko tehnologijo?", moznosti: ["Fotografija na steklu", "Prvi avtomat za slike", "Barvni film", "Optični kabel"], odgovor: "Fotografija na steklu" }
+];
+
+
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

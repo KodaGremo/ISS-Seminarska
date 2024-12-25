@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-slovenija.css">
+  <style>
+    body {
+background-image: url('slike/slo-1.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Kviz o Sloveniji (1999-2010)</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+ 
+      { vprasanje: "Leta 2004 se je Slovenija pridružila kateri organizaciji?", moznosti: ["EU", "NATO", "OZN", "OECD"], odgovor: "EU" },
+      { vprasanje: "V katerem letu je Slovenija uvedla evro kot svojo valuto?", moznosti: ["2004", "2007", "2006", "2008"], odgovor: "2007" },
+      { vprasanje: "Kdo je bil predsednik Slovenije leta 2002?", moznosti: ["Janez Drnovšek", "Danilo Türk", "Borut Pahor", "Milan Kučan"], odgovor: "Janez Drnovšek" },
+      { vprasanje: "V katerem letu je Slovenija postala članica NATO?", moznosti: ["2003", "2004", "2005", "2006"], odgovor: "2004" },
+      { vprasanje: "Kdo je bil slovenski premier leta 2008?", moznosti: ["Janez Janša", "Borut Pahor", "Anton Rop", "Andrej Bajuk"], odgovor: "Borut Pahor" },
+      { vprasanje: "Katera slovenska igralka je osvojila zlati globus leta 2010?", moznosti: ["Tanja Ribič", "Iva Krajnc", "Maruša Majer", "Nataša Matjašec Rošker"], odgovor: "Tanja Ribič" },
+      { vprasanje: "Slovenija je leta 2008 predsedovala kateri organizaciji?", moznosti: ["OECD", "EU", "NATO", "OZN"], odgovor: "EU" },
+      { vprasanje: "V katerem letu je bil slovenski nogometni klub Maribor ustanovljen?", moznosti: ["1999", "2000", "1998", "1999"], odgovor: "1999" },
+      { vprasanje: "Kateri slovenski smučar je leta 2001 osvojil svetovni pokal?", moznosti: ["Jure Košir", "Rok Petrovič", "Boštjan Kline", "Rok Perko"], odgovor: "Jure Košir" },
+      { vprasanje: "Kdo je bil leta 2000 predsednik vlade Slovenije?", moznosti: ["Andrej Bajuk", "Janez Drnovšek", "Borut Pahor", "Anton Rop"], odgovor: "Janez Drnovšek" },
+      { vprasanje: "Kdaj je Slovenija dobila svojo prvo avtocesto?", moznosti: ["2001", "2000", "1999", "2003"], odgovor: "2000" },
+      { vprasanje: "V katerem letu je Slovenija zgradila svoj prvi stadion Stožice?", moznosti: ["2009", "2008", "2010", "2007"], odgovor: "2010" },
+      { vprasanje: "Kdo je bil predsednik Slovenije leta 2007?", moznosti: ["Janez Drnovšek", "Danilo Türk", "Borut Pahor", "Milan Kučan"], odgovor: "Danilo Türk" },
+      { vprasanje: "V katerem letu se je Slovenija pridružila evroobmočju?", moznosti: ["2006", "2007", "2008", "2009"], odgovor: "2007" },
+      { vprasanje: "Kateri slovenski športnik je leta 2008 osvojil olimpijsko medaljo?", moznosti: ["Primož Kozmus", "Tina Maze", "Jure Košir", "Iztok Čop"], odgovor: "Primož Kozmus" },
+      { vprasanje: "Leta 2006 je Slovenija osvojila naslov svetovnega prvaka v katerem športu?", moznosti: ["Košarka", "Odbojka", "Rokomet", "Hokej"], odgovor: "Rokomet" },
+      { vprasanje: "V katerem letu je Slovenija postala članica OECD?", moznosti: ["2009", "2010", "2011", "2008"], odgovor: "2010" },
+      { vprasanje: "Katera reka teče skozi Ljubljano?", moznosti: ["Drava", "Sava", "Krka", "Ljubljanica"], odgovor: "Ljubljanica" },
+      { vprasanje: "Katera slovenska pevka je leta 2001 zmagala na Evroviziji?", moznosti: ["Tanja Ribič", "Nuša Derenda", "Maja Keuc", "Severina"], odgovor: "Nuša Derenda" },
+      { vprasanje: "Kdo je bil predsednik Slovenije leta 1999?", moznosti: ["Milan Kučan", "Janez Drnovšek", "Borut Pahor", "Danilo Türk"], odgovor: "Milan Kučan" },
+  { vprasanje: "Kateri slovenski športnik je leta 2000 osvojil olimpijsko medaljo?", moznosti: ["Iztok Čop", "Primož Kozmus", "Jure Košir", "Tina Maze"], odgovor: "Iztok Čop" },
+  { vprasanje: "Kdo je bil predsednik vlade Slovenije leta 1999?", moznosti: ["Janez Drnovšek", "Andrej Bajuk", "Anton Rop", "Borut Pahor"], odgovor: "Janez Drnovšek" },
+  { vprasanje: "V katerem letu je Slovenija odprla meje z Avstrijo zaradi Schengenskega območja?", moznosti: ["2007", "2006", "2008", "2005"], odgovor: "2007" },
+  { vprasanje: "Katera slovenska športnica je osvojila prvo zlato medaljo na svetovnem prvenstvu leta 2001?", moznosti: ["Tina Maze", "Petra Majdič", "Urška Žolnir", "Vesna Fabjan"], odgovor: "Urška Žolnir" },
+  { vprasanje: "Kateri slovenski kulturni dogodek je postal mednarodno prepoznaven leta 2004?", moznosti: ["Festival Lent", "Borštnikovo srečanje", "Laibach turneja", "Jazz Cerkno"], odgovor: "Festival Lent" },
+  { vprasanje: "Kateri slovenski smučar je leta 1999 osvojil svetovni pokal v veleslalomu?", moznosti: ["Jure Košir", "Rok Petrovič", "Boštjan Kline", "Štefan Hadalin"], odgovor: "Jure Košir" },
+  { vprasanje: "Kdaj je Slovenija postala članica Organizacije za varnost in sodelovanje v Evropi (OSCE)?", moznosti: ["1999", "2000", "2001", "2002"], odgovor: "1999" },
+  { vprasanje: "Kateri slovenski nogometni klub je leta 2004 osvojil državno prvenstvo?", moznosti: ["Maribor", "Olimpija", "Domžale", "Celje"], odgovor: "Maribor" },
+  { vprasanje: "Kdo je bil slovenski predsednik leta 2000?", moznosti: ["Milan Kučan", "Janez Drnovšek", "Danilo Türk", "Borut Pahor"], odgovor: "Milan Kučan" },
+  { vprasanje: "V katerem letu je Slovenija zgradila svojo prvo mednarodno avtocesto?", moznosti: ["2001", "2003", "2005", "2000"], odgovor: "2001" },
+  { vprasanje: "Katera slovenska skladateljica je prejela mednarodno priznanje leta 2005?", moznosti: ["Nina Šenk", "Tanja Pirc", "Larisa Drnovšek", "Mojca Zlobko"], odgovor: "Nina Šenk" },
+  { vprasanje: "Kateri slovenski športnik je leta 2002 osvojil naslov evropskega prvaka v atletiki?", moznosti: ["Primož Kozmus", "Jure Košir", "Robert Renner", "Mitja Petkovšek"], odgovor: "Mitja Petkovšek" },
+  { vprasanje: "Kateri slovenski pesnik je bil leta 2000 prvič izbran za UNESCO pesnika miru?", moznosti: ["Tone Pavček", "Boris A. Novak", "Tomaž Šalamun", "Milan Dekleva"], odgovor: "Tone Pavček" },
+  { vprasanje: "Kateri slovenski kraj je leta 2007 gostil Svetovni pokal v nordijskem smučanju?", moznosti: ["Planica", "Kranjska Gora", "Bled", "Maribor"], odgovor: "Planica" },
+  { vprasanje: "Katera slovenska pevka je leta 2003 izdala mednarodno uspešno pesem?", moznosti: ["Nuša Derenda", "Tanja Ribič", "Maja Keuc", "Helena Blagne"], odgovor: "Nuša Derenda" },
+  { vprasanje: "V katerem letu je Slovenija postala polnopravna članica EU?", moznosti: ["2004", "2003", "2005", "2006"], odgovor: "2004" },
+  { vprasanje: "Kateri slovenski športnik je osvojil srebrno medaljo na olimpijskih igrah leta 2004?", moznosti: ["Iztok Čop", "Primož Kozmus", "Rok Marguč", "Tina Maze"], odgovor: "Iztok Čop" },
+  { vprasanje: "Kateri slovenski kraj je leta 2010 postal Unescov kraj kulturne dediščine?", moznosti: ["Škocjanske jame", "Postojnska jama", "Sečoveljske soline", "Bled"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Kateri slovenski festival je postal mednarodno priznan leta 2006?", moznosti: ["Borštnikovo srečanje", "Festival Lent", "Vino Ljubljana", "Jazz Cerkno"], odgovor: "Borštnikovo srečanje" },
+  { vprasanje: "Kateri slovenski športnik je leta 2005 osvojil zlato medaljo v veslanju?", moznosti: ["Iztok Čop", "Primož Kozmus", "Miha Pirih", "Jure Košir"], odgovor: "Iztok Čop" },
+  { vprasanje: "V katerem letu je Slovenija dobila svoj prvi televizijski kanal za mlade?", moznosti: ["2000", "2002", "2004", "2006"], odgovor: "2004" },
+  { vprasanje: "Kateri slovenski skladatelj je prejel mednarodno nagrado leta 2008?", moznosti: ["Uroš Rojko", "Bojan Adamič", "Marjan Kozina", "Vinko Globokar"], odgovor: "Uroš Rojko" },
+  { vprasanje: "Katera slovenska univerza je bila leta 2010 prvič vključena v mednarodni univerzitetni rang?", moznosti: ["Univerza v Ljubljani", "Univerza v Mariboru", "Univerza na Primorskem", "Univerza v Novi Gorici"], odgovor: "Univerza v Ljubljani" },
+  { vprasanje: "Kateri slovenski športnik je leta 2009 osvojil svetovni pokal v kolesarstvu?", moznosti: ["Tadej Valjavec", "Primož Roglič", "Jani Brajkovič", "Matej Mohorič"], odgovor: "Tadej Valjavec" },
+  { vprasanje: "V katerem letu je Slovenija gostila Evropsko prvenstvo v košarki?", moznosti: ["2004", "2009", "2010", "2007"], odgovor: "2009" },
+  { vprasanje: "Kdo je bil predsednik Slovenije leta 2010?", moznosti: ["Danilo Türk", "Borut Pahor", "Janez Drnovšek", "Milan Kučan"], odgovor: "Danilo Türk" },
+  { vprasanje: "Kateri slovenski športnik je leta 2006 osvojil svetovno prvenstvo v judu?", moznosti: ["Urška Žolnir", "Tina Trstenjak", "Lucija Polavder", "Ana Velenšek"], odgovor: "Urška Žolnir" },
+  { vprasanje: "Kdo je bil predsednik vlade Slovenije leta 2009?", moznosti: ["Borut Pahor", "Janez Janša", "Anton Rop", "Miro Cerar"], odgovor: "Borut Pahor" },
+  { vprasanje: "V katerem letu je Slovenija postala članica evroobmočja?", moznosti: ["2007", "2006", "2008", "2005"], odgovor: "2007" },
+  { vprasanje: "Katera slovenska igralka je prejela mednarodno nagrado leta 2010?", moznosti: ["Maruša Majer", "Nataša Barbara Gračner", "Iva Krajnc", "Tanja Ribič"], odgovor: "Tanja Ribič" },
+   { vprasanje: "Kateri slovenski športnik je osvojil zlato medaljo na olimpijskih igrah leta 2008 v metu kladiva?", moznosti: ["Primož Kozmus", "Iztok Čop", "Tina Maze", "Urška Žolnir"], odgovor: "Primož Kozmus" },
+  { vprasanje: "V katerem letu je Slovenija predsedovala Evropski uniji?", moznosti: ["2008", "2007", "2009", "2010"], odgovor: "2008" },
+  { vprasanje: "Kdo je bil slovenski premier leta 2002?", moznosti: ["Janez Drnovšek", "Anton Rop", "Andrej Bajuk", "Borut Pahor"], odgovor: "Janez Drnovšek" },
+  { vprasanje: "Katera slovenska pevka je leta 2001 nastopila na Evroviziji?", moznosti: ["Nuša Derenda", "Tanja Ribič", "Maja Keuc", "Helena Blagne"], odgovor: "Nuša Derenda" },
+  { vprasanje: "Kateri slovenski športnik je osvojil svetovni pokal v veslanju leta 2005?", moznosti: ["Iztok Čop", "Primož Kozmus", "Miha Pirih", "Mitja Petkovšek"], odgovor: "Iztok Čop" },
+  { vprasanje: "V katerem letu je Slovenija vstopila v evroobmočje?", moznosti: ["2007", "2006", "2008", "2009"], odgovor: "2007" },
+  { vprasanje: "Katera slovenska regija je postala del Unescove dediščine leta 2010?", moznosti: ["Škocjanske jame", "Postojnska jama", "Sečoveljske soline", "Bled"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Kateri slovenski nogometni klub je postal prvak leta 1999?", moznosti: ["Maribor", "Olimpija", "Domžale", "Celje"], odgovor: "Maribor" },
+  { vprasanje: "Katera reka je leta 2000 poplavila Ljubljano?", moznosti: ["Ljubljanica", "Sava", "Krka", "Mura"], odgovor: "Ljubljanica" },
+  { vprasanje: "Kdo je bil predsednik vlade leta 1999?", moznosti: ["Janez Drnovšek", "Anton Rop", "Andrej Bajuk", "Borut Pahor"], odgovor: "Janez Drnovšek" },
+  { vprasanje: "Kdaj je Slovenija zgradila svojo prvo avtocesto?", moznosti: ["2000", "1999", "2001", "2002"], odgovor: "2000" },
+  { vprasanje: "Katera slovenska pevka je leta 2007 nastopila na Evroviziji?", moznosti: ["Alenka Gotar", "Nuša Derenda", "Tanja Ribič", "Maja Keuc"], odgovor: "Alenka Gotar" },
+  { vprasanje: "Kateri šport je leta 2004 Slovenijo zastopal na olimpijskih igrah?", moznosti: ["Rokomet", "Košarka", "Veslanje", "Plavanje"], odgovor: "Veslanje" },
+  { vprasanje: "V katerem letu je Slovenija postala članica OECD?", moznosti: ["2010", "2009", "2008", "2007"], odgovor: "2010" },
+  { vprasanje: "Kateri slovenski športnik je osvojil bronasto medaljo na olimpijskih igrah leta 2000?", moznosti: ["Iztok Čop", "Primož Kozmus", "Tina Maze", "Urška Žolnir"], odgovor: "Iztok Čop" },
+  { vprasanje: "Kdo je bil predsednik Slovenije leta 2000?", moznosti: ["Milan Kučan", "Janez Drnovšek", "Danilo Türk", "Borut Pahor"], odgovor: "Milan Kučan" },
+  { vprasanje: "Katera slovenska pevka je leta 2003 izdala mednarodni hit?", moznosti: ["Nuša Derenda", "Tanja Ribič", "Helena Blagne", "Maja Keuc"], odgovor: "Nuša Derenda" },
+  { vprasanje: "V katerem letu je bil Stadion Stožice odprt?", moznosti: ["2010", "2009", "2008", "2007"], odgovor: "2010" },
+  { vprasanje: "Kateri slovenski skladatelj je prejel mednarodno nagrado leta 2005?", moznosti: ["Uroš Rojko", "Marjan Kozina", "Bojan Adamič", "Vinko Globokar"], odgovor: "Uroš Rojko" },
+  { vprasanje: "Katera slovenska univerza je leta 2010 prvič vstopila v mednarodno rangiranje univerz?", moznosti: ["Univerza v Ljubljani", "Univerza v Mariboru", "Univerza na Primorskem", "Univerza v Novi Gorici"], odgovor: "Univerza v Ljubljani" },
+  { vprasanje: "Kateri slovenski športnik je leta 2008 osvojil olimpijsko medaljo v metu kladiva?", moznosti: ["Primož Kozmus", "Iztok Čop", "Tina Maze", "Mitja Petkovšek"], odgovor: "Primož Kozmus" },
+  { vprasanje: "Kateri slovenski kraj je gostil Evropsko prvenstvo v košarki leta 2009?", moznosti: ["Ljubljana", "Maribor", "Celje", "Kranjska Gora"], odgovor: "Ljubljana" },
+  { vprasanje: "Katera slovenska športnica je leta 2007 osvojila svetovno prvenstvo v judu?", moznosti: ["Urška Žolnir", "Tina Trstenjak", "Lucija Polavder", "Ana Velenšek"], odgovor: "Urška Žolnir" },
+  { vprasanje: "Kdo je bil predsednik vlade leta 2008?", moznosti: ["Borut Pahor", "Janez Janša", "Anton Rop", "Andrej Bajuk"], odgovor: "Borut Pahor" },
+  { vprasanje: "V katerem letu je Slovenija postala del Schengenskega območja?", moznosti: ["2007", "2008", "2006", "2009"], odgovor: "2007" },
+  { vprasanje: "Katera slovenska igralka je leta 2010 prejela mednarodno priznanje?", moznosti: ["Nataša Barbara Gračner", "Iva Krajnc", "Tanja Ribič", "Maruša Majer"], odgovor: "Tanja Ribič" },
+  { vprasanje: "Kateri slovenski nogometni klub je osvojil naslov državnega prvaka leta 2005?", moznosti: ["Maribor", "Domžale", "Olimpija", "Celje"], odgovor: "Domžale" },
+  { vprasanje: "Kateri slovenski športnik je leta 2009 osvojil svetovni pokal v kolesarstvu?", moznosti: ["Tadej Valjavec", "Jani Brajkovič", "Matej Mohorič", "Primož Roglič"], odgovor: "Tadej Valjavec" },
+  { vprasanje: "Katera slovenska športnica je leta 2006 osvojila zlato medaljo na evropskem prvenstvu v alpskem smučanju?", moznosti: ["Tina Maze", "Petra Majdič", "Ilka Štuhec", "Urška Žolnir"], odgovor: "Tina Maze" }
+];
+
+ 
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-slovenija.css">
+  <style>
+    body {
+background-image: url('slike/slo-dedi.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Kulturna dediščina Slovenije</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+  { vprasanje: "Kateri slovenski pesnik je napisal 'Zdravljico'?", moznosti: ["France Prešeren", "Srečko Kosovel", "Ivan Cankar", "Simon Gregorčič"], odgovor: "France Prešeren" },
+  { vprasanje: "Kateri praznik praznujemo v Sloveniji 8. februarja?", moznosti: ["Prešernov dan", "Dan državnosti", "Dan reformacije", "Dan samostojnosti"], odgovor: "Prešernov dan" },
+  { vprasanje: "Kateri je največji kulturni festival v Sloveniji?", moznosti: ["Lent", "Festival Ljubljana", "Kurentovanje", "Pohorski festival"], odgovor: "Lent" },
+  { vprasanje: "Katera slovenska jed je znana po kislem zelju in klobasah?", moznosti: ["Jota", "Prekmurska gibanica", "Štruklji", "Potica"], odgovor: "Jota" },
+  { vprasanje: "Katero mesto je znano po tradicionalnem Kurentovanju?", moznosti: ["Ptuj", "Maribor", "Celje", "Ljubljana"], odgovor: "Ptuj" },
+  { vprasanje: "Kateri slovenski arhitekt je zasnoval Plečnikovo Ljubljano?", moznosti: ["Jože Plečnik", "Ivan Vurnik", "Edvard Ravnikar", "Maks Fabiani"], odgovor: "Jože Plečnik" },
+  { vprasanje: "Katera slovenska sladica vsebuje mak, orehe, rozine in jabolka?", moznosti: ["Prekmurska gibanica", "Štruklji", "Potica", "Kremšnita"], odgovor: "Prekmurska gibanica" },
+  { vprasanje: "Katera dolina je znana po pastirskem prazniku v Sloveniji?", moznosti: ["Velika Planina", "Logarska dolina", "Soška dolina", "Zgornjesavska dolina"], odgovor: "Velika Planina" },
+  { vprasanje: "Kateri slovenski narodni instrument je harmonika?", moznosti: ["Diatonična harmonika", "Klasična harmonika", "Električna harmonika", "Bas harmonika"], odgovor: "Diatonična harmonika" },
+  { vprasanje: "Katera reka je navdihnila veliko pesmi slovenskih pesnikov?", moznosti: ["Sava", "Drava", "Soča", "Krka"], odgovor: "Soča" },
+  { vprasanje: "Kdo je napisal roman 'Martin Kačur'?", moznosti: ["Ivan Cankar", "France Prešeren", "Simon Gregorčič", "Dragotin Kette"], odgovor: "Ivan Cankar" },
+  { vprasanje: "Katera je najbolj znana slovenska plesna skupina, znana po narodnozabavni glasbi?", moznosti: ["Ansambel Avsenik", "Laibach", "Big Foot Mama", "Čuki"], odgovor: "Ansambel Avsenik" },
+  { vprasanje: "Katero mesto je znano po prireditvi 'Festival Lent'?", moznosti: ["Maribor", "Ljubljana", "Kranj", "Celje"], odgovor: "Maribor" },
+  { vprasanje: "Kdo je znan kot slovenski 'pesnik upora'?", moznosti: ["Tone Pavček", "Srečko Kosovel", "France Balantič", "Ivan Minatti"], odgovor: "Srečko Kosovel" },
+  { vprasanje: "Katero leto je Slovenija razglasila za leto kulturne dediščine?", moznosti: ["2018", "2017", "2015", "2019"], odgovor: "2018" },
+  { vprasanje: "Katera slovenska pesnica je napisala pesem 'Duma'?", moznosti: ["Mila Kačič", "Lili Novy", "Vida Jeraj", "Neža Maurer"], odgovor: "Mila Kačič" },
+  { vprasanje: "Kdo je napisal 'Kekčeve pesmi'?", moznosti: ["Josip Vandot", "France Bevk", "Ivan Cankar", "Miroslav Vilhar"], odgovor: "Josip Vandot" },
+  { vprasanje: "Katera slovenska slikarka je znana po sliki 'Likarice'?", moznosti: ["Ivana Kobilca", "Tina Dobrajc", "Metka Krašovec", "Marija Pregelj"], odgovor: "Ivana Kobilca" },
+  { vprasanje: "Katera slovenska pesem je postala nacionalna himna?", moznosti: ["Zdravljica", "Sonetni venec", "Od železne ceste", "Pod lipo"], odgovor: "Zdravljica" },
+  { vprasanje: "Katera slovenska zasedba je znana po mednarodnih umetniških uspehih?", moznosti: ["Laibach", "Big Foot Mama", "Ansambel Avsenik", "Čuki"], odgovor: "Laibach" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Blejskega otoka?", moznosti: ["Bled", "Bohinj", "Kranj", "Radovljica"], odgovor: "Bled" },
+  { vprasanje: "Katera slovenska jed je znana po orehovem nadevu in testu?", moznosti: ["Potica", "Gibanica", "Štruklji", "Kremšnita"], odgovor: "Potica" },
+  { vprasanje: "Katera reka teče skozi Ljubljano?", moznosti: ["Ljubljanica", "Sava", "Drava", "Krka"], odgovor: "Ljubljanica" },
+  { vprasanje: "Katera gora je simbol Slovenije?", moznosti: ["Triglav", "Škrlatica", "Grintovec", "Mangart"], odgovor: "Triglav" },
+  { vprasanje: "Katera slovenska pesem se pogosto poje na državnih praznikih?", moznosti: ["Zdravljica", "Planinska", "Soča", "Vstala Primorska"], odgovor: "Zdravljica" },
+  { vprasanje: "Katera slovenska slikarka je ustvarila sliko 'Portret mladenke'?", moznosti: ["Ivana Kobilca", "Marija Pregelj", "Metka Krašovec", "Tina Dobrajc"], odgovor: "Ivana Kobilca" },
+  { vprasanje: "Kateri slovenski arhitekt je oblikoval Narodno in univerzitetno knjižnico?", moznosti: ["Jože Plečnik", "Edvard Ravnikar", "Ivan Vurnik", "Maks Fabiani"], odgovor: "Jože Plečnik" },
+  { vprasanje: "Katera slovenska regija je znana po teranu?", moznosti: ["Kras", "Gorenjska", "Dolenjska", "Prekmurje"], odgovor: "Kras" },
+  { vprasanje: "Katero mesto je znano po Kobariškem muzeju?", moznosti: ["Kobarid", "Tolmin", "Bovec", "Nova Gorica"], odgovor: "Kobarid" },
+  { vprasanje: "Katera slovenska naravna znamenitost je znana po Postojnski jami?", moznosti: ["Postojna", "Bovec", "Kranjska Gora", "Nova Gorica"], odgovor: "Postojna" },
+  { vprasanje: "Katero leto je Slovenija postala članica UNESCO?", moznosti: ["1992", "1991", "1993", "1994"], odgovor: "1992" },
+  { vprasanje: "Katera slovenska sladica je zaščitena kot kulinarična dediščina?", moznosti: ["Prekmurska gibanica", "Potica", "Štruklji", "Kremšnita"], odgovor: "Prekmurska gibanica" },
+  { vprasanje: "Kateri slovenski pesnik je napisal 'Sonetni venec'?", moznosti: ["France Prešeren", "Simon Gregorčič", "Josip Murn", "Srečko Kosovel"], odgovor: "France Prešeren" },
+  { vprasanje: "Katero slovensko mesto je znano po festivalu Penine?", moznosti: ["Radgona", "Maribor", "Celje", "Ptuj"], odgovor: "Radgona" },
+  { vprasanje: "Katera slovenska reka izvira iz Triglavskega narodnega parka?", moznosti: ["Soča", "Sava", "Drava", "Krka"], odgovor: "Soča" },
+  { vprasanje: "Katera tradicionalna slovenska oblačila se uporabljajo pri narodnih plesih?", moznosti: ["Narodne noše", "Prekmurske noše", "Alpske uniforme", "Dolenjske obleke"], odgovor: "Narodne noše" },
+  { vprasanje: "Kdo je napisal roman 'Hlapec Jernej in njegova pravica'?", moznosti: ["Ivan Cankar", "France Bevk", "Simon Gregorčič", "Dragotin Kette"], odgovor: "Ivan Cankar" },
+  { vprasanje: "Katera slovenska vinska klet je ena največjih v Evropi?", moznosti: ["Klet Brda", "Radgonske Gorice", "Jeruzalem Ormož", "Vipava 1894"], odgovor: "Klet Brda" },
+  { vprasanje: "Katera regija je znana po čipkah?", moznosti: ["Idrija", "Bled", "Gorenjska", "Prekmurje"], odgovor: "Idrija" },
+  { vprasanje: "Katera gora je del slovenskega grba?", moznosti: ["Triglav", "Škrlatica", "Mangart", "Grintovec"], odgovor: "Triglav" },
+  { vprasanje: "Katera slovenska vas je znana po razgledu na Triglav?", moznosti: ["Dolina Vrata", "Planica", "Kranjska Gora", "Bohinj"], odgovor: "Dolina Vrata" },
+  { vprasanje: "Katero mesto je znano po Slovenskem etnografskem muzeju?", moznosti: ["Ljubljana", "Maribor", "Ptuj", "Celje"], odgovor: "Ljubljana" },
+  { vprasanje: "Katera slovenska regija je znana po kostanjevem medu?", moznosti: ["Kočevska", "Goriška", "Dolenjska", "Prekmurje"], odgovor: "Kočevska" },
+  { vprasanje: "Katera reka je poznana po Solkanskem mostu?", moznosti: ["Soča", "Sava", "Krka", "Drava"], odgovor: "Soča" },
+  { vprasanje: "Katera znamenitost je znana kot 'kraška lepotica'?", moznosti: ["Škocjanske jame", "Postojnska jama", "Predjamski grad", "Blejski otok"], odgovor: "Škocjanske jame" },
+  { vprasanje: "Kateri praznik praznujemo 25. junija?", moznosti: ["Dan državnosti", "Dan samostojnosti", "Dan reformacije", "Prešernov dan"], odgovor: "Dan državnosti" },
+  { vprasanje: "Kateri slovenski avtor je napisal 'Na klancu'?", moznosti: ["Ivan Cankar", "France Bevk", "Simon Gregorčič", "Dragotin Kette"], odgovor: "Ivan Cankar" },
+  { vprasanje: "Katera je slovenska narodna pijača?", moznosti: ["Cviček", "Teran", "Borovničke", "Slivovka"], odgovor: "Cviček" },
+  { vprasanje: "Katera je najstarejša vinska trta na svetu?", moznosti: ["Stara trta v Mariboru", "Vipavska trta", "Cvičkova trta", "Jeruzalemska trta"], odgovor: "Stara trta v Mariboru" },
+  { vprasanje: "Katera pesem je simbol slovenstva?", moznosti: ["Zdravljica", "Soča", "Planinska", "Pod lipo"], odgovor: "Zdravljica" },
+  { vprasanje: "Katera gora se nahaja v Julijskih Alpah?", moznosti: ["Triglav", "Škrlatica", "Grintovec", "Mangart"], odgovor: "Triglav" },
+  { vprasanje: "Katero mesto je znano po Termalnem parku Moravske Toplice?", moznosti: ["Moravske Toplice", "Ptuj", "Bled", "Radenci"], odgovor: "Moravske Toplice" },
+  { vprasanje: "Katera je najbolj znana slovenska obmorska destinacija?", moznosti: ["Portorož", "Piran", "Koper", "Izola"], odgovor: "Portorož" },
+  { vprasanje: "Kdo je ustvaril slovenski film 'Cvetje v jeseni'?", moznosti: ["Matjaž Klopčič", "France Štiglic", "Jože Pogačnik", "Tomaž Šalamun"], odgovor: "Matjaž Klopčič" },
+  { vprasanje: "Katera slovenska jed je znana po ocvrtem krompirju in zelju?", moznosti: ["Matevž", "Žganci", "Štruklji", "Bograč"], odgovor: "Matevž" },
+  { vprasanje: "Katero slovensko mesto je znano po Tartinijevem trgu?", moznosti: ["Piran", "Izola", "Portorož", "Koper"], odgovor: "Piran" },
+  { vprasanje: "Katera reka teče skozi Novo mesto?", moznosti: ["Krka", "Sava", "Drava", "Ljubljanica"], odgovor: "Krka" },
+  { vprasanje: "Katero mesto je znano po Ptujski kleti?", moznosti: ["Ptuj", "Maribor", "Celje", "Ljubljana"], odgovor: "Ptuj" },
+  { vprasanje: "Katera slovenska regija je znana po belokranjskih pisanicah?", moznosti: ["Bela krajina", "Prekmurje", "Štajerska", "Gorenjska"], odgovor: "Bela krajina" },
+  { vprasanje: "Katero mesto je znano kot zgodovinsko središče Prekmurja?", moznosti: ["Murska Sobota", "Radenci", "Lendava", "Beltinci"], odgovor: "Murska Sobota" },
+  { vprasanje: "Katera slovenska regija je znana po bučnem olju?", moznosti: ["Štajerska", "Prekmurje", "Goriška", "Dolenjska"], odgovor: "Štajerska" },
+  { vprasanje: "Katera je najvišja slovenska planota?", moznosti: ["Pokljuka", "Velika Planina", "Bohinjska planota", "Trnovski gozd"], odgovor: "Pokljuka" },
+ { vprasanje: "Katero slovensko mesto je znano po zgodovinskem sejmu 'Jurjevanje'?", moznosti: ["Črnomelj", "Novo mesto", "Metlika", "Ptuj"], odgovor: "Črnomelj" },
+  { vprasanje: "Katera je najstarejša naselbina v Sloveniji?", moznosti: ["Ptuj", "Ljubljana", "Celje", "Maribor"], odgovor: "Ptuj" },
+  { vprasanje: "Katera slovenska reka je znana po tradicionalnem splavarjenju?", moznosti: ["Drava", "Sava", "Krka", "Soča"], odgovor: "Drava" },
+  { vprasanje: "Katero slovensko mesto je znano kot mesto vitezov?", moznosti: ["Celje", "Maribor", "Ptuj", "Koper"], odgovor: "Celje" },
+  { vprasanje: "Katera regija je znana po tradicionalni jedi 'žganci'?", moznosti: ["Gorenjska", "Štajerska", "Dolenjska", "Primorska"], odgovor: "Gorenjska" },
+  { vprasanje: "Katera slovenska dolina je znana po Soški fronti?", moznosti: ["Soška dolina", "Logarska dolina", "Zgornjesavska dolina", "Dolina Triglavskih jezer"], odgovor: "Soška dolina" },
+  { vprasanje: "Kateri slovenski grad je znan kot največji v Sloveniji?", moznosti: ["Ljubljanski grad", "Predjamski grad", "Celjski grad", "Grad Snežnik"], odgovor: "Celjski grad" },
+  { vprasanje: "Katero slovensko mesto je znano po Tartinijevem trgu?", moznosti: ["Piran", "Izola", "Koper", "Portorož"], odgovor: "Piran" },
+  { vprasanje: "Katera slovenska planina je znana po sirarski tradiciji?", moznosti: ["Velika Planina", "Bohinjska planota", "Pokljuka", "Krvavec"], odgovor: "Velika Planina" },
+  { vprasanje: "Katera slovenska znamenitost je znana kot 'vhod v podzemni svet'?", moznosti: ["Postojnska jama", "Škocjanske jame", "Predjamski grad", "Vilenica"], odgovor: "Postojnska jama" },
+  { vprasanje: "Kateri slovenski avtor je napisal delo 'Cvetje v jeseni'?", moznosti: ["Ivan Tavčar", "France Bevk", "Josip Jurčič", "Ivan Cankar"], odgovor: "Ivan Tavčar" },
+  { vprasanje: "Katero slovensko mesto je znano po Minoritskem samostanu?", moznosti: ["Ptuj", "Celje", "Novo mesto", "Koper"], odgovor: "Ptuj" },
+  { vprasanje: "Katera je najbolj znana tradicionalna pijača v Prekmurju?", moznosti: ["Bograč", "Bučno olje", "Prekmursko vino", "Medeno vino"], odgovor: "Bučno olje" },
+  { vprasanje: "Katero slovensko mesto je znano po festivalu Penine?", moznosti: ["Radgona", "Ptuj", "Maribor", "Celje"], odgovor: "Radgona" },
+  { vprasanje: "Katera slovenska gora je simbol Triglavskega narodnega parka?", moznosti: ["Triglav", "Mangart", "Škrlatica", "Razor"], odgovor: "Triglav" },
+  { vprasanje: "Katera reka je znana po barvi 'smaragdne kraljice'?", moznosti: ["Soča", "Krka", "Sava", "Drava"], odgovor: "Soča" },
+  { vprasanje: "Katera slovenska jed je narejena iz ajdove moke in kislega mleka?", moznosti: ["Žganci", "Matevž", "Bograč", "Štruklji"], odgovor: "Žganci" },
+  { vprasanje: "Katera dolina je znana po slapovih Savica?", moznosti: ["Bohinjska dolina", "Logarska dolina", "Soška dolina", "Zgornjesavska dolina"], odgovor: "Bohinjska dolina" },
+  { vprasanje: "Katera slovenska sladica je znana po orehovem in makovem nadevu?", moznosti: ["Prekmurska gibanica", "Potica", "Štruklji", "Kremšnita"], odgovor: "Prekmurska gibanica" },
+  { vprasanje: "Kateri slovenski skladatelj je napisal Zdravljico?", moznosti: ["Stanko Premrl", "Anton Foerster", "Marij Kogoj", "Hugo Wolf"], odgovor: "Stanko Premrl" },
+  { vprasanje: "Katera slovenska regija je znana po kraških pojavih?", moznosti: ["Kras", "Gorenjska", "Dolenjska", "Štajerska"], odgovor: "Kras" },
+  { vprasanje: "Katero mesto je znano po 'Kurentovanju'?", moznosti: ["Ptuj", "Maribor", "Celje", "Ljubljana"], odgovor: "Ptuj" },
+  { vprasanje: "Kateri praznik praznujemo 8. februarja v Sloveniji?", moznosti: ["Prešernov dan", "Dan državnosti", "Dan samostojnosti", "Dan reformacije"], odgovor: "Prešernov dan" },
+  { vprasanje: "Katera je najbolj znana tradicionalna slovenska sladica?", moznosti: ["Potica", "Kremšnita", "Prekmurska gibanica", "Štruklji"], odgovor: "Potica" },
+  { vprasanje: "Katera reka deli Slovenijo na zahodni in vzhodni del?", moznosti: ["Sava", "Drava", "Soča", "Krka"], odgovor: "Sava" },
+  { vprasanje: "Kateri slovenski grad je bil dom Erazma Predjamskega?", moznosti: ["Predjamski grad", "Ljubljanski grad", "Grad Snežnik", "Celjski grad"], odgovor: "Predjamski grad" },
+  { vprasanje: "Katero slovensko mesto je znano po Tartinijevem trgu?", moznosti: ["Piran", "Izola", "Koper", "Portorož"], odgovor: "Piran" },
+  { vprasanje: "Katera dolina je znana po Logarski poti?", moznosti: ["Logarska dolina", "Dolina Vrata", "Soška dolina", "Bohinjska dolina"], odgovor: "Logarska dolina" },
+  { vprasanje: "Katera slovenska vas je znana po vsakoletnem prazniku metuljev?", moznosti: ["Velika Planina", "Črna na Koroškem", "Idrija", "Planica"], odgovor: "Črna na Koroškem" },
+  { vprasanje: "Katero slovensko mesto je znano po Termah Zreče?", moznosti: ["Zreče", "Rogaška Slatina", "Radenci", "Moravske Toplice"], odgovor: "Zreče" },
+  { vprasanje: "Kateri slovenski praznik praznujemo 1. novembra?", moznosti: ["Dan spomina na mrtve", "Dan državnosti", "Prešernov dan", "Dan reformacije"], odgovor: "Dan spomina na mrtve" },
+  { vprasanje: "Katera slovenska reka je znana po številnih mlinih?", moznosti: ["Krka", "Sava", "Drava", "Soča"], odgovor: "Krka" },
+  { vprasanje: "Katera slovenska regija je znana po kraških jamah?", moznosti: ["Kras", "Primorska", "Štajerska", "Gorenjska"], odgovor: "Kras" },
+  { vprasanje: "Katero mesto je znano po Ptujski kleti?", moznosti: ["Ptuj", "Maribor", "Celje", "Ljubljana"], odgovor: "Ptuj" },
+  { vprasanje: "Kateri slovenski avtor je napisal roman 'Deseti brat'?", moznosti: ["Josip Jurčič", "Ivan Tavčar", "France Bevk", "Ivan Cankar"], odgovor: "Josip Jurčič" },
+  { vprasanje: "Katera slovenska dolina je znana po festivalu 'Soča Outdoor'?", moznosti: ["Soška dolina", "Dolina Vrata", "Bohinjska dolina", "Logarska dolina"], odgovor: "Soška dolina" },
+  { vprasanje: "Katera reka teče skozi Maribor?", moznosti: ["Drava", "Sava", "Soča", "Krka"], odgovor: "Drava" },
+  { vprasanje: "Katera je tradicionalna slovenska žgana pijača?", moznosti: ["Borovničke", "Cviček", "Slivovka", "Teran"], odgovor: "Borovničke" },
+  { vprasanje: "Katero mesto je znano po Termalnem parku Laško?", moznosti: ["Laško", "Rogaška Slatina", "Radenci", "Ptuj"], odgovor: "Laško" },
+  { vprasanje: "Katera slovenska pesem je postala nacionalna himna?", moznosti: ["Zdravljica", "Planinska", "Soča", "Od železne ceste"], odgovor: "Zdravljica" }
+
+];
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>
