@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+ <link rel="stylesheet" href="Witcher.css">
+  <style>
+    body {
+background-image: url('slike-kviz/The-1-3.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>The Witcher 1-3</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+  const podatkiKviz = [
+
+  { vprasanje: "[The Witcher 1] Kdo je glavni antagonist v prvem delu igre?", moznosti: ["Jacques de Aldersberg", "Eredin", "Dettlaff", "Gaunter O'Dimm"], odgovor: "Jacques de Aldersberg" },
+  { vprasanje: "[The Witcher 1] Kakšno orožje uporablja Geralt, da premaga pošasti?", moznosti: ["Srebrni meč", "Ognjeni meč", "Zlati meč", "Bakreni meč"], odgovor: "Srebrni meč" },
+  { vprasanje: "[The Witcher 1] Katera čarovnica pomaga Geralta oživeti v začetku igre?", moznosti: ["Triss Merigold", "Yennefer", "Keira Metz", "Philippa Eilhart"], odgovor: "Triss Merigold" },
+  
+  { vprasanje: "[The Witcher 2] Kateri kralj je umorjen na začetku igre The Witcher 2?", moznosti: ["Kralj Foltest", "Kralj Radovid", "Kralj Emhyr", "Kralj Henselt"], odgovor: "Kralj Foltest" },
+  { vprasanje: "[The Witcher 2] Kateri lik je odgovoren za umor kralja Foltesta?", moznosti: ["Letho", "Dijkstra", "Eredin", "Iorveth"], odgovor: "Letho" },
+  { vprasanje: "[The Witcher 2] Katera lokacija se pojavi kot mesto izbire poti v drugem aktu igre?", moznosti: ["Roche ali Iorveth", "Nilfgaard", "Toussaint", "Kaer Morhen"], odgovor: "Roche ali Iorveth" },
+  { vprasanje: "[The Witcher 2] Katera igrača za izkoriščanje bugov je omogočila hitro pridobivanje denarja?", moznosti: ["Klavniško meso", "Rože", "Pošastni zobje", "Napitki"], odgovor: "Klavniško meso" },
+
+  { vprasanje: "[The Witcher 3] Kdo je Ciriin oče?", moznosti: ["Emhyr var Emreis", "Geralt", "Vesemir", "Radovid"], odgovor: "Emhyr var Emreis" },
+  { vprasanje: "[The Witcher 3] Kako se imenuje znameniti trgovec, ki ga lahko Geralt izkorišča za denar v Novigradu?", moznosti: ["Skrivnostni trgovec", "Novigradski tat", "Čarovnik", "Dijkstra"], odgovor: "Skrivnostni trgovec" },
+  { vprasanje: "[The Witcher 3] Katera nadgradnja je bila potrebna za večinoma neuspešno izvajanje igre zaradi 'pavšalnih napak' na konzolah?", moznosti: ["Patch 1.03", "Patch 1.21", "Patch 1.10", "Patch 1.12"], odgovor: "Patch 1.03" },
+  { vprasanje: "[The Witcher 3] Kateri zlobnež sledi Geraltu skozi celotno igro kot vodja Divjega lova?", moznosti: ["Eredin", "Imlerith", "Caranthir", "Letho"], odgovor: "Eredin" },
+  { vprasanje: "[The Witcher 3] Kje lahko igralci najdejo enega največjih eksploatov za denar v igri?", moznosti: ["Kravja misija v White Orchard", "Novigrad", "Kaer Morhen", "Skellige"], odgovor: "Kravja misija v White Orchard" },
+  { vprasanje: "[The Witcher 3] Kateri je bil dodatek, ki je prinesel novo regijo in razširitev?", moznosti: ["Blood and Wine", "Hearts of Stone", "Wild Hunt", "The Witcher 2 Expansion"], odgovor: "Blood and Wine" },
+
+  { vprasanje: "[The Witcher 1] Katera alkemija v prvem delu omogoča Geralta ustvarjanje napitkov?", moznosti: ["Potične knjige", "Kaer Morhen zelišča", "Naravna zelišča", "Kamene rune"], odgovor: "Potične knjige" },
+  { vprasanje: "[The Witcher 1] Kako se imenuje skrivnostna organizacija, s katero se Geralt srečuje?", moznosti: ["Salamandra", "Divji lov", "Dijkstrajeva mreža", "Ljudje Skellige"], odgovor: "Salamandra" },
+
+  { vprasanje: "[The Witcher 2] Katere izbire vplivajo na zgodbo v drugem delu?", moznosti: ["Roche ali Iorveth", "Dijkstra ali Radovid", "Triss ali Yennefer", "Ciri ali Divji lov"], odgovor: "Roche ali Iorveth" },
+  { vprasanje: "[The Witcher 2] Kje se nahaja baza čarovnic?", moznosti: ["Kaer Morhen", "Temeria", "Aedirn", "Nilfgaard"], odgovor: "Kaer Morhen" },
+  { vprasanje: "[The Witcher 2] Kdo je dvobojni nasprotnik, ki ga lahko Geralt premaga v poglavju 2?", moznosti: ["Letho", "Dijkstra", "Triss", "Philippa Eilhart"], odgovor: "Letho" },
+
+  { vprasanje: "[The Witcher 3] Kako se imenuje otok, kjer je večina zadnjega dela igre?", moznosti: ["Skellige", "Novigrad", "Toussaint", "Kaer Morhen"], odgovor: "Skellige" },
+  { vprasanje: "[The Witcher 3] Kateri nadgradnja omogoča igralcem izkoriščanje krav za neomejen denar?", moznosti: ["Kravja misija", "Novigradski zli duhovi", "Zlato novigradsko pravilo", "Bogastvo Skellige"], odgovor: "Kravja misija" },
+  { vprasanje: "[The Witcher 3] Kako se imenuje čarovnica, s katero ima Geralt zgodovinsko povezavo?", moznosti: ["Yennefer", "Triss", "Keira Metz", "Philippa Eilhart"], odgovor: "Yennefer" },
+  { vprasanje: "[The Witcher 3] Kateri bug je omogočil, da so predmeti izginili iz inventarja?", moznosti: ["Inventarski bug", "Teleport bug", "Pošast bug", "Armor bug"], odgovor: "Inventarski bug" },
+  
+  { vprasanje: "[The Witcher 1] Kako se imenuje glavna utrdba čarovnic?", moznosti: ["Kaer Morhen", "Vizima", "Temeria", "Skellige"], odgovor: "Kaer Morhen" },
+  { vprasanje: "[The Witcher 2] Kateri konflikt je osrednja tema drugega dela?", moznosti: ["Državljanska vojna v Aedirnu", "Boji v Kaer Morhenu", "Napad na Toussaint", "Iskanje Ciri"], odgovor: "Državljanska vojna v Aedirnu" },
+  { vprasanje: "[The Witcher 3] Katere vrste nadgradnje so potrebne za nadgradnjo Geraltove opreme?", moznosti: ["Nadgradnja Witcherja", "Oprema Dijkstra", "Amulet Yennefer", "Magija Radovida"], odgovor: "Nadgradnja Witcherja" },
+  { vprasanje: "[The Witcher 3] Kdo Geraltu pomaga najti Ciri?", moznosti: ["Yennefer in Triss", "Eredin", "Radovid", "Dijkstra"], odgovor: "Yennefer in Triss" },
+  { vprasanje: "[The Witcher 3] Katera dodatek omogoča Geraltu obisk Toussainta?", moznosti: ["Blood and Wine", "Hearts of Stone", "Wild Hunt", "Novigrad Expansion"], odgovor: "Blood and Wine" },
+  { vprasanje: "[The Witcher 1] Kateri spopad s pošastmi je bil izjemno zahteven zaradi bugov?", moznosti: ["Fleder", "Kikimora", "Leshen", "Wild Hunt"], odgovor: "Kikimora" },
+  { vprasanje: "[The Witcher 2] Kakšen je namen izbire poti med Rochejem in Iorvethom?", moznosti: ["Vpliva na zgodbo in razkriva različne informacije", "Spremeni Geralta", "Zgradi bazni kamp", "Zavzame mesto"], odgovor: "Vpliva na zgodbo in razkriva različne informacije" },
+  { vprasanje: "[The Witcher 3] Katera nadgradnja je izboljšala igralno izkušnjo z vidika stabilnosti?", moznosti: ["Patch 1.10", "Patch 1.21", "Patch 1.30", "Patch 1.50"], odgovor: "Patch 1.10" }, 
+  
+  { vprasanje: "[The Witcher 1] Katera bitka je bila znana kot najtežja zaradi AI?", moznosti: ["Bitka z kikimorami", "Bitka s strigo", "Bitka s salamandrami", "Bitka z wyverni"], odgovor: "Bitka z kikimorami" },
+  { vprasanje: "[The Witcher 1] Katera redka sestavina se uporablja za ustvarjanje Eliksirja lastovke?", moznosti: ["Vitriol", "Aether", "Quebrith", "Rebis"], odgovor: "Quebrith" },
+  { vprasanje: "[The Witcher 2] Kateri prijatelj Geralta je zvest spremljevalec skozi igro?", moznosti: ["Zoltan", "Dandelion", "Eskel", "Lambert"], odgovor: "Zoltan" },
+  { vprasanje: "[The Witcher 2] Katere ruševine raziskuje Geralt?", moznosti: ["Ruševine Loc Muinne", "Ruševine Aedirna", "Ruševine Vizime", "Ruševine Skellige"], odgovor: "Ruševine Loc Muinne" },
+  { vprasanje: "[The Witcher 3] Katere močne pošasti najdemo na Skellige otokih?", moznosti: ["Lesheni", "Griffini", "Ekimme", "Kikimore"], odgovor: "Lesheni" },
+  { vprasanje: "[The Witcher 2] Kdo so Scoia'tael?", moznosti: ["Skupina vilinov in škratov", "Red čarovnic", "Skupina najemnikov", "Nilfgaardska vojska"], odgovor: "Skupina vilinov in škratov" },
+  { vprasanje: "[The Witcher 2] Kako se imenuje mesto, kjer Geralt pomaga Loc Muinne?", moznosti: ["Flotsam", "Aedirn", "Vizima", "Loc Muinne"], odgovor: "Loc Muinne" },
+  { vprasanje: "[The Witcher 2] Katera kraljica vlada Aedirnu?", moznosti: ["Meve", "Adda", "Saskia", "Philippa"], odgovor: "Saskia" },
+  { vprasanje: "[The Witcher 2] Katera zmožnost omogoča Geraltu manipulacijo z nasprotniki?", moznosti: ["Aard", "Igni", "Axii", "Yrden"], odgovor: "Axii" },
+  { vprasanje: "[The Witcher 2] Kako se imenuje vohun, ki dela za Redanijo?", moznosti: ["Dijkstra", "Thaler", "Letho", "Iorveth"], odgovor: "Dijkstra" },
+
+  { vprasanje: "[The Witcher 3] Kako se imenuje trdnjava Divjega lova?", moznosti: ["Kaer Morhen", "Novigrad", "Ard Skellig", "Tir na Lia"], odgovor: "Tir na Lia" },
+  { vprasanje: "[The Witcher 3] Kako se imenuje pesem, ki opeva Geralta?", moznosti: ["Toss a Coin to Your Witcher", "Winds of Winter", "The White Wolf", "Song of Skellige"], odgovor: "Toss a Coin to Your Witcher" },
+  { vprasanje: "[The Witcher 3] Kako se imenuje vrač, ki pomaga Ciri na Skellige?", moznosti: ["Ermion", "Crach", "Birna", "Yennefer"], odgovor: "Ermion" },
+  { vprasanje: "[The Witcher 3] Katere močne pošasti najdemo na Ard Skellig?", moznosti: ["Lesheni", "Ekimme", "Wraiths", "Wyverns"], odgovor: "Lesheni" },
+  { vprasanje: "[The Witcher 3] Kakšen je glavni cilj Geralta v Hearts of Stone?", moznosti: ["Poraziti Gaunter O'Dimm", "Raziskati Novigrad", "Rešiti Olgierda", "Najti zaklad Skellige"], odgovor: "Poraziti Gaunter O'Dimm" }
+  
+  
+];
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

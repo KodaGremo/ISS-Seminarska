@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+ <link rel="stylesheet" href="game-mix.css">
+  <style>
+    body {
+background-image: url('slike-kviz/mix-40.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Evropske resnice, ki jih niso hoteli razkriti</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+  const podatkiKviz = [
+
+  { vprasanje: "Kateri glavni lik vodi zgodbo v igri *The Last of Us*?", moznosti: ["Joel", "Ellie", "Tommy", "Sarah"], odgovor: "Joel" },
+  { vprasanje: "Kateri razvijalec je ustvaril igro *The Witcher 3: Wild Hunt*?", moznosti: ["CD Projekt Red", "Ubisoft", "Bethesda", "Rockstar Games"], odgovor: "CD Projekt Red" },
+  { vprasanje: "Katero mesto je prizorišče za večino igre *Grand Theft Auto V*?", moznosti: ["Los Santos", "Vice City", "Liberty City", "San Fierro"], odgovor: "Los Santos" },
+  { vprasanje: "Kateri liki so glavni junaki v igri *Red Dead Redemption 2*?", moznosti: ["Arthur Morgan in John Marston", "Dutch van der Linde in Micah Bell", "Joel in Ellie", "Franklin in Trevor"], odgovor: "Arthur Morgan in John Marston" },
+  { vprasanje: "Katera igra ima sistem parkour gibanja, ki je značilen za boj proti zombijem?", moznosti: ["Dying Light", "Left 4 Dead", "Dead Rising", "Resident Evil 6"], odgovor: "Dying Light" },
+  { vprasanje: "Katera igra je postavljena v post-apokaliptični nuklearni puščavi?", moznosti: ["Fallout 4", "Metro Exodus", "Far Cry 5", "The Last of Us Part II"], odgovor: "Fallout 4" },
+  { vprasanje: "V kateri igri raziskujete odprto svetovno divjino Hyrule?", moznosti: ["The Legend of Zelda: Breath of the Wild", "Skyrim", "Dragon Age: Inquisition", "Dark Souls III"], odgovor: "The Legend of Zelda: Breath of the Wild" },
+  { vprasanje: "Katera igra je bila izdana s številnimi tehničnimi težavami leta 2020?", moznosti: ["Cyberpunk 2077", "Assassin's Creed Valhalla", "Call of Duty: Cold War", "Ghost of Tsushima"], odgovor: "Cyberpunk 2077" },
+  { vprasanje: "Kateri razvijalec je znan po seriji *Dark Souls*?", moznosti: ["FromSoftware", "Naughty Dog", "Ubisoft", "Square Enix"], odgovor: "FromSoftware" },
+  { vprasanje: "Kateri lik v *God of War (2018)* spremlja Kratosa skozi celotno igro?", moznosti: ["Atreus", "Thor", "Zeus", "Hercules"], odgovor: "Atreus" },
+  { vprasanje: "Katera igra ima svet, imenovan Night City?", moznosti: ["Cyberpunk 2077", "The Witcher 3", "Mass Effect", "GTA V"], odgovor: "Cyberpunk 2077" },
+  { vprasanje: "Kateri igralec nadzoruje tipično tihotapko Aloy v igri?", moznosti: ["Horizon Zero Dawn", "Tomb Raider", "Uncharted", "Far Cry Primal"], odgovor: "Horizon Zero Dawn" },
+  { vprasanje: "Kateri izzivi so ovirali razvoj igre *Final Fantasy XV*?", moznosti: ["Dolga razvojna doba", "Spreminjanje platforme", "Spremembe zgodbe", "Vse navedeno"], odgovor: "Vse navedeno" },
+  { vprasanje: "Kateri znani karakter iz *The Legend of Zelda* igre je večinoma nem?", moznosti: ["Link", "Zelda", "Ganon", "Epona"], odgovor: "Link" },
+  { vprasanje: "Katera igra se začne z nesrečo in preživetjem na otoku?", moznosti: ["Tomb Raider", "Far Cry 3", "The Forest", "The Witcher 3"], odgovor: "Tomb Raider" },
+  { vprasanje: "Kateri lik je zaslužil naziv 'Dovahkiin' v igri *Skyrim*?", moznosti: ["Glavni junak", "Alduin", "Ulfric Stormcloak", "General Tullius"], odgovor: "Glavni junak" },
+  { vprasanje: "Katera igra je postavljena v pokrajino Hope County?", moznosti: ["Far Cry 5", "Red Dead Redemption 2", "The Last of Us", "Assassin's Creed Odyssey"], odgovor: "Far Cry 5" },
+  { vprasanje: "Katera igra je vključevala sistem za gradnjo naselbin?", moznosti: ["Fallout 4", "The Witcher 3", "GTA V", "Uncharted 4"], odgovor: "Fallout 4" },
+  { vprasanje: "Kateri znanstvenofantastični RPG se odvija v galaksiji?", moznosti: ["Mass Effect", "The Outer Worlds", "No Man's Sky", "Destiny"], odgovor: "Mass Effect" },
+  { vprasanje: "Kateri karakter v *Overwatch* ima zdravilske sposobnosti?", moznosti: ["Mercy", "Tracer", "Reinhardt", "Hanzo"], odgovor: "Mercy" },
+  { vprasanje: "Katera igra ima bitje, imenovano 'Clicker'?", moznosti: ["The Last of Us", "Resident Evil", "Dead Space", "Days Gone"], odgovor: "The Last of Us" },
+  { vprasanje: "Kateri razvijalec je ustvaril serijo *Assassin's Creed*?", moznosti: ["Ubisoft", "EA", "Rockstar Games", "CD Projekt Red"], odgovor: "Ubisoft" },
+  { vprasanje: "Kateri lik iz serije *Resident Evil* je postal zombi?", moznosti: ["Leon Kennedy", "Jill Valentine", "Nemesis", "Albert Wesker"], odgovor: "Nemesis" },
+  { vprasanje: "Katera igra ima svet, imenovan 'Pandora'?", moznosti: ["Borderlands", "Destiny", "Mass Effect", "Warframe"], odgovor: "Borderlands" },
+  { vprasanje: "Katera igra se dogaja v postapokaliptični Rusiji?", moznosti: ["Metro Exodus", "Fallout 4", "Far Cry New Dawn", "STALKER"], odgovor: "Metro Exodus" },
+  { vprasanje: "Katera igra raziskuje prihodnost z umetno inteligenco in roboti?", moznosti: ["Detroit: Become Human", "Cyberpunk 2077", "Deus Ex", "Watch Dogs"], odgovor: "Detroit: Become Human" },
+  { vprasanje: "Kateri antagonistični lik je prisoten v seriji *Halo*?", moznosti: ["The Covenant", "Locust Horde", "The Brotherhood", "Umbrella Corp"], odgovor: "The Covenant" },
+  { vprasanje: "Katera igra omogoča gradnjo in boj proti zombijem?", moznosti: ["Minecraft", "Resident Evil", "Left 4 Dead", "Far Cry 3"], odgovor: "Minecraft" },
+  { vprasanje: "Katera igra omogoča igralcu, da izbira pot z več konci glede na odločitve?", moznosti: ["The Witcher 3", "Uncharted 4", "Tomb Raider", "God of War"], odgovor: "The Witcher 3" },
+  { vprasanje: "Kateri znani junak ima krilatega konja v *Assassin's Creed Odyssey*?", moznosti: ["Kassandra", "Alexios", "Sokrates", "Leonidas"], odgovor: "Kassandra" },
+  { vprasanje: "Katera franšiza ima lik z imenom Big Daddy?", moznosti: ["BioShock", "Fallout", "Silent Hill", "Mass Effect"], odgovor: "BioShock" },
+  { vprasanje: "Katera igra omogoča igralcu gradnjo v celotnem svetu?", moznosti: ["Minecraft", "Terraria", "No Man's Sky", "Subnautica"], odgovor: "Minecraft" },
+  { vprasanje: "Kateri razvijalec je ustvaril igro *Horizon Zero Dawn*?", moznosti: ["Guerrilla Games", "Naughty Dog", "Ubisoft", "Square Enix"], odgovor: "Guerrilla Games" },
+  { vprasanje: "Katera igra omogoča igralcu, da zavzame več planetov in galaksij?", moznosti: ["No Man's Sky", "Star Wars Battlefront", "Mass Effect", "The Outer Worlds"], odgovor: "No Man's Sky" },
+  { vprasanje: "Katera igra ima enote, imenovane Titans?", moznosti: ["Titanfall", "Warframe", "Destiny", "Gears of War"], odgovor: "Titanfall" },
+  { vprasanje: "Kateri lik v *The Witcher 3* spremlja Geralta kot sorodna duša?", moznosti: ["Yennefer", "Ciri", "Triss", "Keira Metz"], odgovor: "Yennefer" },
+  { vprasanje: "Kateri mehanizem omogoča potovanje skozi čas v *Quantum Break*?", moznosti: ["Stroj za čas", "Luknje v prostoru", "Kvantna harmonija", "Quantum Breaks"], odgovor: "Kvantna harmonija" },
+  { vprasanje: "Katera igra vključuje raziskovanje postapokaliptičnega sveta in ni omejena z nobenim določenim ciljem?", moznosti: ["The Forest", "No Man's Sky", "Subnautica", "Rust"], odgovor: "No Man's Sky" },
+  { vprasanje: "Kateri lik vodi zgodbo v igri *Uncharted 4*?", moznosti: ["Nathan Drake", "Victor Sullivan", "Sam Drake", "Chloe Frazer"], odgovor: "Nathan Drake" },
+  { vprasanje: "Katera igra ima sistem imenovan 'Nemesis System'?", moznosti: ["Middle-earth: Shadow of Mordor", "Skyrim", "The Witcher 3", "Dragon Age: Inquisition"], odgovor: "Middle-earth: Shadow of Mordor" },
+  { vprasanje: "Katera igra vključuje dirkanje z nadgradljivimi avtomobili?", moznosti: ["Forza Horizon 4", "Need for Speed", "Gran Turismo", "Mario Kart"], odgovor: "Forza Horizon 4" },
+  { vprasanje: "Kateri lik spremlja Master Chief v seriji *Halo*?", moznosti: ["Cortana", "The Arbiter", "Captain Keyes", "Sergeant Johnson"], odgovor: "Cortana" },
+  { vprasanje: "Katera igra vključuje preživetje in boj proti zombijem na odprtem svetu?", moznosti: ["Days Gone", "The Last of Us", "Dead Island", "Resident Evil 4"], odgovor: "Days Gone" },
+  { vprasanje: "Katera igra raziskuje nordijsko mitologijo in ima glavno junakinjo Senua?", moznosti: ["Hellblade: Senua's Sacrifice", "God of War", "Dark Souls", "Skyrim"], odgovor: "Hellblade: Senua's Sacrifice" },
+  { vprasanje: "Kateri lik je protagonist igre *Control*?", moznosti: ["Jesse Faden", "Alan Wake", "Max Payne", "Emily Pope"], odgovor: "Jesse Faden" },
+  { vprasanje: "Katera igra vključuje čarobne palice in gradove?", moznosti: ["Hogwarts Legacy", "The Witcher 3", "Fable", "Dragon Age"], odgovor: "Hogwarts Legacy" },
+  { vprasanje: "Katera igra vsebuje robote z imenom Watchers?", moznosti: ["Horizon Zero Dawn", "Mass Effect", "Cyberpunk 2077", "Fallout 4"], odgovor: "Horizon Zero Dawn" },
+  { vprasanje: "Kateri antagonist je znan kot 'The Illusive Man'?", moznosti: ["Mass Effect", "Deus Ex", "Cyberpunk 2077", "Halo"], odgovor: "Mass Effect" },
+  { vprasanje: "Katera igra omogoča igranje kot ikonični lik Lara Croft?", moznosti: ["Tomb Raider", "Uncharted", "The Witcher", "Far Cry"], odgovor: "Tomb Raider" },
+  { vprasanje: "Kateri glavni lik vodi zgodbo v *Assassin's Creed Origins*?", moznosti: ["Bayek", "Ezio", "Kassandra", "Altair"], odgovor: "Bayek" },
+  { vprasanje: "Katera igra ima svet, imenovan Sanctuary?", moznosti: ["Diablo", "World of Warcraft", "Elder Scrolls", "Divinity: Original Sin"], odgovor: "Diablo" },
+  { vprasanje: "Kateri znani lik ima ščit v igri *Overwatch*?", moznosti: ["Reinhardt", "Mercy", "Tracer", "Zarya"], odgovor: "Reinhardt" },
+  { vprasanje: "Katera franšiza vključuje bitje z imenom 'Vault Boy'?", moznosti: ["Fallout", "Borderlands", "The Outer Worlds", "Cyberpunk 2077"], odgovor: "Fallout" },
+  { vprasanje: "Katera igra se odvija v antični Grčiji?", moznosti: ["Assassin's Creed Odyssey", "God of War", "Immortals Fenyx Rising", "Hades"], odgovor: "Assassin's Creed Odyssey" },
+  { vprasanje: "Kateri mehanizem omogoča ustvarjanje stolpov v igri *Fortnite*?", moznosti: ["Gradnja", "Postavljanje pasti", "Teleportacija", "Skakanje"], odgovor: "Gradnja" },
+  { vprasanje: "Katera igra raziskuje življenje androidov v futurističnem Detroitu?", moznosti: ["Detroit: Become Human", "Cyberpunk 2077", "Deus Ex: Human Revolution", "Watch Dogs"], odgovor: "Detroit: Become Human" },
+  { vprasanje: "Katera igra ima bitke proti ogromnim robotom, imenovanim Colossi?", moznosti: ["Shadow of the Colossus", "Horizon Zero Dawn", "Titanfall", "MechWarrior"], odgovor: "Shadow of the Colossus" },
+  { vprasanje: "Katera igra vključuje iskanje svetišč v svetu Hyrule?", moznosti: ["The Legend of Zelda: Breath of the Wild", "Dark Souls", "Elder Scrolls", "Dragon Quest"], odgovor: "The Legend of Zelda: Breath of the Wild" },
+  { vprasanje: "Katera franšiza raziskuje zgodovinsko obdobje s pomočjo Animusa?", moznosti: ["Assassin's Creed", "The Witcher", "Skyrim", "Far Cry"], odgovor: "Assassin's Creed" },
+  { vprasanje: "Kateri glavni lik ima pipca in zvestega psa v igri *Far Cry 5*?", moznosti: ["The Deputy", "Jason Brody", "Ajay Ghale", "Joseph Seed"], odgovor: "The Deputy" },
+  { vprasanje: "Kateri razvijalec je ustvaril franšizo *Elder Scrolls*?", moznosti: ["Bethesda", "CD Projekt Red", "Ubisoft", "Rockstar Games"], odgovor: "Bethesda" },
+  { vprasanje: "Katera igra raziskuje vesoljske bitke in trgovanje?", moznosti: ["Elite Dangerous", "Mass Effect", "No Man's Sky", "Destiny"], odgovor: "Elite Dangerous" },
+  { vprasanje: "Katera igra vključuje gradnjo naselbin v postapokaliptičnem svetu?", moznosti: ["Fallout 4", "The Last of Us Part II", "State of Decay", "Horizon Zero Dawn"], odgovor: "Fallout 4" },
+  { vprasanje: "Katera franšiza vključuje zmaje in čarovnijo v srednjeveškem okolju?", moznosti: ["Dragon Age", "The Witcher", "Elder Scrolls", "Dark Souls"], odgovor: "Dragon Age" },
+  { vprasanje: "Katera igra raziskuje podzemlje ruskega metroja?", moznosti: ["Metro Exodus", "Fallout", "Stalker", "The Outer Worlds"], odgovor: "Metro Exodus" },
+  { vprasanje: "Kateri lik je glavni junak igre *Red Dead Redemption*?", moznosti: ["John Marston", "Arthur Morgan", "Dutch Van der Linde", "Bill Williamson"], odgovor: "John Marston" },
+  { vprasanje: "Katera igra raziskuje zgodovino Vikingov?", moznosti: ["Assassin's Creed Valhalla", "The Witcher 3", "Far Cry 4", "Skyrim"], odgovor: "Assassin's Creed Valhalla" },
+  { vprasanje: "Katera franšiza vključuje mehaniko stealth bojevanja v sodobnem okolju?", moznosti: ["Splinter Cell", "Metal Gear Solid", "Hitman", "Assassin's Creed"], odgovor: "Splinter Cell" },
+  { vprasanje: "Kateri antagonist je prisoten v seriji *BioShock*?", moznosti: ["Andrew Ryan", "Atlas", "Big Daddy", "Dr. Steinman"], odgovor: "Andrew Ryan" },
+  { vprasanje: "Katera igra raziskuje vesoljske kolonije v prihodnosti?", moznosti: ["The Outer Worlds", "Mass Effect", "Cyberpunk 2077", "Elite Dangerous"], odgovor: "The Outer Worlds" },
+  { vprasanje: "Katera igra vključuje bitke proti strojem in raziskovanje starodavnih ruševin?", moznosti: ["Horizon Zero Dawn", "Fallout 4", "The Witcher 3", "Far Cry Primal"], odgovor: "Horizon Zero Dawn" },
+  { vprasanje: "Katera igra omogoča igranje kot viking, ki napada Anglijo?", moznosti: ["Assassin's Creed Valhalla", "Skyrim", "For Honor", "The Witcher 3"], odgovor: "Assassin's Creed Valhalla" },
+  { vprasanje: "Kateri lik v *Red Dead Redemption 2* je znan po svojem zvestem konju?", moznosti: ["Arthur Morgan", "John Marston", "Dutch van der Linde", "Micah Bell"], odgovor: "Arthur Morgan" },
+  { vprasanje: "Katera igra vključuje preživetje v zaledeni pokrajini?", moznosti: ["The Long Dark", "Subnautica", "The Forest", "Rust"], odgovor: "The Long Dark" },
+  { vprasanje: "Katera franšiza omogoča raziskovanje sveta z mehaniko parkourja?", moznosti: ["Mirror's Edge", "Dying Light", "Assassin's Creed", "Tomb Raider"], odgovor: "Mirror's Edge" },
+  { vprasanje: "Katera igra raziskuje življenje vampirjev v viktorijanski dobi?", moznosti: ["Vampyr", "The Order: 1886", "Bloodborne", "Dark Souls"], odgovor: "Vampyr" },
+  { vprasanje: "Kateri glavni lik raziskuje paranormalne pojave v *Alan Wake*?", moznosti: ["Alan Wake", "Barry Wheeler", "Cynthia Weaver", "Rose Marigold"], odgovor: "Alan Wake" },
+  { vprasanje: "Katera igra vključuje raziskovanje morskih globin in preživetje?", moznosti: ["Subnautica", "No Man's Sky", "The Long Dark", "Raft"], odgovor: "Subnautica" },
+  { vprasanje: "Katera franšiza vključuje gradnjo in obrambo stolpov?", moznosti: ["Orcs Must Die!", "Bloons TD", "Minecraft", "Clash of Clans"], odgovor: "Orcs Must Die!" },
+  { vprasanje: "Katera igra raziskuje koncept večnih življenj v spominih?", moznosti: ["Remember Me", "Control", "Quantum Break", "Assassin's Creed"], odgovor: "Remember Me" },
+  { vprasanje: "Katera igra vključuje raziskovanje puščavskega sveta z mehaniko preživetja?", moznosti: ["Conan Exiles", "The Forest", "ARK: Survival Evolved", "Rust"], odgovor: "Conan Exiles" },
+  { vprasanje: "Katera franšiza vključuje raziskovanje zombi apokalipse na motorju?", moznosti: ["Days Gone", "The Walking Dead", "Dead Rising", "Resident Evil"], odgovor: "Days Gone" },
+  { vprasanje: "Kateri antagonist je znan kot 'The Prophet of Truth'?", moznosti: ["Halo", "Destiny", "Mass Effect", "BioShock"], odgovor: "Halo" },
+  { vprasanje: "Katera igra raziskuje postapokaliptične puščave z avtomobilskimi boji?", moznosti: ["Mad Max", "Fallout", "Borderlands", "Far Cry"], odgovor: "Mad Max" },
+  { vprasanje: "Katera igra vključuje raziskovanje džungle z elementom gradnje in preživetja?", moznosti: ["Green Hell", "The Forest", "ARK: Survival Evolved", "Rust"], odgovor: "Green Hell" },
+  { vprasanje: "Kateri lik je glavni protagonist v *The Evil Within*?", moznosti: ["Sebastian Castellanos", "Joseph Oda", "Ruvik", "Juli Kidman"], odgovor: "Sebastian Castellanos" },
+  { vprasanje: "Katera franšiza raziskuje apokaliptične scenarije z mutanti?", moznosti: ["Fallout", "Metro Exodus", "STALKER", "The Last of Us"], odgovor: "Fallout" },
+  { vprasanje: "Katera igra vključuje raziskovanje skrivnostnih otokov in grozljivih pojavov?", moznosti: ["The Forest", "Myst", "The Witness", "Amnesia"], odgovor: "The Forest" },
+  { vprasanje: "Kateri lik je protagonist v igri *Half-Life*?", moznosti: ["Gordon Freeman", "Alyx Vance", "Barney Calhoun", "Dr. Wallace Breen"], odgovor: "Gordon Freeman" },
+  { vprasanje: "Katera igra raziskuje gradnjo mest v antičnih časih?", moznosti: ["Anno 1800", "Civilization VI", "SimCity", "Age of Empires"], odgovor: "Anno 1800" },
+  { vprasanje: "Katera franšiza raziskuje vesoljske vojne z mech roboti?", moznosti: ["Titanfall", "Destiny", "Mass Effect", "Elite Dangerous"], odgovor: "Titanfall" },
+  { vprasanje: "Katera igra vključuje lov na pošasti v fantazijskem svetu?", moznosti: ["Monster Hunter", "The Witcher 3", "Dark Souls", "Dragon Age"], odgovor: "Monster Hunter" },
+  { vprasanje: "Kateri lik je antagonist v seriji *Metal Gear Solid*?", moznosti: ["Liquid Snake", "Revolver Ocelot", "Big Boss", "Vulcan Raven"], odgovor: "Liquid Snake" },
+  { vprasanje: "Katera igra raziskuje izgradnjo železnic in logistike?", moznosti: ["Factorio", "SimCity", "Civilization VI", "Anno 1800"], odgovor: "Factorio" },
+  { vprasanje: "Katera franšiza vključuje raziskovanje vesolja z mehaniko rudarjenja?", moznosti: ["Star Citizen", "Elite Dangerous", "No Man's Sky", "EVE Online"], odgovor: "No Man's Sky" },
+  { vprasanje: "Katera igra vključuje izgradnjo ladij in boj v oceanu?", moznosti: ["Sea of Thieves", "Raft", "Subnautica", "World of Warships"], odgovor: "Sea of Thieves" },
+  { vprasanje: "Kateri lik je protagonist v igri *Max Payne*?", moznosti: ["Max Payne", "Vincent Vega", "Tony Montana", "Victor Sullivan"], odgovor: "Max Payne" },
+  { vprasanje: "Katera franšiza vključuje gradnjo in upravljanje temnic?", moznosti: ["Dungeon Keeper", "Darkest Dungeon", "Divinity: Original Sin", "Path of Exile"], odgovor: "Dungeon Keeper" },
+  { vprasanje: "Katera igra vključuje postavljanje pasti in raziskovanje votlin?", moznosti: ["Spelunky", "Terraria", "Minecraft", "The Forest"], odgovor: "Spelunky" },
+  { vprasanje: "Katera franšiza raziskuje čarovnijo v viktorijanski dobi?", moznosti: ["Bloodborne", "The Order: 1886", "Dishonored", "Vampyr"], odgovor: "Bloodborne" },
+  { vprasanje: "Katera igra vključuje raziskovanje starodavnih civilizacij v galaksiji?", moznosti: ["Mass Effect", "Star Wars: Knights of the Old Republic", "Elite Dangerous", "The Outer Worlds"], odgovor: "Star Wars: Knights of the Old Republic" },
+  { vprasanje: "Katera igra vključuje raziskovanje postapokaliptičnih mest in okužb?", moznosti: ["The Last of Us", "Fallout 4", "Days Gone", "Dying Light"], odgovor: "The Last of Us" },
+  { vprasanje: "Katera franšiza raziskuje temačno fantazijo z RPG elementi?", moznosti: ["Dark Souls", "The Witcher", "Skyrim", "Dragon Age"], odgovor: "Dark Souls" }
+];
+
+
+
+
+const maxVprasanj =40;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

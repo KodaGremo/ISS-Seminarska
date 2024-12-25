@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+ <link rel="stylesheet" href="mincraft.css">
+  <style>
+    body {
+background-image: url('slike-kviz/minc-1.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Minecraft</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+  const podatkiKviz = [
+
+  { vprasanje: "Kateri blok se uporablja za izdelavo stekla?", moznosti: ["Pesek", "Kamen", "Opeka", "Glina"], odgovor: "Pesek" },
+  { vprasanje: "Kateri sovražnik se pojavi le ponoči in gori podnevi?", moznosti: ["Zombi", "Creeper", "Skelet", "Pajek"], odgovor: "Zombi" },
+  { vprasanje: "Kateri predmet potrebujete za ustvarjanje Nether Porta?", moznosti: ["Obsidian in kresilni kamen", "Diamant in les", "Zlato in ogenj", "Lava in voda"], odgovor: "Obsidian in kresilni kamen" },
+  { vprasanje: "Katera ruda je potrebna za izdelavo oklepa najvišje stopnje?", moznosti: ["Netherite", "Diamant", "Zlato", "Železo"], odgovor: "Netherite" },
+  { vprasanje: "Kateri pasivni mob lahko leti?", moznosti: ["Papiga", "Svinja", "Kravica", "Lama"], odgovor: "Papiga" },
+  { vprasanje: "Kateri blok je bil odstranjen iz igre?", moznosti: ["Zelena volna", "Vrtni palček", "Ruby Ore", "Nizki sneg"], odgovor: "Ruby Ore" },
+  { vprasanje: "Kakšno orodje potrebujete za zbiranje lesa najhitreje?", moznosti: ["Sekiro", "Meč", "Krampar", "Lopato"], odgovor: "Sekiro" },
+  { vprasanje: "Katera rastlina se uporablja za izdelavo papirja?", moznosti: ["Sladkorni trs", "Bambus", "Pšenica", "Rože"], odgovor: "Sladkorni trs" },
+  { vprasanje: "Kako se imenuje najmočnejši mob v Netherju?", moznosti: ["Wither", "Ghast", "Zombi Pigman", "Magma Cube"], odgovor: "Wither" },
+  { vprasanje: "Kateri blok se lahko premika s pomočjo batov?", moznosti: ["Kamen", "Blato", "Mleto tla", "TNT"], odgovor: "TNT" },
+  { vprasanje: "Kako se imenuje struktura, kjer lahko najdete Ender Portal?", moznosti: ["Trdnjava", "Tempelj", "Vas", "Votline"], odgovor: "Trdnjava" },
+  { vprasanje: "Kateri mob pade na tla in eksplodira, če se približate?", moznosti: ["Creeper", "Pajek", "Enderman", "Srebrna ribica"], odgovor: "Creeper" },
+  { vprasanje: "Kateri material je potreben za izdelavo kresa?", moznosti: ["Kamen", "Iron ingot", "Opeka", "Diamant"], odgovor: "Iron ingot" },
+  { vprasanje: "Kateri blok oddaja svetlobo?", moznosti: ["Glowstone", "Kamen", "Les", "Zemlja"], odgovor: "Glowstone" },
+  { vprasanje: "Kako se imenuje pasivni mob, ki proizvaja mleko?", moznosti: ["Krava", "Svinja", "Ovca", "Kozel"], odgovor: "Krava" },
+  { vprasanje: "Katera stvaritev vam omogoča hitro potovanje med svetovi?", moznosti: ["Nether Portal", "Zmajeva glava", "End Portal", "Prevozna postaja"], odgovor: "Nether Portal" },
+  { vprasanje: "Kateri blok vam omogoča izdelavo knjig?", moznosti: ["Usnje", "Zelena volna", "Glina", "Opeka"], odgovor: "Usnje" },
+  { vprasanje: "Kateri mob napade igralca, ko ga pogleda?", moznosti: ["Enderman", "Pajek", "Creeper", "Svinja"], odgovor: "Enderman" },
+  { vprasanje: "Kateri blok je potreben za sajenje sadik?", moznosti: ["Zemlja", "Kamen", "Voda", "Lava"], odgovor: "Zemlja" },
+  { vprasanje: "Katera ruda je bila dodana v posodobitvi 1.17?", moznosti: ["Baker", "Oglje", "Rdeči kamen", "Zlato"], odgovor: "Baker" },
+  { vprasanje: "Kateri predmet omogoča dihanje pod vodo?", moznosti: ["Čelada za dihanje", "Plavuti", "Ščit", "Meč"], odgovor: "Čelada za dihanje" },
+  { vprasanje: "Kako se imenuje redka vrsta rib, ki jo najdemo v oceanih?", moznosti: ["Tropska riba", "Trska", "Zlat ribica", "Krap"], odgovor: "Tropska riba" },
+  { vprasanje: "Katera ruda je potrebna za izdelavo meča?", moznosti: ["Železo", "Premog", "Lapiz lazuli", "Bakra"], odgovor: "Železo" },
+  { vprasanje: "Kateri blok lahko uporabite za izdelavo bakel?", moznosti: ["Oglje", "Železo", "Diamant", "Rdeči kamen"], odgovor: "Oglje" },
+  { vprasanje: "Kako se imenuje portal, ki vodi do Ender zmaja?", moznosti: ["End Portal", "Nether Portal", "Village Portal", "Magma Portal"], odgovor: "End Portal" },
+  { vprasanje: "Kateri blok lahko uporabljate za sajenje nether wart?", moznosti: ["Soul Sand", "Obsidian", "Netherite", "Rdeči pesek"], odgovor: "Soul Sand" },
+  { vprasanje: "Kateri mob pusti za sabo zlato ingot?", moznosti: ["Piglin", "Zombi", "Skelet", "Enderman"], odgovor: "Piglin" },
+  { vprasanje: "Katera ruda je bila prva dodana v igro?", moznosti: ["Premog", "Zlato", "Diamant", "Železo"], odgovor: "Premog" },
+  { vprasanje: "Katera naprava omogoča samodejno prevažanje predmetov?", moznosti: ["Hopper", "Rdeči kamen", "Plavajoči krog", "Zložljiv trak"], odgovor: "Hopper" },
+  { vprasanje: "Katera rastlina se uporablja za pripravo piva v Minecraftu?", moznosti: ["Nether wart", "Sladkorni trs", "Korenje", "Pšenica"], odgovor: "Nether wart" },
+  { vprasanje: "Kateri mob se pojavi, če zadenete črno mačko z bliskom?", moznosti: ["Witch", "Skeleton", "Creeper", "Ghast"], odgovor: "Witch" },
+  { vprasanje: "Katera ruda se uporablja za izdelavo lokov?", moznosti: ["Ni potrebna ruda", "Železo", "Zlato", "Diamant"], odgovor: "Ni potrebna ruda" },
+  { vprasanje: "Kateri predmet omogoča teleportacijo?", moznosti: ["Ender Pearl", "Nether Star", "Compass", "TNT"], odgovor: "Ender Pearl" },
+  { vprasanje: "Katera rastlina oddaja svetlobo?", moznosti: ["Glow Lichen", "Sladkorni trs", "Rože", "Bambus"], odgovor: "Glow Lichen" },
+  { vprasanje: "Kateri mob plava pod vodo in vas napade?", moznosti: ["Drowned", "Zombi", "Pajek", "Skeleton"], odgovor: "Drowned" },
+  { vprasanje: "Kako se imenuje les, ki ga najdemo v Netherju?", moznosti: ["Warped Wood", "Oak Wood", "Birch Wood", "Jungle Wood"], odgovor: "Warped Wood" },
+  { vprasanje: "Kateri mob napade z daljave v The End?", moznosti: ["Shulker", "Enderman", "Ghast", "Blaze"], odgovor: "Shulker" },
+  { vprasanje: "Kako se imenuje mob, ki eksplodira, ko se približate?", moznosti: ["Creeper", "Ghast", "Wither", "Zombie"], odgovor: "Creeper" },
+  { vprasanje: "Kateri material je potreben za ustvarjanje bakel?", moznosti: ["Oglje ali premog", "Železo", "Zlato", "Diamant"], odgovor: "Oglje ali premog" },
+  { vprasanje: "Kako pridobite Netherite Scrap?", moznosti: ["Z rudarjenjem Ancient Debris", "S taljenjem peska", "Z iskanjem v templjih", "S kopanjem blata"], odgovor: "Z rudarjenjem Ancient Debris" },
+  { vprasanje: "Kateri mob vam omogoča letenje z Elytro?", moznosti: ["Phantom", "Enderman", "Zombie", "Ghast"], odgovor: "Phantom" },
+  { vprasanje: "Kako se imenuje redka riba v Minecraftu?", moznosti: ["Axolotl", "Zlat ribica", "Tropska riba", "Trska"], odgovor: "Axolotl" },
+  { vprasanje: "Kateri blok je potreben za izdelavo meča?", moznosti: ["Les, kamen, železo, zlato ali diamant", "Bambus", "Glowstone", "Soul Sand"], odgovor: "Les, kamen, železo, zlato ali diamant" },
+  { vprasanje: "Katera struktura vsebuje Blaze spawnerje?", moznosti: ["Nether Fortress", "Village", "Mineshaft", "Igloo"], odgovor: "Nether Fortress" },
+  { vprasanje: "Kako se imenuje portal, ki vodi v dimenzijo z Ender Dragon?", moznosti: ["End Portal", "Nether Portal", "Village Portal", "Sky Portal"], odgovor: "End Portal" },
+  { vprasanje: "Katera ruda oddaja svetlobo?", moznosti: ["Glowstone", "Diamant", "Železo", "Kamen"], odgovor: "Glowstone" },
+  { vprasanje: "Kako se imenuje mob, ki lahko prenaša predmete?", moznosti: ["Donkey", "Creeper", "Skeleton", "Zombie"], odgovor: "Donkey" },
+  { vprasanje: "Kateri predmet vam omogoča plavanje pod vodo?", moznosti: ["Turtle Shell Helmet", "Iron Boots", "Diamond Helmet", "Gold Helmet"], odgovor: "Turtle Shell Helmet" },
+  { vprasanje: "Kako pridobite Honeycomb?", moznosti: ["S striženjem čebeljega gnezda", "Z rudarjenjem", "Z nabiranjem cvetov", "S pobiranjem peska"], odgovor: "S striženjem čebeljega gnezda" },
+  { vprasanje: "Kako ustvarite železni golem?", moznosti: ["S štirimi železnimi bloki in bučo", "S tremi železnimi bloki", "S štirimi zlatimi bloki", "S petimi železnimi bloki"], odgovor: "S štirimi železnimi bloki in bučo" },
+  { vprasanje: "Katera rastlina raste pod vodo?", moznosti: ["Sea Grass", "Pšenica", "Korenje", "Rože"], odgovor: "Sea Grass" },
+  { vprasanje: "Kako ustvarite posteljo?", moznosti: ["Z volno in lesom", "S kamnom in lesom", "S peskom in volno", "Z zemljo in volno"], odgovor: "Z volno in lesom" },
+  { vprasanje: "Kako se imenuje biom, kjer rastejo kaktusi?", moznosti: ["Puščava", "Gozd", "Savanna", "Ocean"], odgovor: "Puščava" },
+  { vprasanje: "Kateri mob napade z ognjenimi kroglami?", moznosti: ["Ghast", "Blaze", "Wither Skeleton", "Enderman"], odgovor: "Ghast" },
+  { vprasanje: "Katera struktura vsebuje zaklade v oceanih?", moznosti: ["Ocean Monument", "Shipwreck", "Ruins", "Stronghold"], odgovor: "Ocean Monument" },
+  { vprasanje: "Kako ustvarite čoln?", moznosti: ["Z lesom", "S kamnom", "Z železom", "S peskom"], odgovor: "Z lesom" },
+  { vprasanje: "Kako se imenuje dimenzija, kjer živijo Piglini?", moznosti: ["Nether", "End", "Overworld", "Sky"], odgovor: "Nether" },
+  { vprasanje: "Kako se imenuje blok, ki omogoča dihanje pod vodo?", moznosti: ["Bubble Column", "Glass", "Sand", "Clay"], odgovor: "Bubble Column" },
+  { vprasanje: "Kako se imenuje mob, ki prenaša skrinje?", moznosti: ["Donkey", "Mule", "Horse", "Sheep"], odgovor: "Mule" },
+  { vprasanje: "Kako ustvarite knjigo?", moznosti: ["Z usnjem in papirjem", "Z železom in papirjem", "Z lesom in papirjem", "Z ogljem in papirjem"], odgovor: "Z usnjem in papirjem" },
+  { vprasanje: "Katera ruda je najpogostejša v Minecraftu?", moznosti: ["Premog", "Železo", "Zlato", "Diamant"], odgovor: "Premog" }
+];
+
+
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>
