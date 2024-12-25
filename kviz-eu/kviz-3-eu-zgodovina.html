@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-EU.css">
+  <style>
+    body {
+background-image: url('slike/kviz-zg.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Zgodovina Evropske unije</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+   { vprasanje: "V katerem letu je bila podpisana Maastrichtska pogodba?", moznosti: ["1992", "1993", "1995", "1991"], odgovor: "1992" },
+  { vprasanje: "Katera pogodba je omogočila ustanovitev Evropske unije?", moznosti: ["Maastrichtska pogodba", "Rimska pogodba", "Lizbonska pogodba", "Amsterdamska pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katero leto je EU uvedla evro kot skupno valuto?", moznosti: ["1999", "2002", "2000", "1998"], odgovor: "1999" },
+  { vprasanje: "Katera pogodba je leta 2007 okrepila delovanje EU?", moznosti: ["Amsterdamska pogodba", "Lizbonska pogodba", "Rimska pogodba", "Pariška pogodba"], odgovor: "Lizbonska pogodba" },
+  { vprasanje: "Koliko držav je ustanovilo Evropsko gospodarsko skupnost leta 1957?", moznosti: ["6", "9", "12", "15"], odgovor: "6" },
+  { vprasanje: "Katera država je prva zapustila EU leta 2020?", moznosti: ["Velika Britanija", "Danska", "Švedska", "Irska"], odgovor: "Velika Britanija" },
+  { vprasanje: "Katera organizacija je predhodnica EU?", moznosti: ["Evropska gospodarska skupnost", "OECD", "Evropska zveza", "NATO"], odgovor: "Evropska gospodarska skupnost" },
+  { vprasanje: "Kdaj je bila ustanovljena Evropska gospodarska skupnost?", moznosti: ["1957", "1960", "1965", "1970"], odgovor: "1957" },
+  { vprasanje: "Kdaj se je EU razširila na Vzhodno Evropo?", moznosti: ["2004", "2000", "2007", "2001"], odgovor: "2004" },
+  { vprasanje: "Katere države so bile ustanovne članice EU?", moznosti: ["Francija, Nemčija, Italija, Belgija, Nizozemska, Luksemburg", "Francija, Španija, Nemčija, Italija, Danska", "Francija, Poljska, Nemčija, Italija, Irska", "Francija, Nemčija, Španija, Italija, Grčija"], odgovor: "Francija, Nemčija, Italija, Belgija, Nizozemska, Luksemburg" },
+  { vprasanje: "Katera država je postala članica EU leta 1986?", moznosti: ["Španija", "Grčija", "Italija", "Portugalska"], odgovor: "Španija" },
+  { vprasanje: "Katere države so se pridružile EU leta 1995?", moznosti: ["Avstrija, Švedska, Finska", "Poljska, Madžarska, Češka", "Španija, Portugalska, Grčija", "Estonija, Latvija, Litva"], odgovor: "Avstrija, Švedska, Finska" },
+  { vprasanje: "Katera država je gostila prvi evropski referendum o članstvu v EU?", moznosti: ["Danska", "Irska", "Švica", "Švedska"], odgovor: "Danska" },
+  { vprasanje: "Kdo je prvi predsednik Evropske komisije?", moznosti: ["Walter Hallstein", "Jacques Delors", "Jean-Claude Juncker", "Ursula von der Leyen"], odgovor: "Walter Hallstein" },
+  { vprasanje: "Katera je največja širitev EU v zgodovini?", moznosti: ["2004", "1995", "1986", "1993"], odgovor: "2004" },
+  { vprasanje: "Kateri dogodek je bil ključnega pomena za enotno valuto?", moznosti: ["Maastrichtska pogodba", "Rimska pogodba", "Lizbonska pogodba", "Pariška pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katere države so se pridružile EU leta 2007?", moznosti: ["Romunija in Bolgarija", "Hrvaška in Romunija", "Estonija in Latvija", "Poljska in Madžarska"], odgovor: "Romunija in Bolgarija" },
+  { vprasanje: "Katera država NI članica evroobmočja?", moznosti: ["Švedska", "Francija", "Italija", "Nizozemska"], odgovor: "Švedska" },
+  { vprasanje: "Katere države so bile prve članice Schengenskega območja?", moznosti: ["Francija, Nemčija, Belgija, Nizozemska, Luksemburg", "Španija, Portugalska, Italija, Danska", "Poljska, Češka, Slovaška, Madžarska", "Švedska, Finska, Avstrija, Irska"], odgovor: "Francija, Nemčija, Belgija, Nizozemska, Luksemburg" },
+  { vprasanje: "Kdaj je bila ustanovljena Evropska centralna banka?", moznosti: ["1998", "2001", "1995", "2000"], odgovor: "1998" },
+  { vprasanje: "Katera pogodba je ustanovila Evropsko skupnost za premog in jeklo (ESPJ)?", moznosti: ["Pariška pogodba", "Rimska pogodba", "Maastrichtska pogodba", "Lizbonska pogodba"], odgovor: "Pariška pogodba" },
+  { vprasanje: "Katero leto je bila podpisana Rimska pogodba?", moznosti: ["1957", "1958", "1960", "1955"], odgovor: "1957" },
+  { vprasanje: "Katera država je postala članica EU leta 2004?", moznosti: ["Poljska", "Norveška", "Švica", "Islandija"], odgovor: "Poljska" },
+  { vprasanje: "Katera organizacija je bila ustanovljena leta 1949 kot predhodnica EU?", moznosti: ["Svet Evrope", "NATO", "OECD", "ESPJ"], odgovor: "Svet Evrope" },
+  { vprasanje: "Kateri dogodek leta 1989 je vplival na širitev EU?", moznosti: ["Padec Berlinskega zidu", "Lizbonska pogodba", "Ustanovitev evra", "Maastrichtska pogodba"], odgovor: "Padec Berlinskega zidu" },
+  { vprasanje: "Katera država je postala članica EU leta 1981?", moznosti: ["Grčija", "Portugalska", "Španija", "Danska"], odgovor: "Grčija" },
+  { vprasanje: "Kdaj je bila uvedena schengenska ureditev?", moznosti: ["1995", "1993", "1997", "2001"], odgovor: "1995" },
+  { vprasanje: "Katera institucija EU sprejema zakonodajo?", moznosti: ["Evropski parlament in Svet EU", "Evropska komisija", "Evropska centralna banka", "Evropski svet"], odgovor: "Evropski parlament in Svet EU" },
+  { vprasanje: "Katera država je postala 28. članica EU?", moznosti: ["Hrvaška", "Romunija", "Bolgarija", "Slovenija"], odgovor: "Hrvaška" },
+  { vprasanje: "Katera organizacija je nadzorovala gospodarstvo pred nastankom EU?", moznosti: ["Evropska skupnost za premog in jeklo", "Svet Evrope", "NATO", "OECD"], odgovor: "Evropska skupnost za premog in jeklo" },
+  { vprasanje: "Katere države so se pridružile EU leta 1973?", moznosti: ["Danska, Irska, Velika Britanija", "Grčija, Španija, Portugalska", "Italija, Nemčija, Francija", "Švedska, Finska, Avstrija"], odgovor: "Danska, Irska, Velika Britanija" },
+  { vprasanje: "Katera pogodba je uvedla enotni trg?", moznosti: ["Enotni evropski akt", "Maastrichtska pogodba", "Rimska pogodba", "Lizbonska pogodba"], odgovor: "Enotni evropski akt" },
+  { vprasanje: "Kateri predsednik Evropske komisije je znan po viziji 'enotne Evrope'?", moznosti: ["Jacques Delors", "Jean-Claude Juncker", "Walter Hallstein", "Romano Prodi"], odgovor: "Jacques Delors" },
+  { vprasanje: "Katera je prva država, ki je kandidirala za članstvo v EU?", moznosti: ["Turčija", "Španija", "Grčija", "Norveška"], odgovor: "Turčija" },
+  { vprasanje: "Kateri dogodek leta 1993 je omogočil ustanovitev enotnega trga?", moznosti: ["Maastrichtska pogodba", "Lizbonska pogodba", "Rimska pogodba", "Pariška pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katera država je postala članica EU leta 2007?", moznosti: ["Bolgarija", "Hrvaška", "Litva", "Poljska"], odgovor: "Bolgarija" },
+  { vprasanje: "Kateri dokument je bil podpisan leta 2000 kot temelj človekovih pravic v EU?", moznosti: ["Listina Evropske unije o temeljnih pravicah", "Lizbonska pogodba", "Enotni evropski akt", "Amsterdamska pogodba"], odgovor: "Listina Evropske unije o temeljnih pravicah" },
+  { vprasanje: "Katera država NI članica Schengenskega območja?", moznosti: ["Irska", "Španija", "Francija", "Nemčija"], odgovor: "Irska" },
+  { vprasanje: "Katera država je postala članica EU leta 1986 skupaj s Španijo?", moznosti: ["Portugalska", "Grčija", "Italija", "Francija"], odgovor: "Portugalska" },
+  { vprasanje: "Kateri sporazum je leta 1991 vodil k ustanovitvi EU?", moznosti: ["Maastrichtska pogodba", "Enotni evropski akt", "Rimska pogodba", "Lizbonska pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katera država je zavrnila evro v referendumu?", moznosti: ["Danska", "Irska", "Poljska", "Švedska"], odgovor: "Danska" },
+  { vprasanje: "Katera pogodba je omogočila politično unijo?", moznosti: ["Maastrichtska pogodba", "Lizbonska pogodba", "Rimska pogodba", "Pariška pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katera institucija EU ima sedež v Luksemburgu?", moznosti: ["Sodišče Evropske unije", "Evropski parlament", "Evropska centralna banka", "Evropska komisija"], odgovor: "Sodišče Evropske unije" },
+  { vprasanje: "Kateri predsednik Evropske komisije je uvedel evro?", moznosti: ["Jacques Santer", "Jacques Delors", "Romano Prodi", "Jean-Claude Juncker"], odgovor: "Jacques Santer" },
+  { vprasanje: "Katera država je postala članica EU leta 1995 skupaj s Švedsko?", moznosti: ["Avstrija", "Norveška", "Danska", "Islandija"], odgovor: "Avstrija" },
+  { vprasanje: "Kateri dogodek je leta 2004 privedel do največje širitve EU?", moznosti: ["Pristop srednje- in vzhodnoevropskih držav", "Ustanovitev Schengena", "Uvedba evra", "Lizbonska pogodba"], odgovor: "Pristop srednje- in vzhodnoevropskih držav" },
+  { vprasanje: "Katera država je leta 1973 postala članica EU?", moznosti: ["Velika Britanija", "Grčija", "Španija", "Portugalska"], odgovor: "Velika Britanija" },
+  { vprasanje: "Kdaj je začela veljati Lizbonska pogodba?", moznosti: ["2009", "2007", "2010", "2005"], odgovor: "2009" },
+  { vprasanje: "Katera je prva država kandidatka za članstvo v EU, ki ni postala članica?", moznosti: ["Norveška", "Turčija", "Islandija", "Švica"], odgovor: "Norveška" },
+  { vprasanje: "Katera je glavna naloga Evropskega parlamenta?", moznosti: ["Sprejemanje zakonodaje", "Upravljanje monetarne politike", "Izvajanje zakonov", "Pravdanje"], odgovor: "Sprejemanje zakonodaje" },
+  { vprasanje: "Katera država NI ustanovna članica EU?", moznosti: ["Španija", "Francija", "Belgija", "Nemčija"], odgovor: "Španija" },
+  { vprasanje: "Katere države so uvedle evro leta 2002?", moznosti: ["Nemčija, Francija, Italija, Španija", "Danska, Švedska, Finska", "Avstrija, Portugalska, Grčija", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katera organizacija EU se ukvarja z zaščito mej?", moznosti: ["Frontex", "Europol", "Eurojust", "Eurosur"], odgovor: "Frontex" },
+  { vprasanje: "Katera institucija predstavlja države članice EU?", moznosti: ["Svet EU", "Evropski svet", "Evropska komisija", "Evropski parlament"], odgovor: "Svet EU" },
+  { vprasanje: "Kdaj je bila podpisana Amsterdamska pogodba?", moznosti: ["1997", "1995", "1999", "2001"], odgovor: "1997" },
+  { vprasanje: "Katera država je postala članica EU leta 2013?", moznosti: ["Hrvaška", "Bolgarija", "Romunija", "Slovenija"], odgovor: "Hrvaška" },
+  { vprasanje: "Katera institucija EU ima sedež v Strasbourgu?", moznosti: ["Evropski parlament", "Evropska komisija", "Svet EU", "Evropska centralna banka"], odgovor: "Evropski parlament" },
+  { vprasanje: "Katera pogodba je omogočila uvedbo evropskega državljanstva?", moznosti: ["Maastrichtska pogodba", "Rimska pogodba", "Lizbonska pogodba", "Amsterdamska pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katera je bila prva širitev EU?", moznosti: ["1973", "1981", "1986", "1995"], odgovor: "1973" },
+  { vprasanje: "Katera država je leta 2001 zavrnila uvedbo evra na referendumu?", moznosti: ["Danska", "Švedska", "Norveška", "Islandija"], odgovor: "Švedska" },
+  { vprasanje: "Katere države so se pridružile EU leta 2004 kot del največje širitve?", moznosti: ["Poljska, Madžarska, Češka in druge", "Romunija in Bolgarija", "Avstrija, Švedska, Finska", "Hrvaška in Slovenija"], odgovor: "Poljska, Madžarska, Češka in druge" },
+  { vprasanje: "Kateri dokument ureja temeljna pravila delovanja EU?", moznosti: ["Lizbonska pogodba", "Maastrichtska pogodba", "Enotni evropski akt", "Amsterdamska pogodba"], odgovor: "Lizbonska pogodba" },
+  { vprasanje: "Katera država EU je organizirala prvi predsedniški vrh EU leta 1975?", moznosti: ["Francija", "Nemčija", "Italija", "Belgija"], odgovor: "Francija" },
+  { vprasanje: "Katera organizacija je bila ustanovljena leta 1951?", moznosti: ["Evropska skupnost za premog in jeklo (ESPJ)", "OECD", "NATO", "Rimska pogodba"], odgovor: "Evropska skupnost za premog in jeklo (ESPJ)" },
+  { vprasanje: "Kdaj je začela veljati Rimska pogodba?", moznosti: ["1958", "1957", "1960", "1959"], odgovor: "1958" },
+  { vprasanje: "Katera država je leta 1999 uvedla evro kot elektronsko valuto?", moznosti: ["Nemčija", "Francija", "Italija", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katera država je gostila podpis Lizbonske pogodbe?", moznosti: ["Portugalska", "Francija", "Belgija", "Italija"], odgovor: "Portugalska" },
+  { vprasanje: "Kdaj je Evropska unija prejela Nobelovo nagrado za mir?", moznosti: ["2012", "2010", "2008", "2015"], odgovor: "2012" },
+  { vprasanje: "Kateri cilj je bil določen s Pariško pogodbo leta 1951?", moznosti: ["Integracija premogovništva in jeklarstva", "Vzpostavitev Schengenskega območja", "Uvedba skupne valute", "Razširitev EU"], odgovor: "Integracija premogovništva in jeklarstva" },
+  { vprasanje: "Katera država je leta 1986 ratificirala Rimsko pogodbo?", moznosti: ["Španija", "Francija", "Danska", "Portugalska"], odgovor: "Španija" },
+  { vprasanje: "Katera institucija EU je odgovorna za monetarno politiko?", moznosti: ["Evropska centralna banka", "Evropska komisija", "Evropski parlament", "Svet EU"], odgovor: "Evropska centralna banka" },
+  { vprasanje: "Katera država je predsedovala Svetu EU med podpisom Maastrichtske pogodbe?", moznosti: ["Nizozemska", "Francija", "Italija", "Belgija"], odgovor: "Nizozemska" },
+  { vprasanje: "Katera institucija EU je odgovorna za predlaganje zakonodaje?", moznosti: ["Evropska komisija", "Evropski parlament", "Evropski svet", "Svet EU"], odgovor: "Evropska komisija" },
+  { vprasanje: "Katera država je leta 1979 prva volila poslance Evropskega parlamenta?", moznosti: ["Francija", "Nemčija", "Velika Britanija", "Danska"], odgovor: "Francija" },
+  { vprasanje: "Katera je bila prva država kandidatka za članstvo v EU?", moznosti: ["Grčija", "Turčija", "Norveška", "Poljska"], odgovor: "Turčija" },
+  { vprasanje: "Kdaj je bil uveden evro kot gotovinsko plačilno sredstvo?", moznosti: ["2002", "1999", "2001", "2000"], odgovor: "2002" },
+  { vprasanje: "Katera država NI podpisala Lizbonske pogodbe?", moznosti: ["Islandija", "Danska", "Irska", "Švedska"], odgovor: "Islandija" },
+  { vprasanje: "Katera je bila prva širitvena pogodba EU?", moznosti: ["Københavnska pogodba", "Maastrichtska pogodba", "Rimska pogodba", "Amsterdamska pogodba"], odgovor: "Københavnska pogodba" },
+  { vprasanje: "Katera država EU je gostila prvi Schengenski dogovor?", moznosti: ["Luksemburg", "Belgija", "Francija", "Nemčija"], odgovor: "Luksemburg" },
+  { vprasanje: "Kdaj je bil podpisan prvi evropski akt o človekovih pravicah?", moznosti: ["1950", "1960", "1970", "1980"], odgovor: "1950" },
+  { vprasanje: "Katera institucija EU sprejema proračun?", moznosti: ["Evropski parlament", "Evropska komisija", "Svet EU", "Evropski svet"], odgovor: "Evropski parlament" },
+  { vprasanje: "Katera pogodba je vzpostavila evropsko državljanstvo?", moznosti: ["Maastrichtska pogodba", "Rimska pogodba", "Amsterdamska pogodba", "Lizbonska pogodba"], odgovor: "Maastrichtska pogodba" },
+  { vprasanje: "Katera država EU ima najdlje veljavni evro?", moznosti: ["Nemčija", "Francija", "Španija", "Italija"], odgovor: "Nemčija" },
+  { vprasanje: "Katera organizacija je bila prvi korak k ustanovitvi EU?", moznosti: ["ESPJ", "OECD", "NATO", "EFTA"], odgovor: "ESPJ" },
+  { vprasanje: "Katera država je zavrnila pristop k EU leta 1972?", moznosti: ["Norveška", "Švica", "Islandija", "Danska"], odgovor: "Norveška" },
+  { vprasanje: "Katera država NI članica EU, a uporablja evro?", moznosti: ["Švica", "Črna gora", "Andora", "Vatikansko mesto"], odgovor: "Švica" },
+  { vprasanje: "Kateri sporazum je vzpostavil schengenski prostor?", moznosti: ["Schengenski sporazum", "Lizbonska pogodba", "Maastrichtska pogodba", "Rimska pogodba"], odgovor: "Schengenski sporazum" },
+  { vprasanje: "Katera država EU ima največji vpliv na proračun?", moznosti: ["Nemčija", "Francija", "Italija", "Španija"], odgovor: "Nemčija" },
+  { vprasanje: "Katera institucija EU vodi zunanjo in varnostno politiko?", moznosti: ["Evropski svet", "Svet EU", "Evropski parlament", "Evropska komisija"], odgovor: "Evropski svet" },
+  { vprasanje: "Katera država NI podpisnica Rimske pogodbe?", moznosti: ["Španija", "Belgija", "Francija", "Nemčija"], odgovor: "Španija" },
+  { vprasanje: "Katera država je leta 2008 vložila prošnjo za članstvo v EU?", moznosti: ["Islandija", "Črna gora", "Kosovo", "Srbija"], odgovor: "Črna gora" },
+  { vprasanje: "Kateri je prvi evropski akt za varstvo okolja?", moznosti: ["Zeleni dogovor EU", "Okoljski akcijski program", "Schengenski sporazum", "Pariška pogodba"], odgovor: "Okoljski akcijski program" }
+];
+
+  
+  
+  
+  
+
+  
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

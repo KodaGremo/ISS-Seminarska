@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-EU.css">
+  <style>
+    body {
+background-image: url('slike/eu-geo-v-2.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Evropska geografija</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+   const podatkiKviz = [
+   { vprasanje: "Katera država članica EU ima največje število prebivalcev?", moznosti: ["Nemčija", "Francija", "Italija", "Španija"], odgovor: "Nemčija" },
+  { vprasanje: "Katera je največja država članica EU po površini?", moznosti: ["Francija", "Nemčija", "Španija", "Italija"], odgovor: "Francija" },
+  { vprasanje: "Kje ima sedež Evropska komisija?", moznosti: ["Bruselj", "Strasbourg", "Luxembourg", "Amsterdam"], odgovor: "Bruselj" },
+  { vprasanje: "Katera reka teče skozi Pariz, glavno mesto Francije?", moznosti: ["Seina", "Rona", "Loara", "Marna"], odgovor: "Seina" },
+  { vprasanje: "Kateri otok v EU je največji po površini?", moznosti: ["Irska", "Sicilija", "Ciper", "Korzika"], odgovor: "Irska" },
+  { vprasanje: "Katera gora je najvišja v Evropski uniji?", moznosti: ["Mont Blanc", "Zugspitze", "Grossglockner", "Triglav"], odgovor: "Mont Blanc" },
+  { vprasanje: "V kateri državi se nahaja regija Toskana?", moznosti: ["Italija", "Francija", "Španija", "Portugalska"], odgovor: "Italija" },
+  { vprasanje: "Katero mesto v Belgiji velja za administrativno središče EU?", moznosti: ["Bruselj", "Antwerpen", "Gent", "Liège"], odgovor: "Bruselj" },
+  { vprasanje: "Katera reka teče skozi Budimpešto?", moznosti: ["Donava", "Raba", "Mura", "Tisa"], odgovor: "Donava" },
+  { vprasanje: "Katera država EU meji na največ drugih držav?", moznosti: ["Nemčija", "Francija", "Italija", "Poljska"], odgovor: "Nemčija" },
+  { vprasanje: "Katero morje meji na Španijo na vzhodni strani?", moznosti: ["Sredozemsko morje", "Baltsko morje", "Severno morje", "Črno morje"], odgovor: "Sredozemsko morje" },
+  { vprasanje: "Katera je najjužnejša država članica EU?", moznosti: ["Ciper", "Grčija", "Malta", "Portugalska"], odgovor: "Ciper" },
+  { vprasanje: "Katera država članica ima najdaljšo obalo?", moznosti: ["Grčija", "Italija", "Španija", "Francija"], odgovor: "Grčija" },
+  { vprasanje: "Katero glavno mesto EU države leži na reki Vltavi?", moznosti: ["Praga", "Dunaj", "Budimpešta", "Varšava"], odgovor: "Praga" },
+  { vprasanje: "Katera reka teče skozi glavno mesto Avstrije, Dunaj?", moznosti: ["Donava", "Rein", "Loara", "Rona"], odgovor: "Donava" },
+  { vprasanje: "Katera je največja otoška država članica EU?", moznosti: ["Irska", "Ciper", "Malta", "Islandija"], odgovor: "Irska" },
+  { vprasanje: "Katera planota pokriva večji del Portugalske in Španije?", moznosti: ["Meseta", "Alpe", "Pireneji", "Apenini"], odgovor: "Meseta" },
+  { vprasanje: "Kateri otok je del Grčije in leži južno od celinske Grčije?", moznosti: ["Kreta", "Rodos", "Santorini", "Kos"], odgovor: "Kreta" },
+  { vprasanje: "Katera reka ločuje Španijo in Portugalsko?", moznosti: ["Guadiana", "Tajo", "Ebro", "Douro"], odgovor: "Guadiana" },
+  { vprasanje: "Katera evropska prestolnica leži na Jadranskem morju?", moznosti: ["Ljubljana", "Zagreb", "Podgorica", "Rim"], odgovor: "Rim" },
+  { vprasanje: "Katera evropska reka je najdaljša?", moznosti: ["Volga", "Donava", "Loara", "Ren"], odgovor: "Volga" },
+  { vprasanje: "Katero je glavno mesto Portugalske?", moznosti: ["Lizbona", "Porto", "Braga", "Coimbra"], odgovor: "Lizbona" },
+  { vprasanje: "Katera država EU je znana po Baltskih državah?", moznosti: ["Litva", "Latvija", "Estonija", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katera gora je simbol Švice, čeprav ni v EU?", moznosti: ["Matterhorn", "Mont Blanc", "Grossglockner", "Triglav"], odgovor: "Matterhorn" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Karlov most?", moznosti: ["Praga", "Varšava", "Budimpešta", "Ljubljana"], odgovor: "Praga" },
+  { vprasanje: "Katera reka povezuje Nemčijo, Francijo in Nizozemsko?", moznosti: ["Ren", "Donava", "Loara", "Seina"], odgovor: "Ren" },
+  { vprasanje: "Katera država EU meji na največje število morij?", moznosti: ["Grčija", "Španija", "Italija", "Francija"], odgovor: "Grčija" },
+  { vprasanje: "Katero je glavno mesto Švice, ki ni del EU?", moznosti: ["Bern", "Zürich", "Ženeva", "Lozana"], odgovor: "Bern" },
+  { vprasanje: "Katera država EU je znana po otoku Sardinija?", moznosti: ["Italija", "Španija", "Francija", "Portugalska"], odgovor: "Italija" },
+  { vprasanje: "Katero mesto je znano po Eifflovem stolpu?", moznosti: ["Pariz", "Rim", "Madrid", "Berlin"], odgovor: "Pariz" },
+  { vprasanje: "Katera država EU ima najvišji slap?", moznosti: ["Avstrija", "Nemčija", "Slovenija", "Francija"], odgovor: "Avstrija" },
+  { vprasanje: "Katera država EU je znana po znamenitosti Neuschwanstein?", moznosti: ["Nemčija", "Avstrija", "Francija", "Italija"], odgovor: "Nemčija" },
+  { vprasanje: "Katera reka ločuje Romunijo in Bolgarijo?", moznosti: ["Donava", "Tisa", "Prut", "Olt"], odgovor: "Donava" },
+  { vprasanje: "Katero je glavno mesto Hrvaške?", moznosti: ["Zagreb", "Split", "Dubrovnik", "Rijeka"], odgovor: "Zagreb" },
+  { vprasanje: "Katera država EU je znana po svojih fjordih?", moznosti: ["Norveška", "Švedska", "Finska", "Danska"], odgovor: "Norveška" },
+  { vprasanje: "Katera reka teče skozi Bruselj?", moznosti: ["Senne", "Schelde", "Maas", "Donava"], odgovor: "Senne" },
+  { vprasanje: "Katero mesto je znano po znameniti katedrali Svetega Petra?", moznosti: ["Rim", "Vatikan", "Firence", "Milano"], odgovor: "Vatikan" },
+  { vprasanje: "Katera je največja celinska država EU?", moznosti: ["Francija", "Nemčija", "Poljska", "Španija"], odgovor: "Francija" },
+  { vprasanje: "Katera država EU je znana po otokih Kreta in Rodos?", moznosti: ["Grčija", "Italija", "Španija", "Portugalska"], odgovor: "Grčija" },
+  { vprasanje: "Katera država EU meji na Norveško?", moznosti: ["Švedska", "Danska", "Finska", "Estonija"], odgovor: "Švedska" },
+  { vprasanje: "Katera je najvišja gora v Sloveniji?", moznosti: ["Triglav", "Peca", "Grintovec", "Mangart"], odgovor: "Triglav" },
+  { vprasanje: "Katera reka teče skozi Milano?", moznosti: ["Po", "Tiber", "Adige", "Arno"], odgovor: "Po" },
+  { vprasanje: "Katera država EU meji na Gibraltar?", moznosti: ["Španija", "Portugalska", "Francija", "Italija"], odgovor: "Španija" },
+  { vprasanje: "Katero je glavno mesto Romunije?", moznosti: ["Bukarešta", "Sibiu", "Cluj-Napoca", "Timișoara"], odgovor: "Bukarešta" },
+  { vprasanje: "Katera država EU ima največji otok?", moznosti: ["Danska", "Francija", "Italija", "Nizozemska"], odgovor: "Danska" },
+  { vprasanje: "Katero evropsko mesto je znano po znamenitosti Atomium?", moznosti: ["Bruselj", "Pariz", "Amsterdam", "Berlin"], odgovor: "Bruselj" },
+  { vprasanje: "Katera evropska država meji na Baltsko morje?", moznosti: ["Poljska", "Avstrija", "Madžarska", "Slovenija"], odgovor: "Poljska" },
+  { vprasanje: "Katera je najsevernejša država članica EU?", moznosti: ["Finska", "Švedska", "Estonija", "Litva"], odgovor: "Finska" },
+  { vprasanje: "Katera reka teče skozi Dunaj?", moznosti: ["Donava", "Ren", "Seina", "Loara"], odgovor: "Donava" },
+  { vprasanje: "Katero je glavno mesto Latvije?", moznosti: ["Riga", "Vilna", "Tallinn", "Kaunas"], odgovor: "Riga" },
+  { vprasanje: "Katera država članica EU meji na največ drugih držav?", moznosti: ["Nemčija", "Poljska", "Francija", "Italija"], odgovor: "Nemčija" },
+  { vprasanje: "Katero evropsko mesto je znano po katedrali Notre-Dame?", moznosti: ["Pariz", "Praga", "Rim", "Amsterdam"], odgovor: "Pariz" },
+  { vprasanje: "Katera reka ločuje Španijo in Francijo?", moznosti: ["Bidasoa", "Douro", "Tajo", "Guadiana"], odgovor: "Bidasoa" },
+  { vprasanje: "Katero glavno mesto EU leži na reki Loara?", moznosti: ["Pariz", "Lizbona", "Rim", "Dunaj"], odgovor: "Pariz" },
+  { vprasanje: "Katera država EU je znana po Toskani?", moznosti: ["Italija", "Španija", "Francija", "Nemčija"], odgovor: "Italija" },
+  { vprasanje: "Katera država članica EU ima največ otokov?", moznosti: ["Švedska", "Grčija", "Italija", "Hrvaška"], odgovor: "Švedska" },
+  { vprasanje: "Katero evropsko mesto je znano po Koloseju?", moznosti: ["Rim", "Firence", "Neapelj", "Benetke"], odgovor: "Rim" },
+  { vprasanje: "Katera reka teče skozi Bratislavo?", moznosti: ["Donava", "Sava", "Loara", "Ren"], odgovor: "Donava" },
+  { vprasanje: "Katera država članica EU ima največjo otoško državo?", moznosti: ["Irska", "Malta", "Ciper", "Danska"], odgovor: "Irska" },
+  { vprasanje: "Katero mesto je znano po znamenitem trgu Dam?", moznosti: ["Amsterdam", "Rotterdam", "Haarlem", "Haag"], odgovor: "Amsterdam" },
+  { vprasanje: "Katera država EU je znana po gradu Bran?", moznosti: ["Romunija", "Slovaška", "Poljska", "Madžarska"], odgovor: "Romunija" },
+  { vprasanje: "Katero evropsko mesto je znano po katedrali Svetega Štefana?", moznosti: ["Dunaj", "Praga", "Budimpešta", "Ljubljana"], odgovor: "Dunaj" },
+  { vprasanje: "Katera država EU ima najvišjo lego glavnega mesta?", moznosti: ["Španija", "Slovenija", "Avstrija", "Italija"], odgovor: "Španija" },
+  { vprasanje: "Katero evropsko mesto je znano po znamenitosti Akropole?", moznosti: ["Atene", "Rim", "Lizbona", "Madrid"], odgovor: "Atene" },
+  { vprasanje: "Katera reka teče skozi glavno mesto Finske?", moznosti: ["Vantaa", "Kemijoki", "Tornionjoki", "Donava"], odgovor: "Vantaa" },
+  { vprasanje: "Katera evropska država je znana po otoku Korzika?", moznosti: ["Francija", "Italija", "Španija", "Portugalska"], odgovor: "Francija" },
+  { vprasanje: "Katera država EU meji na Baltsko morje in ima glavno mesto Varšava?", moznosti: ["Poljska", "Estonija", "Latvija", "Litva"], odgovor: "Poljska" },
+  { vprasanje: "Katera država EU ima največji naravni rezervat Natura 2000?", moznosti: ["Španija", "Francija", "Nemčija", "Italija"], odgovor: "Španija" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Schönbrunn?", moznosti: ["Dunaj", "Praga", "Ljubljana", "Varšava"], odgovor: "Dunaj" },
+  { vprasanje: "Katera država EU je znana po reki Tajo?", moznosti: ["Španija", "Portugalska", "Francija", "Italija"], odgovor: "Španija" },
+  { vprasanje: "Katera evropska država ima največje število jezer?", moznosti: ["Finska", "Švedska", "Norveška", "Poljska"], odgovor: "Finska" },
+  { vprasanje: "Katera reka teče skozi mesto Ljubljana?", moznosti: ["Ljubljanica", "Sava", "Mura", "Drava"], odgovor: "Ljubljanica" },
+  { vprasanje: "Katera evropska država je znana po vinskih regijah Bordeaux in Burgundija?", moznosti: ["Francija", "Italija", "Španija", "Portugalska"], odgovor: "Francija" },
+  { vprasanje: "Katero mesto je znano po reki Donava in mostu Svobode?", moznosti: ["Budimpešta", "Dunaj", "Bratislava", "Varšava"], odgovor: "Budimpešta" },
+  { vprasanje: "Katero glavno mesto EU države leži ob Severnem morju?", moznosti: ["Amsterdam", "Bruselj", "Helsinki", "Kopenhagen"], odgovor: "Amsterdam" },
+  { vprasanje: "Katera država EU je znana po Pirenejih?", moznosti: ["Španija", "Francija", "Andora", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katero mesto je znano po dvorcu Versailles?", moznosti: ["Pariz", "Dunaj", "Berlin", "Madrid"], odgovor: "Pariz" },
+  { vprasanje: "Katera evropska država je znana po Renu?", moznosti: ["Nemčija", "Francija", "Švica", "Vse navedene"], odgovor: "Vse navedene" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Puerta del Sol?", moznosti: ["Madrid", "Barcelona", "Lizbona", "Rim"], odgovor: "Madrid" },
+  { vprasanje: "Katera država EU ima največjo vinorodno površino?", moznosti: ["Španija", "Italija", "Francija", "Portugalska"], odgovor: "Španija" },
+  { vprasanje: "Katera država EU meji na Severni ledeni ocean?", moznosti: ["Danska", "Finska", "Švedska", "Islandija"], odgovor: "Danska" },
+  { vprasanje: "Katera reka teče skozi mesto Hamburg?", moznosti: ["Laba", "Donava", "Ren", "Seina"], odgovor: "Laba" },
+  { vprasanje: "Katera država EU je znana po reki Ebro?", moznosti: ["Španija", "Francija", "Italija", "Grčija"], odgovor: "Španija" },
+  { vprasanje: "Katero je glavno mesto Islandije?", moznosti: ["Reykjavik", "Akureyri", "Selfoss", "Keflavik"], odgovor: "Reykjavik" },
+  { vprasanje: "Katera reka teče skozi mesto Varšava?", moznosti: ["Visla", "Donava", "Mura", "Tisa"], odgovor: "Visla" },
+  { vprasanje: "Katera evropska država je znana po gradovih Loare?", moznosti: ["Francija", "Italija", "Nemčija", "Belgija"], odgovor: "Francija" },
+  { vprasanje: "Katero mesto je znano po znamenitosti Duomo di Milano?", moznosti: ["Milano", "Firence", "Rim", "Benetke"], odgovor: "Milano" },
+  { vprasanje: "Katera evropska država je znana po otoku Malta?", moznosti: ["Malta", "Italija", "Grčija", "Ciper"], odgovor: "Malta" },
+  { vprasanje: "Katera reka ločuje Bolgarijo in Romunijo?", moznosti: ["Donava", "Prut", "Tisa", "Visla"], odgovor: "Donava" },
+  { vprasanje: "Katero evropsko mesto je znano po znamenitosti Atomium?", moznosti: ["Bruselj", "Amsterdam", "Pariz", "Berlin"], odgovor: "Bruselj" },
+  { vprasanje: "Katera država EU meji na Ciper?", moznosti: ["Grčija", "Italija", "Turčija", "Francija"], odgovor: "Grčija" }
+];
+
+  
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

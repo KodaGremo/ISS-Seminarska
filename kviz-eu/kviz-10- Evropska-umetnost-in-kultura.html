@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ <link rel="stylesheet" href="kviz-EU.css">
+  <style>
+    body {
+background-image: url('slike/eu-geo.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Evropa kultura</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+const podatkiKviz = [
+  { vprasanje: "Kateri znani slikar je naslikal 'Zvezdno noč'?", moznosti: ["Vincent van Gogh", "Pablo Picasso", "Claude Monet", "Leonardo da Vinci"], odgovor: "Vincent van Gogh" },
+  { vprasanje: "V kateri evropski državi poteka festival San Fermín, znan po teku pred biki?", moznosti: ["Španija", "Italija", "Francija", "Portugalska"], odgovor: "Španija" },
+  { vprasanje: "Kateri evropski pisatelj je napisal 'Vojna in mir'?", moznosti: ["Lev Tolstoj", "Victor Hugo", "Charles Dickens", "Franz Kafka"], odgovor: "Lev Tolstoj" },
+  { vprasanje: "V katerem mestu se nahaja slavni Louvre, največji muzej na svetu?", moznosti: ["Pariz", "London", "Rim", "Berlin"], odgovor: "Pariz" },
+  { vprasanje: "Katera evropska država je znana po tradicionalnem plesu, imenovanem 'fado'?", moznosti: ["Portugalska", "Španija", "Italija", "Grčija"], odgovor: "Portugalska" },
+  { vprasanje: "Kateri skladatelj je ustvaril 9. simfonijo 'Oda radosti', ki je tudi himna Evropske unije?", moznosti: ["Ludwig van Beethoven", "Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Franz Schubert"], odgovor: "Ludwig van Beethoven" },
+  { vprasanje: "V kateri evropski državi je bila prvič uprizorjena baletna predstava 'Labodje jezero'?", moznosti: ["Rusija", "Francija", "Nemčija", "Avstrija"], odgovor: "Rusija" },
+  { vprasanje: "Kateri francoski umetnik je bil vodilna osebnost kubizma?", moznosti: ["Pablo Picasso", "Georges Braque", "Henri Matisse", "Claude Monet"], odgovor: "Georges Braque" },
+  { vprasanje: "Katera država gosti največji pustni karneval v Evropi, ki poteka v Benetkah?", moznosti: ["Italija", "Francija", "Španija", "Avstrija"], odgovor: "Italija" },
+  { vprasanje: "Kateri irski pisatelj je znan po romanu 'Ulikses'?", moznosti: ["James Joyce", "Oscar Wilde", "Samuel Beckett", "Jonathan Swift"], odgovor: "James Joyce" },
+  { vprasanje: "Katera evropska država je dom Michelangelove znamenite skulpture Davida?", moznosti: ["Italija", "Španija", "Francija", "Grčija"], odgovor: "Italija" },
+  { vprasanje: "V kateri evropski državi je nastal klasični glasbeni slog 'barok'?", moznosti: ["Italija", "Francija", "Avstrija", "Nemčija"], odgovor: "Italija" },
+  { vprasanje: "Kateri romanopisec je napisal delo 'Zločin in kazen'?", moznosti: ["Fjodor Dostojevski", "Lev Tolstoj", "Gustave Flaubert", "Franz Kafka"], odgovor: "Fjodor Dostojevski" },
+  { vprasanje: "Katero mesto je znano po ikoničnem kolesarskem dogodku Tour de France?", moznosti: ["Pariz", "Marseille", "Lyon", "Toulouse"], odgovor: "Pariz" },
+  { vprasanje: "Kateri umetniški slog je značilen za umetnika Salvadorja Dalíja?", moznosti: ["Surenalizem", "Impresionizem", "Ekspresionizem", "Kubizem"], odgovor: "Surenalizem" },
+  { vprasanje: "V kateri državi je bil klasični skladatelj Wolfgang Amadeus Mozart rojen?", moznosti: ["Avstrija", "Nemčija", "Francija", "Italija"], odgovor: "Avstrija" },
+  { vprasanje: "Kateri evropski muzej hrani znamenito sliko Mona Liza?", moznosti: ["Louvre", "Rijksmuseum", "Prado", "Tate Modern"], odgovor: "Louvre" },
+  { vprasanje: "Katera evropska država je znana po operi 'Carmen'?", moznosti: ["Francija", "Italija", "Španija", "Nemčija"], odgovor: "Francija" },
+  { vprasanje: "Katero evropsko mesto je rojstno mesto renesanse?", moznosti: ["Firence", "Pariz", "Rim", "Benetke"], odgovor: "Firence" },
+  { vprasanje: "V kateri evropski državi praznujejo Oktoberfest, največji festival piva na svetu?", moznosti: ["Nemčija", "Avstrija", "Češka", "Belgija"], odgovor: "Nemčija" },
+  { vprasanje: "Katera evropska država je znana po plesnem slogu 'polka'?", moznosti: ["Češka", "Avstrija", "Madžarska", "Nemčija"], odgovor: "Češka" },
+  { vprasanje: "Kateri evropski skladatelj je napisal opere, kot so 'Figarova svatba' in 'Don Giovanni'?", moznosti: ["Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Richard Wagner", "Franz Schubert"], odgovor: "Wolfgang Amadeus Mozart" },
+  { vprasanje: "Katero mesto je znano po znameniti stavbi Big Ben?", moznosti: ["London", "Pariz", "Dublin", "Berlin"], odgovor: "London" },
+  { vprasanje: "V kateri evropski državi se nahaja grad Neuschwanstein, ki je bil navdih za Disneyjev grad?", moznosti: ["Nemčija", "Avstrija", "Francija", "Švica"], odgovor: "Nemčija" },
+  { vprasanje: "Katera evropska država je znana po hrani, kot sta tapas in paella?", moznosti: ["Španija", "Italija", "Francija", "Grčija"], odgovor: "Španija" },
+  { vprasanje: "Kateri umetnik je naslikal 'Rojstvo Venere'?", moznosti: ["Sandro Botticelli", "Leonardo da Vinci", "Raphael", "Caravaggio"], odgovor: "Sandro Botticelli" },
+  { vprasanje: "Kateri grški filozof je znan kot učitelj Aleksandra Velikega?", moznosti: ["Aristotel", "Platon", "Sokrat", "Heraklit"], odgovor: "Aristotel" },
+  { vprasanje: "V kateri državi je nastal impresionizem?", moznosti: ["Francija", "Italija", "Avstrija", "Nizozemska"], odgovor: "Francija" },
+  { vprasanje: "Katera evropska država je znana po svojih tulipanih in mlinih na veter?", moznosti: ["Nizozemska", "Belgija", "Danska", "Švica"], odgovor: "Nizozemska" },
+  { vprasanje: "Kateri skladatelj je ustvaril glasbeno delo 'Štirje letni časi'?", moznosti: ["Antonio Vivaldi", "Johann Sebastian Bach", "Franz Schubert", "Ludwig van Beethoven"], odgovor: "Antonio Vivaldi" },
+  { vprasanje: "Katera evropska država je znana po svojem tradicionalnem kiltu in dude?", moznosti: ["Škotska", "Irska", "Anglija", "Wales"], odgovor: "Škotska" },
+  { vprasanje: "V kateri državi je bil ustanovljen prvi univerzitetni sistem na svetu?", moznosti: ["Italija", "Francija", "Nemčija", "Grčija"], odgovor: "Italija" },
+  { vprasanje: "Kateri renesančni umetnik je naslikal Sikstinsko kapelo?", moznosti: ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"], odgovor: "Michelangelo" },
+  { vprasanje: "Katera evropska država je znana po plesnem slogu 'flamenco'?", moznosti: ["Španija", "Portugalska", "Italija", "Francija"], odgovor: "Španija" },
+  { vprasanje: "Katero mesto je znano po Eiffelovem stolpu?", moznosti: ["Pariz", "London", "Rim", "Madrid"], odgovor: "Pariz" },
+  { vprasanje: "Katera evropska država je rojstno mesto klasične glasbe?", moznosti: ["Avstrija", "Nemčija", "Francija", "Italija"], odgovor: "Avstrija" },
+  { vprasanje: "Kateri umetniški slog je značilen za obdobje po drugi svetovni vojni?", moznosti: ["Ekspresionizem", "Abstraktni ekspresionizem", "Kubizem", "Impresionizem"], odgovor: "Abstraktni ekspresionizem" },
+  { vprasanje: "Katera država je znana po svojih gradovih ob Renu?", moznosti: ["Nemčija", "Avstrija", "Švica", "Francija"], odgovor: "Nemčija" },
+  { vprasanje: "V katerem mestu se nahaja Kolosej, simbol antičnega Rima?", moznosti: ["Rim", "Neapelj", "Benetke", "Milano"], odgovor: "Rim" },
+  { vprasanje: "Katera evropska država je znana po tradicionalnih lesnih coklah?", moznosti: ["Nizozemska", "Švica", "Nemčija", "Belgija"], odgovor: "Nizozemska" },
+  { vprasanje: "Katera evropska država je domovina pivskih vrtov?", moznosti: ["Nemčija", "Češka", "Avstrija", "Poljska"], odgovor: "Nemčija" },
+  { vprasanje: "Kateri skladatelj je ustvaril opero 'Aida'?", moznosti: ["Giuseppe Verdi", "Richard Wagner", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"], odgovor: "Giuseppe Verdi" },
+  { vprasanje: "Katero mesto je znano po Akropoli?", moznosti: ["Atene", "Rim", "Pariz", "Istanbul"], odgovor: "Atene" },
+  { vprasanje: "Katera država gosti svetovno znani festival luči v Lyonu?", moznosti: ["Francija", "Italija", "Nemčija", "Španija"], odgovor: "Francija" },
+  { vprasanje: "Katera evropska država je znana po sirih, kot so Gouda in Edam?", moznosti: ["Nizozemska", "Francija", "Švica", "Italija"], odgovor: "Nizozemska" },
+  { vprasanje: "Katera država je dom svetovno znanega muzeja Prado?", moznosti: ["Španija", "Francija", "Italija", "Nemčija"], odgovor: "Španija" },
+  { vprasanje: "Kateri umetniški slog je značilen za Vincenta van Gogha?", moznosti: ["Postimpresionizem", "Kubizem", "Impresionizem", "Ekspresionizem"], odgovor: "Postimpresionizem" },
+  { vprasanje: "V katerem mestu stoji znamenita stavba Sagrada Família?", moznosti: ["Barcelona", "Madrid", "Rim", "Pariz"], odgovor: "Barcelona" },
+  { vprasanje: "Kateri evropski pisatelj je napisal delo 'Les Misérables'?", moznosti: ["Victor Hugo", "Charles Dickens", "Fjodor Dostojevski", "Lev Tolstoj"], odgovor: "Victor Hugo" },
+  { vprasanje: "Katera evropska država je znana po čokoladi in vafljih?", moznosti: ["Belgija", "Francija", "Nizozemska", "Švica"], odgovor: "Belgija" },
+  { vprasanje: "Katera država je rojstni kraj baleta?", moznosti: ["Rusija", "Francija", "Italija", "Avstrija"], odgovor: "Francija" },
+  { vprasanje: "Katero mesto je znano po svoji operni hiši Teatro alla Scala?", moznosti: ["Milano", "Rim", "Benetke", "Firence"], odgovor: "Milano" },
+  { vprasanje: "Katera država je domovina znamenitega napitka absint?", moznosti: ["Švica", "Francija", "Nemčija", "Italija"], odgovor: "Švica" },
+  { vprasanje: "Katera evropska država je znana po modri keramiki Delft?", moznosti: ["Nizozemska", "Belgija", "Francija", "Švica"], odgovor: "Nizozemska" },
+  { vprasanje: "V katerem mestu se nahaja znameniti Tower Bridge?", moznosti: ["London", "Pariz", "Berlin", "Madrid"], odgovor: "London" },
+  { vprasanje: "Katera evropska država je domovina vina Chianti?", moznosti: ["Italija", "Francija", "Španija", "Portugalska"], odgovor: "Italija" },
+  { vprasanje: "Katero mesto je znano po festivalu luči, imenovanem Fête des Lumières?", moznosti: ["Lyon", "Pariz", "Marseille", "Toulouse"], odgovor: "Lyon" },
+  { vprasanje: "Katera evropska država je znana po svojih alpskih jezerih?", moznosti: ["Švica", "Avstrija", "Nemčija", "Italija"], odgovor: "Švica" },
+  { vprasanje: "Katero evropsko mesto je rojstni kraj kave espresso?", moznosti: ["Rim", "Benetke", "Pariz", "Milano"], odgovor: "Milano" },
+  { vprasanje: "Katera država gosti festival belih noči v Sankt Peterburgu?", moznosti: ["Rusija", "Finska", "Švedska", "Estonija"], odgovor: "Rusija" },
+  { vprasanje: "Kateri evropski skladatelj je ustvaril delo 'Requiem'?", moznosti: ["Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach", "Franz Schubert"], odgovor: "Wolfgang Amadeus Mozart" },
+  { vprasanje: "Katera evropska država je znana po tradicionalni jedi moussaka?", moznosti: ["Grčija", "Italija", "Francija", "Španija"], odgovor: "Grčija" },
+  { vprasanje: "Katero mesto je znano po cerkvi Notre-Dame?", moznosti: ["Pariz", "Rim", "Barcelona", "Dublin"], odgovor: "Pariz" },
+  { vprasanje: "Katera evropska država je znana po pivovarstvu in blagovnih znamkah, kot sta Guinness in Jameson?", moznosti: ["Irska", "Anglija", "Škotska", "Belgija"], odgovor: "Irska" },
+  { vprasanje: "Katero mesto je znano po festivalu Sanremo?", moznosti: ["Sanremo", "Rim", "Milano", "Neapelj"], odgovor: "Sanremo" },
+  { vprasanje: "Katera država je znana po svojem narodnem parku Plitvička jezera?", moznosti: ["Hrvaška", "Slovenija", "Bosna in Hercegovina", "Črna gora"], odgovor: "Hrvaška" },
+  { vprasanje: "Katero evropsko mesto je dom znane trdnjave Alhambra?", moznosti: ["Granada", "Sevilla", "Barcelona", "Madrid"], odgovor: "Granada" },
+  { vprasanje: "Kateri znani evropski umetnik je znan po svojem delu 'Vztrajnost spomina'?", moznosti: ["Salvador Dalí", "Pablo Picasso", "Joan Miró", "Claude Monet"], odgovor: "Salvador Dalí" },
+  { vprasanje: "Katera evropska država je znana po svojem otoku Santorini?", moznosti: ["Grčija", "Italija", "Španija", "Hrvaška"], odgovor: "Grčija" },
+  { vprasanje: "Katero evropsko mesto je znano po Karlovem mostu?", moznosti: ["Praga", "Dunaj", "Berlin", "Ljubljana"], odgovor: "Praga" },
+  { vprasanje: "Katera evropska država je znana po tradicionalni jedi fondue?", moznosti: ["Švica", "Francija", "Avstrija", "Nemčija"], odgovor: "Švica" },
+  { vprasanje: "V katerem mestu se nahaja slavni trg Piazza San Marco?", moznosti: ["Benetke", "Rim", "Firence", "Milano"], odgovor: "Benetke" },
+  { vprasanje: "Kateri umetniški slog je značilen za Gustava Klimta?", moznosti: ["Art Nouveau", "Impresionizem", "Ekspresionizem", "Kubizem"], odgovor: "Art Nouveau" },
+  { vprasanje: "Katero evropsko mesto je dom operne hiše Bolšoj teater?", moznosti: ["Moskva", "Sankt Peterburg", "Kijev", "Varšava"], odgovor: "Moskva" },
+  { vprasanje: "Katera evropska država je znana po gradu Bran, povezanem z zgodbo o Drakuli?", moznosti: ["Romunija", "Madžarska", "Slovaška", "Poljska"], odgovor: "Romunija" },
+  { vprasanje: "Katero evropsko mesto je znano po arhitektu Antoni Gaudíju?", moznosti: ["Barcelona", "Madrid", "Rim", "Pariz"], odgovor: "Barcelona" },
+  { vprasanje: "Katera evropska država je dom svetovno znanega belgijskega čokoladnega festivala?", moznosti: ["Belgija", "Francija", "Nemčija", "Švica"], odgovor: "Belgija" },
+  { vprasanje: "Katero evropsko mesto gosti mednarodni filmski festival v Cannesu?", moznosti: ["Cannes", "Pariz", "Nice", "Marseille"], odgovor: "Cannes" },
+  { vprasanje: "Katera evropska država je znana po svojih čudovitih ledeniških jezerih?", moznosti: ["Švica", "Avstrija", "Norveška", "Islandija"], odgovor: "Švica" },
+  { vprasanje: "V katerem mestu se nahaja znamenita stavba Reichstag?", moznosti: ["Berlin", "München", "Hamburg", "Frankfurt"], odgovor: "Berlin" },
+  { vprasanje: "Katera država je znana po svoji arhitekturi z barvnimi stavbami Nyhavn?", moznosti: ["Danska", "Švedska", "Norveška", "Nizozemska"], odgovor: "Danska" },
+  { vprasanje: "Kateri evropski skladatelj je ustvaril glasbo za balet 'Hrestač'?", moznosti: ["Čajkovski", "Mozart", "Beethoven", "Schubert"], odgovor: "Čajkovski" },
+  { vprasanje: "Katero evropsko mesto je znano po srednjeveški katedrali v Chartresu?", moznosti: ["Chartres", "Pariz", "Orleans", "Rouen"], odgovor: "Chartres" },
+  { vprasanje: "Katera evropska država je znana po svojih geotermalnih bazenih, kot je Blue Lagoon?", moznosti: ["Islandija", "Norveška", "Švedska", "Finska"], odgovor: "Islandija" },
+  { vprasanje: "Katero mesto je znano po svoji arhitekturni mojstrovini Duomo di Milano?", moznosti: ["Milano", "Rim", "Benetke", "Firence"], odgovor: "Milano" },
+  { vprasanje: "Katera evropska država je znana po glasbenem festivalu Eurovision?", moznosti: ["Švedska", "Norveška", "Velika Britanija", "Irska"], odgovor: "Švedska" },
+  { vprasanje: "Katero evropsko mesto je znano po znameniti stavbi Atomium?", moznosti: ["Bruselj", "Amsterdam", "Pariz", "Berlin"], odgovor: "Bruselj" },
+  { vprasanje: "Katera evropska država je znana po smučarskih destinacijah, kot sta Innsbruck in Kitzbühel?", moznosti: ["Avstrija", "Švica", "Francija", "Italija"], odgovor: "Avstrija" },
+  { vprasanje: "Katero evropsko mesto je znano po božičnem trgu v Nürnbergu?", moznosti: ["Nürnberg", "Dunaj", "Praga", "Berlin"], odgovor: "Nürnberg" },
+  { vprasanje: "Katera evropska država je znana po svojih znamenitih alpskih travnikih?", moznosti: ["Švica", "Avstrija", "Nemčija", "Francija"], odgovor: "Švica" },
+  { vprasanje: "Kateri evropski skladatelj je ustvaril delo 'Requiem'?", moznosti: ["Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Johann Sebastian Bach", "Franz Schubert"], odgovor: "Wolfgang Amadeus Mozart" },
+  { vprasanje: "Katera evropska država je znana po tradicionalni jedi moussaka?", moznosti: ["Grčija", "Italija", "Francija", "Španija"], odgovor: "Grčija" },
+  { vprasanje: "Katero mesto je znano po cerkvi Notre-Dame?", moznosti: ["Pariz", "Rim", "Barcelona", "Dublin"], odgovor: "Pariz" },
+  { vprasanje: "Katera evropska država je znana po pivovarstvu in blagovnih znamkah, kot sta Guinness in Jameson?", moznosti: ["Irska", "Anglija", "Škotska", "Belgija"], odgovor: "Irska" },
+  { vprasanje: "Katero mesto je znano po festivalu Sanremo?", moznosti: ["Sanremo", "Rim", "Milano", "Neapelj"], odgovor: "Sanremo" },
+  { vprasanje: "Katera država je znana po svojem narodnem parku Plitvička jezera?", moznosti: ["Hrvaška", "Slovenija", "Bosna in Hercegovina", "Črna gora"], odgovor: "Hrvaška" },
+  { vprasanje: "Katero evropsko mesto je dom znane trdnjave Alhambra?", moznosti: ["Granada", "Sevilla", "Barcelona", "Madrid"], odgovor: "Granada" },
+  { vprasanje: "Kateri znani evropski umetnik je znan po svojem delu 'Vztrajnost spomina'?", moznosti: ["Salvador Dalí", "Pablo Picasso", "Joan Miró", "Claude Monet"], odgovor: "Salvador Dalí" },
+  { vprasanje: "Katera evropska država je znana po svojem otoku Santorini?", moznosti: ["Grčija", "Italija", "Španija", "Hrvaška"], odgovor: "Grčija" },
+  { vprasanje: "Katero evropsko mesto je znano po Karlovem mostu?", moznosti: ["Praga", "Dunaj", "Berlin", "Ljubljana"], odgovor: "Praga" },
+  { vprasanje: "Katera evropska država je znana po tradicionalni jedi fondue?", moznosti: ["Švica", "Francija", "Avstrija", "Nemčija"], odgovor: "Švica" },
+  { vprasanje: "V katerem mestu se nahaja slavni trg Piazza San Marco?", moznosti: ["Benetke", "Rim", "Firence", "Milano"], odgovor: "Benetke" },
+  { vprasanje: "Kateri umetniški slog je značilen za Gustava Klimta?", moznosti: ["Art Nouveau", "Impresionizem", "Ekspresionizem", "Kubizem"], odgovor: "Art Nouveau" },
+  { vprasanje: "Katero evropsko mesto je dom operne hiše Bolšoj teater?", moznosti: ["Moskva", "Sankt Peterburg", "Kijev", "Varšava"], odgovor: "Moskva" },
+  { vprasanje: "Katera evropska država je znana po gradu Bran, povezanem z zgodbo o Drakuli?", moznosti: ["Romunija", "Madžarska", "Slovaška", "Poljska"], odgovor: "Romunija" },
+  { vprasanje: "Katero evropsko mesto je znano po arhitektu Antoni Gaudíju?", moznosti: ["Barcelona", "Madrid", "Rim", "Pariz"], odgovor: "Barcelona" },
+  { vprasanje: "Katera evropska država je dom svetovno znanega belgijskega čokoladnega festivala?", moznosti: ["Belgija", "Francija", "Nemčija", "Švica"], odgovor: "Belgija" },
+  { vprasanje: "Katero evropsko mesto gosti mednarodni filmski festival v Cannesu?", moznosti: ["Cannes", "Pariz", "Nice", "Marseille"], odgovor: "Cannes" },
+  { vprasanje: "Katera evropska država je znana po svojih čudovitih ledeniških jezerih?", moznosti: ["Švica", "Avstrija", "Norveška", "Islandija"], odgovor: "Švica" },
+  { vprasanje: "V katerem mestu se nahaja znamenita stavba Reichstag?", moznosti: ["Berlin", "München", "Hamburg", "Frankfurt"], odgovor: "Berlin" },
+  { vprasanje: "Katera država je znana po svoji arhitekturi z barvnimi stavbami Nyhavn?", moznosti: ["Danska", "Švedska", "Norveška", "Nizozemska"], odgovor: "Danska" },
+  { vprasanje: "Kateri evropski skladatelj je ustvaril glasbo za balet 'Hrestač'?", moznosti: ["Čajkovski", "Mozart", "Beethoven", "Schubert"], odgovor: "Čajkovski" },
+  { vprasanje: "Katero evropsko mesto je znano po srednjeveški katedrali v Chartresu?", moznosti: ["Chartres", "Pariz", "Orleans", "Rouen"], odgovor: "Chartres" },
+  { vprasanje: "Katera evropska država je znana po svojih geotermalnih bazenih, kot je Blue Lagoon?", moznosti: ["Islandija", "Norveška", "Švedska", "Finska"], odgovor: "Islandija" },
+  { vprasanje: "Katero mesto je znano po svoji arhitekturni mojstrovini Duomo di Milano?", moznosti: ["Milano", "Rim", "Benetke", "Firence"], odgovor: "Milano" },
+  { vprasanje: "Katera evropska država je znana po glasbenem festivalu Eurovision?", moznosti: ["Švedska", "Norveška", "Velika Britanija", "Irska"], odgovor: "Švedska" },
+  { vprasanje: "Katero evropsko mesto je znano po znameniti stavbi Atomium?", moznosti: ["Bruselj", "Amsterdam", "Pariz", "Berlin"], odgovor: "Bruselj" },
+  { vprasanje: "Katera evropska država je znana po smučarskih destinacijah, kot sta Innsbruck in Kitzbühel?", moznosti: ["Avstrija", "Švica", "Francija", "Italija"], odgovor: "Avstrija" },
+  { vprasanje: "Katero evropsko mesto je znano po božičnem trgu v Nürnbergu?", moznosti: ["Nürnberg", "Dunaj", "Praga", "Berlin"], odgovor: "Nürnberg" },
+  { vprasanje: "Katera evropska država je znana po svojih znamenitih alpskih travnikih?", moznosti: ["Švica", "Avstrija", "Nemčija", "Francija"], odgovor: "Švica" }
+];
+
+
+
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>

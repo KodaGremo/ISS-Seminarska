@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evropske resnice, ki jih niso hoteli razkriti</title>
+
+
+ <link rel="stylesheet" href="kviz-EU.css">
+  <style>
+    body {
+background-image: url('slike/mitilogija.png');
+background-repeat: no-repeat;
+background-position: center top;
+background-size: cover;
+  }
+</style>
+</head>
+<body>
+
+<div id="kviz-posoda">
+  <h1>Mitologija Evropske unije</h1>
+  <button class="font-control" onclick="spremeniVelikostPisave(1)">Povečaj pisavo</button>
+  <button class="font-control" onclick="spremeniVelikostPisave(-1)">Zmanjšaj pisavo</button>
+  <div id="napredek"></div> 
+  <div id="vprasanje-posoda">
+    <div id="vprasanje"></div>
+    <div class="moznosti" id="moznosti"></div>
+  </div>
+  <div id="kontrole" class="skrito">
+    <button onclick="ponovniZacetek()">Ponovni začetek</button>
+ <a href="/ISS-Seminarska/quizzes.html"><button>Kvizi</button></a>
+<a href="/ISS-Seminarska/index.html"><button>Domov</button></a>
+  </div>
+</div>
+
+
+<script>
+  let trenutnaVelikostPisave = 22;
+
+function spremeniVelikostPisave(sprememba) {
+  trenutnaVelikostPisave += sprememba;
+  document.getElementById("kviz-posoda").style.fontSize = trenutnaVelikostPisave + "px";
+}
+
+function premesajMoznosti(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function premesajVprasanja(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const podatkiKviz = [
+  { vprasanje: "Kateri grški bog je bil vladar Olimpa?", moznosti: ["Zeus", "Hades", "Poseidon", "Ares"], odgovor: "Zeus" },
+  { vprasanje: "Katera boginja je bila znana kot grška boginja ljubezni?", moznosti: ["Afrodita", "Hera", "Artemida", "Hekata"], odgovor: "Afrodita" },
+  { vprasanje: "Kateri bog je bil v nordijski mitologiji poznan kot bog groma?", moznosti: ["Thor", "Odin", "Loki", "Baldur"], odgovor: "Thor" },
+  { vprasanje: "Kdo je bil rimski ekvivalent grškega boga Zeusa?", moznosti: ["Jupiter", "Mars", "Apollo", "Pluton"], odgovor: "Jupiter" },
+  { vprasanje: "Katera nordijska boginja je bila povezana z ljubeznijo in plodnostjo?", moznosti: ["Freya", "Hel", "Frigg", "Skadi"], odgovor: "Freya" },
+  { vprasanje: "Kako se je imenoval grški bog podzemlja?", moznosti: ["Hades", "Poseidon", "Hermes", "Ares"], odgovor: "Hades" },
+  { vprasanje: "Kateri rimski bog je bil bog vojne?", moznosti: ["Mars", "Jupiter", "Vulkan", "Neptun"], odgovor: "Mars" },
+  { vprasanje: "Katera keltska boginja je bila povezana z vodo?", moznosti: ["Brigid", "Danu", "Epona", "Morrigan"], odgovor: "Danu" },
+  { vprasanje: "Kdo je bil glavni bog v slovanski mitologiji?", moznosti: ["Perun", "Svarog", "Veles", "Rod"], odgovor: "Perun" },
+  { vprasanje: "Katero drevo je igralo ključno vlogo v nordijski mitologiji?", moznosti: ["Yggdrasil", "Dub", "Askr", "Linden"], odgovor: "Yggdrasil" },
+  { vprasanje: "Katera grška boginja je bila povezana z lovom?", moznosti: ["Artemida", "Demetra", "Afrodita", "Hera"], odgovor: "Artemida" },
+  { vprasanje: "Kateri rimski bog je bil ekvivalent grškega Poseidona?", moznosti: ["Neptun", "Pluton", "Jupiter", "Mars"], odgovor: "Neptun" },
+  { vprasanje: "Kako so imenovali slovanskega boga ognja in kovanja?", moznosti: ["Svarog", "Perun", "Veles", "Triglav"], odgovor: "Svarog" },
+  { vprasanje: "Kdo je bil nordijski bog modrosti?", moznosti: ["Odin", "Thor", "Loki", "Baldur"], odgovor: "Odin" },
+  { vprasanje: "Katera keltska boginja je bila povezana s konji?", moznosti: ["Epona", "Danu", "Brigid", "Morrigan"], odgovor: "Epona" },
+  { vprasanje: "Kateri grški junak je ubil Minotavra?", moznosti: ["Tezej", "Heraklej", "Perzej", "Achilles"], odgovor: "Tezej" },
+  { vprasanje: "Katera nordijska boginja je bila žena Odina?", moznosti: ["Frigg", "Freya", "Hel", "Skadi"], odgovor: "Frigg" },
+  { vprasanje: "Kdo je bil grški bog sonca?", moznosti: ["Apollo", "Helios", "Hermes", "Zeus"], odgovor: "Apollo" },
+  { vprasanje: "Kako se je imenovala keltska boginja plodnosti in poezije?", moznosti: ["Brigid", "Danu", "Morrigan", "Epona"], odgovor: "Brigid" },
+  { vprasanje: "Kateri grški junak je opravil dvanajst nalog?", moznosti: ["Heraklej", "Tezej", "Odisej", "Achilles"], odgovor: "Heraklej" },
+  { vprasanje: "Katera rimska boginja je bila boginja domačega ognjišča?", moznosti: ["Vesta", "Minerva", "Diana", "Ceres"], odgovor: "Vesta" },
+  { vprasanje: "Kako se imenuje bitka, kjer naj bi bogovi nordijske mitologije doživeli svoj konec?", moznosti: ["Ragnarok", "Götterdämmerung", "Armagedon", "Valhalla"], odgovor: "Ragnarok" },
+  { vprasanje: "Kdo je bil grški bog morja?", moznosti: ["Poseidon", "Hades", "Hermes", "Apollo"], odgovor: "Poseidon" },
+  { vprasanje: "Kateri grški junak je prevaral Trojance z lesenim konjem?", moznosti: ["Odisej", "Tezej", "Achilles", "Heraklej"], odgovor: "Odisej" },
+  { vprasanje: "Kdo je bil grški bog ljubezni?", moznosti: ["Eros", "Zeus", "Hermes", "Apollo"], odgovor: "Eros" },
+  { vprasanje: "Katera keltska boginja je bila povezana z vojno?", moznosti: ["Morrigan", "Brigid", "Danu", "Epona"], odgovor: "Morrigan" },
+  { vprasanje: "Katera grška boginja je bila znana kot boginja modrosti?", moznosti: ["Atena", "Afrodita", "Artemida", "Hera"], odgovor: "Atena" },
+  { vprasanje: "Kdo je bil nordijski bog zvijačnosti in prevar?", moznosti: ["Loki", "Thor", "Odin", "Baldur"], odgovor: "Loki" },
+  { vprasanje: "Kateri rimski bog je bil bog ognja in kovaštva?", moznosti: ["Vulkan", "Mars", "Jupiter", "Neptun"], odgovor: "Vulkan" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z ljubeznijo in pomladjo?", moznosti: ["Lada", "Mokoš", "Morana", "Živa"], odgovor: "Lada" },
+  { vprasanje: "Kako se je imenoval grški bog podzemlja?", moznosti: ["Hades", "Zeus", "Poseidon", "Ares"], odgovor: "Hades" },
+  { vprasanje: "Katera nordijska boginja je varovala mrtve?", moznosti: ["Hel", "Frigg", "Freya", "Skadi"], odgovor: "Hel" },
+  { vprasanje: "Kateri grški junak je ubil Meduzo?", moznosti: ["Perzej", "Heraklej", "Odisej", "Achilles"], odgovor: "Perzej" },
+  { vprasanje: "Katera boginja je bila rimskemu Jupitru ekvivalentna v grški mitologiji?", moznosti: ["Hera", "Afrodita", "Artemida", "Demetra"], odgovor: "Hera" },
+  { vprasanje: "Katera keltska boginja je bila povezana z vodo in rodovitnostjo?", moznosti: ["Danu", "Epona", "Morrigan", "Brigid"], odgovor: "Danu" },
+  { vprasanje: "Kako so imenovali raj v nordijski mitologiji?", moznosti: ["Valhalla", "Ragnarok", "Midgard", "Asgard"], odgovor: "Valhalla" },
+  { vprasanje: "Kateri grški bog je bil glasnik bogov?", moznosti: ["Hermes", "Apollo", "Zeus", "Hades"], odgovor: "Hermes" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z žetvijo in plodnostjo?", moznosti: ["Mokoš", "Lada", "Morana", "Živa"], odgovor: "Mokoš" },
+  { vprasanje: "Katera keltska boginja je bila znana kot boginja ognja in poezije?", moznosti: ["Brigid", "Danu", "Morrigan", "Epona"], odgovor: "Brigid" },
+  { vprasanje: "Katera grška boginja je bila zaščitnica poroke in družine?", moznosti: ["Hera", "Afrodita", "Demetra", "Artemida"], odgovor: "Hera" },
+  { vprasanje: "Kateri grški bog je bil povezan z vinom in veseljem?", moznosti: ["Dioniz", "Apollo", "Hermes", "Ares"], odgovor: "Dioniz" },
+  { vprasanje: "Katera nordijska bitja so prebivala pod zemljo in so bila mojstri kovaštva?", moznosti: ["Škrati", "Jotuni", "Alfi", "Trol",], odgovor: "Škrati" },
+  { vprasanje: "Kateri grški heroj je iskal zlato runo?", moznosti: ["Jazon", "Odisej", "Heraklej", "Perzej"], odgovor: "Jazon" },
+  { vprasanje: "Kako se imenuje nordijski volk, ki naj bi povzročil Ragnarok?", moznosti: ["Fenrir", "Skoll", "Hati", "Loki"], odgovor: "Fenrir" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z zimo in smrtjo?", moznosti: ["Morana", "Lada", "Mokoš", "Živa"], odgovor: "Morana" },
+  { vprasanje: "Kdo je bil grški bog vojne?", moznosti: ["Ares", "Hermes", "Apollo", "Zeus"], odgovor: "Ares" },
+  { vprasanje: "Katera keltska boginja je bila povezana z vojno in prerokbami?", moznosti: ["Morrigan", "Epona", "Danu", "Brigid"], odgovor: "Morrigan" },
+  { vprasanje: "Kako se imenujejo severni bogovi, ki so prebivali v Asgardu?", moznosti: ["Azi", "Jotuni", "Vanirji", "Alfi"], odgovor: "Azi" },
+  { vprasanje: "Katera rimska boginja je bila boginja plodnosti in kmetijstva?", moznosti: ["Ceres", "Minerva", "Vesta", "Diana"], odgovor: "Ceres" },
+  { vprasanje: "Kdo je bil grški bog smrti, ki je bil tudi brat Hada?", moznosti: ["Tanatos", "Zeus", "Hermes", "Ares"], odgovor: "Tanatos" },
+  { vprasanje: "Kateri keltski bog je bil znan kot 'Oče bogov'?", moznosti: ["Dagda", "Lugh", "Nuada", "Balor"], odgovor: "Dagda" },
+  { vprasanje: "Kdo je bil rimski ekvivalent grške Atene?", moznosti: ["Minerva", "Vesta", "Diana", "Ceres"], odgovor: "Minerva" },
+  { vprasanje: "Katera nordijska boginja je bila povezana z lovom?", moznosti: ["Skadi", "Frigg", "Freya", "Hel"], odgovor: "Skadi" },
+  { vprasanje: "Kako so imenovali grškega boga podzemlja?", moznosti: ["Hades", "Poseidon", "Zeus", "Ares"], odgovor: "Hades" },
+  { vprasanje: "Kateri grški heroj je bil poznan po svoji peti?", moznosti: ["Achilles", "Heraklej", "Tezej", "Jazon"], odgovor: "Achilles" },
+  { vprasanje: "Katera keltska boginja je bila povezana z rekami?", moznosti: ["Danu", "Brigid", "Morrigan", "Epona"], odgovor: "Danu" },
+  { vprasanje: "Kateri nordijski bog je imel en samo oko?", moznosti: ["Odin", "Thor", "Loki", "Tyr"], odgovor: "Odin" },
+  { vprasanje: "Kako se imenuje grški labirint, kjer je živel Minotaver?", moznosti: ["Kreta", "Delos", "Olimp", "Lerna"], odgovor: "Kreta" },
+  { vprasanje: "Katera boginja je bila žena Hada v grški mitologiji?", moznosti: ["Perzefona", "Hera", "Afrodita", "Demetra"], odgovor: "Perzefona" },
+  { vprasanje: "Kdo je bil grški bog kovaštva in ognja?", moznosti: ["Hefajst", "Ares", "Hermes", "Apollo"], odgovor: "Hefajst" },
+  { vprasanje: "Kateri keltski bog je bil znan kot bog svetlobe?", moznosti: ["Lugh", "Dagda", "Nuada", "Balor"], odgovor: "Lugh" },
+  { vprasanje: "Kako se je imenovala nordijska prestolnica mrtvih?", moznosti: ["Helheim", "Valhalla", "Midgard", "Asgard"], odgovor: "Helheim" },
+  { vprasanje: "Kateri grški bog je bil znan kot zaščitnik popotnikov?", moznosti: ["Hermes", "Apollo", "Dioniz", "Hades"], odgovor: "Hermes" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z življenjem in plodnostjo?", moznosti: ["Živa", "Mokoš", "Morana", "Lada"], odgovor: "Živa" },
+  { vprasanje: "Kako se imenuje keltski simbol, ki predstavlja večnost?", moznosti: ["Triquetra", "Spiralna trojnost", "Keltknot", "Runestone"], odgovor: "Triquetra" },
+  { vprasanje: "Kateri grški bog je bil znan po svoji glasbi?", moznosti: ["Apollo", "Hermes", "Hades", "Ares"], odgovor: "Apollo" },
+  { vprasanje: "Kako se imenuje nordijska bitja, ki so bila duhovi narave?", moznosti: ["Alfi", "Trol", "Jotuni", "Vanirji"], odgovor: "Alfi" },
+  { vprasanje: "Katera boginja je bila v grški mitologiji povezana z mesečino?", moznosti: ["Selena", "Artemida", "Hekata", "Afrodita"], odgovor: "Selena" },
+  { vprasanje: "Kateri rimski bog je bil bog časa?", moznosti: ["Saturn", "Jupiter", "Mars", "Pluton"], odgovor: "Saturn" },
+  { vprasanje: "Katera keltska boginja je bila znana kot kraljica bogov?", moznosti: ["Danu", "Brigid", "Morrigan", "Epona"], odgovor: "Danu" },
+  { vprasanje: "Kdo je bil nordijski bog pravice?", moznosti: ["Tyr", "Odin", "Thor", "Loki"], odgovor: "Tyr" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z materinstvom?", moznosti: ["Mokoš", "Morana", "Lada", "Živa"], odgovor: "Mokoš" },
+  { vprasanje: "Kako se imenuje grški bog sanj?", moznosti: ["Morfej", "Hermes", "Apollo", "Hades"], odgovor: "Morfej" },
+  { vprasanje: "Katera keltska boginja je bila znana kot zaščitnica konjev?", moznosti: ["Epona", "Danu", "Brigid", "Morrigan"], odgovor: "Epona" },
+  { vprasanje: "Kako se imenuje nordijski čarobni kladiv Thorja?", moznosti: ["Mjolnir", "Gungnir", "Gram", "Hrunting"], odgovor: "Mjolnir" },
+  { vprasanje: "Kdo je bil rimski bog podzemlja?", moznosti: ["Pluton", "Mars", "Jupiter", "Neptun"], odgovor: "Pluton" },
+  { vprasanje: "Katera grška boginja je bila povezana s kmetijstvom?", moznosti: ["Demetra", "Hera", "Afrodita", "Artemida"], odgovor: "Demetra" },
+  { vprasanje: "Kateri grški bog je imel krilata sandala?", moznosti: ["Hermes", "Apollo", "Zeus", "Ares"], odgovor: "Hermes" },
+  { vprasanje: "Kako se imenuje keltski bog kraljevstva in modrosti?", moznosti: ["Dagda", "Lugh", "Nuada", "Balor"], odgovor: "Dagda" },
+  { vprasanje: "Kateri nordijski bog je bil povezan z lovom in naravo?", moznosti: ["Ullr", "Thor", "Odin", "Tyr"], odgovor: "Ullr" },
+  { vprasanje: "Kako se imenuje grški bog neba?", moznosti: ["Uran", "Zeus", "Poseidon", "Hades"], odgovor: "Uran" },
+  { vprasanje: "Katera rimska boginja je bila povezana z divjadjo?", moznosti: ["Diana", "Minerva", "Vesta", "Ceres"], odgovor: "Diana" },
+  { vprasanje: "Kateri grški bog je bil znan po svojem loku in puščicah?", moznosti: ["Apollo", "Artemida", "Hermes", "Ares"], odgovor: "Apollo" },
+   { vprasanje: "Kateri grški bog je bil poznan kot zaščitnik kovačev?", moznosti: ["Hefajst", "Hermes", "Zeus", "Ares"], odgovor: "Hefajst" },
+  { vprasanje: "Kako so imenovali grško boginjo usode?", moznosti: ["Moire", "Erinije", "Nimfe", "Harpije"], odgovor: "Moire" },
+  { vprasanje: "Katera rimska boginja je bila povezana z ljubeznijo?", moznosti: ["Venera", "Minerva", "Diana", "Juno"], odgovor: "Venera" },
+  { vprasanje: "Kdo je bil vodja grških Titanov?", moznosti: ["Kronos", "Zeus", "Uran", "Okeanos"], odgovor: "Kronos" },
+  { vprasanje: "Katera nordijska boginja je bila zaščitnica zakonske zveze?", moznosti: ["Frigg", "Freya", "Hel", "Skadi"], odgovor: "Frigg" },
+  { vprasanje: "Kako so imenovali duhove narave v slovanski mitologiji?", moznosti: ["Domovoi", "Rusalki", "Lesniki", "Vodniki"], odgovor: "Domovoi" },
+  { vprasanje: "Katera grška boginja je bila znana kot boginja plodnosti in žetve?", moznosti: ["Demetra", "Hera", "Afrodita", "Artemida"], odgovor: "Demetra" },
+  { vprasanje: "Kateri rimski bog je bil povezan s trgovino in pogajanji?", moznosti: ["Merkur", "Mars", "Neptun", "Pluton"], odgovor: "Merkur" },
+  { vprasanje: "Kateri grški junak je bil vpleten v trojansko vojno?", moznosti: ["Achilles", "Heraklej", "Tezej", "Jazon"], odgovor: "Achilles" },
+  { vprasanje: "Kako se imenuje reka, ki deli svet živih in mrtvih v grški mitologiji?", moznosti: ["Stiks", "Lethe", "Aheron", "Kokitos"], odgovor: "Stiks" },
+  { vprasanje: "Katera keltska boginja je bila povezana z zaščito žensk in otrok?", moznosti: ["Brigid", "Danu", "Epona", "Morrigan"], odgovor: "Brigid" },
+  { vprasanje: "Kdo je bil grški bog vetra?", moznosti: ["Aeolos", "Zeus", "Poseidon", "Hermes"], odgovor: "Aeolos" },
+  { vprasanje: "Kateri grški bog je bil znan po svoji jezi in nasilju?", moznosti: ["Ares", "Hermes", "Zeus", "Hades"], odgovor: "Ares" },
+  { vprasanje: "Kako so imenovali keltskega boga vojne in smrtonosnosti?", moznosti: ["Balor", "Dagda", "Nuada", "Lugh"], odgovor: "Balor" },
+  { vprasanje: "Katera rimska boginja je bila povezana z modrostjo in umetnostjo?", moznosti: ["Minerva", "Venera", "Diana", "Juno"], odgovor: "Minerva" },
+  { vprasanje: "Kako so imenovali bojevnike, ki so varovali Asgard v nordijski mitologiji?", moznosti: ["Einherjar", "Jotuni", "Vanirji", "Alfi"], odgovor: "Einherjar" },
+  { vprasanje: "Kako se imenujejo grški duhovi maščevanja?", moznosti: ["Erinije", "Moire", "Harpije", "Nimfe"], odgovor: "Erinije" },
+  { vprasanje: "Katera slovanska boginja je bila znana kot zaščitnica doma in družine?", moznosti: ["Mokoš", "Morana", "Živa", "Lada"], odgovor: "Mokoš" },
+  { vprasanje: "Katera keltska boginja je bila povezana z bojevništvom in prerokovanjem?", moznosti: ["Morrigan", "Epona", "Danu", "Brigid"], odgovor: "Morrigan" },
+  { vprasanje: "Katera grška boginja je bila znana kot zaščitnica Aten?", moznosti: ["Atena", "Afrodita", "Demetra", "Hera"], odgovor: "Atena" },
+  { vprasanje: "Katera rimska boginja je bila povezana z lovom?", moznosti: ["Diana", "Minerva", "Venera", "Juno"], odgovor: "Diana" },
+  { vprasanje: "Kako se imenuje grška bitja, ki so bila pol človek in pol konj?", moznosti: ["Kentavri", "Minotavri", "Satirov", "Kiklopi"], odgovor: "Kentavri" },
+  { vprasanje: "Kdo je bil kralj bogov v nordijski mitologiji?", moznosti: ["Odin", "Thor", "Loki", "Baldur"], odgovor: "Odin" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z ljubeznijo in pomladjo?", moznosti: ["Lada", "Mokoš", "Morana", "Živa"], odgovor: "Lada" },
+  { vprasanje: "Katera keltska boginja je bila povezana s soncem in zdravjem?", moznosti: ["Brigid", "Danu", "Epona", "Morrigan"], odgovor: "Brigid" },
+  { vprasanje: "Kako so imenovali grško boginjo lune?", moznosti: ["Selena", "Hekata", "Artemida", "Afrodita"], odgovor: "Selena" },
+  { vprasanje: "Kateri grški heroj je bil znan po svoji premetenosti?", moznosti: ["Odisej", "Tezej", "Heraklej", "Achilles"], odgovor: "Odisej" },
+  { vprasanje: "Kako se imenujejo nordijski duhovi vode?", moznosti: ["Nixie", "Alfi", "Jotuni", "Einherjar"], odgovor: "Nixie" },
+  { vprasanje: "Katera grška boginja je bila povezana z magijo?", moznosti: ["Hekata", "Afrodita", "Demetra", "Atena"], odgovor: "Hekata" },
+  { vprasanje: "Kdo je bil grški bog vinogradov in veselja?", moznosti: ["Dioniz", "Apollo", "Hermes", "Ares"], odgovor: "Dioniz" },
+  { vprasanje: "Kako so imenovali nordijskega boga sonca?", moznosti: ["Sol", "Odin", "Thor", "Baldur"], odgovor: "Sol" },
+  { vprasanje: "Katera slovanska boginja je bila povezana z zimskim sončevim obratom?", moznosti: ["Morana", "Lada", "Mokoš", "Živa"], odgovor: "Morana" },
+  { vprasanje: "Kako so imenovali keltske simbole, ki so predstavljali moč?", moznosti: ["Runestone", "Triquetra", "Keltknot", "Spiralna trojnost"], odgovor: "Runestone" },
+  { vprasanje: "Katera grška boginja je bila povezana z lovom in divjadjo?", moznosti: ["Artemida", "Demetra", "Afrodita", "Hera"], odgovor: "Artemida" },
+  { vprasanje: "Kako se imenuje keltski bog morja?", moznosti: ["Manannan mac Lir", "Dagda", "Lugh", "Nuada"], odgovor: "Manannan mac Lir" },
+  { vprasanje: "Katera grška boginja je bila znana kot boginja družinskega ognjišča?", moznosti: ["Hestia", "Hera", "Demetra", "Artemida"], odgovor: "Hestia" },
+  { vprasanje: "Kako se imenujejo nordijski velikani?", moznosti: ["Jotuni", "Vanirji", "Alfi", "Einherjar"], odgovor: "Jotuni" },
+  { vprasanje: "Kako se imenujejo grške boginje usode?", moznosti: ["Moire", "Erinije", "Nimfe", "Harpije"], odgovor: "Moire" },
+  { vprasanje: "Kateri grški bog je bil znan kot bog glasbe in poezije?", moznosti: ["Apollo", "Hermes", "Zeus", "Dioniz"], odgovor: "Apollo" }
+  
+];
+ 
+const maxVprasanj = 25;
+  const izbranaVprasanja = premesajVprasanja([...podatkiKviz]).slice(0, maxVprasanj).map(vprasanje => {
+    return {
+      ...vprasanje,
+      moznosti: premesajMoznosti([...vprasanje.moznosti])
+    };
+  });
+
+  let indeksVprasanja = 0;
+  let rezultat = 0;
+  let uporabnikoviOdgovori = [];
+
+  function posodobiNapredek() {
+    document.getElementById("napredek").innerText = `Vprašanje ${indeksVprasanja + 1} od ${izbranaVprasanja.length}`;
+  }
+
+  function naloziVprasanje() {
+    const trenutniVprasanje = izbranaVprasanja[indeksVprasanja];
+    document.getElementById("vprasanje").innerText = trenutniVprasanje.vprasanje;
+    const moznostiPosoda = document.getElementById("moznosti");
+    moznostiPosoda.innerHTML = "";
+
+    trenutniVprasanje.moznosti.forEach((moznost, index) => {
+      const gumb = document.createElement("button");
+      gumb.innerText = `${index + 1}. ${moznost}`;
+      gumb.onclick = () => preveriOdgovor(moznost);
+      moznostiPosoda.appendChild(gumb);
+    });
+    posodobiNapredek();
+  }
+
+  function preveriOdgovor(odgovor) {
+    uporabnikoviOdgovori.push(odgovor);
+    if (odgovor === izbranaVprasanja[indeksVprasanja].odgovor) {
+      rezultat++;
+    }
+    indeksVprasanja++;
+    if (indeksVprasanja < izbranaVprasanja.length) {
+      naloziVprasanje();
+    } else {
+      prikaziRezultat();
+    }
+  }
+
+  function prikaziRezultat() {
+    let rezultatHtml = `<h2>Kviz končan!</h2>`;
+    rezultatHtml += `<p>Pravilnih odgovorov: ${rezultat} od ${izbranaVprasanja.length}</p>`;
+    rezultatHtml += `<h3>Pravilni odgovori:</h3><ol id="rezultat-lista" style="text-align: left; padding-left: 20px; list-style-type: decimal;">`;
+
+    izbranaVprasanja.forEach((item, index) => {
+      const razredOdgovora = (uporabnikoviOdgovori[index] === item.odgovor) ? 'pravilno' : 'napacno';
+      rezultatHtml += `<li class="${razredOdgovora}" style="margin-bottom: 10px;">${item.vprasanje} - <strong>${item.odgovor}</strong><hr style="margin-top: 10px; border: 1px solid #ccc;"></li>`;
+    });
+
+    rezultatHtml += `</ol>`;
+    document.getElementById("vprasanje-posoda").innerHTML = rezultatHtml;
+  }
+
+  function ponovniZacetek() {
+    rezultat = 0;
+    indeksVprasanja = 0;
+    uporabnikoviOdgovori = [];
+    document.getElementById("vprasanje-posoda").innerHTML = `
+      <div id="vprasanje"></div>
+      <div class="moznosti" id="moznosti"></div>
+    `;
+    naloziVprasanje();
+  }
+
+  naloziVprasanje();
+</script>
+</body>
+</html>
