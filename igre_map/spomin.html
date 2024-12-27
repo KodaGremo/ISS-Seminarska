@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Memory Igra</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(135deg, #cce5ff, #f3faff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    nav {
+      width: 100%;
+      background-color: #003366;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+    nav ul li a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 20px;
+      transition: background 0.3s;
+    }
+    nav ul li a:hover {
+      background: #002244;
+    }
+    .game-container {
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 30px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #003366;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    .controls select {
+      font-size: 1rem;
+      padding: 5px;
+      margin-right: 10px;
+    }
+    .controls button {
+      font-size: 1rem;
+      padding: 8px 16px;
+      margin-right: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .controls button:hover {
+      background-color: #0066cc;
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .timer {
+      font-size: 1.2rem;
+      color: #ff0000;
+      margin-bottom: 10px;
+    }
+    .grid {
+      display: grid;
+      gap: 10px;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .card {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      perspective: 600px;
+      cursor: pointer;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s;
+      transform-style: preserve-3d;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff center/cover no-repeat;
+    }
+    .card-front {
+      transform: rotateY(180deg);
+    }
+    .card-back {
+      background-image: url("slike-spomin/card-back.png");
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      background-color: #666;
+    }
+    .hidden {
+      display: none;
+    }
+    .modal {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.6);
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      position: relative;
+    }
+    .modal-content img {
+      width: 280px;
+      height: 280px;
+      object-fit: contain;
+      margin: 0 auto;
+      display: block;
+    }
+    .modal.hide {
+      display: none;
+    }
+    .modal p {
+      margin: 15px 0;
+    }
+    #closeModal {
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: #0066cc;
+      color: #fff;
+      font-size: 1rem;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    #closeModal:hover {
+      background-color: #003366;
+      transform: scale(1.05);
+    }
+    footer {
+      width: 100%;
+      background-color: #003366;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="/ISS-Seminarska/index.html">Domov</a></li>
+      <li><a href="/ISS-Seminarska/games.html">Igre</a></li>
+    </ul>
+  </nav>
+
+  <div class="game-container">
+    <h1>Spomin</h1>
+    <div class="controls">
+      <label for="difficulty">Težavnost: </label>
+      <select id="difficulty">
+        <option value="4">Lahka (4x4)</option>
+        <option value="6">Srednja (6x6)</option>
+        <option value="8">Težka (8x8)</option>
+      </select>
+      <button id="startBtn">Začni igro</button>
+      <button id="reloadBtn">Ponovno naloži</button>
+    </div>
+    <div class="timer" id="timer">Čas: --:--</div>
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <div id="resultModal" class="modal hide">
+    <div class="modal-content">
+      <img id="resultImage" src="" alt="Rezultat">
+      <h2 id="resultText"></h2>
+      <p>Porabili ste <span id="finalTime"></span> sekund.</p>
+      <button id="closeModal">Zapri</button>
+    </div>
+  </div>
+
+  <footer>
+  </footer>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const startBtn = document.getElementById('startBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const difficultySelect = document.getElementById('difficulty');
+    const timerEl = document.getElementById('timer');
+    const resultModal = document.getElementById('resultModal');
+    const resultImage = document.getElementById('resultImage');
+    const resultText = document.getElementById('resultText');
+    const finalTime = document.getElementById('finalTime');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    let cardArray = [];
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let matchedPairs = 0;
+    let totalPairs = 0;
+    let timeLimit = 60;
+    let currentTime = 0;
+    let timerInterval = null;
+
+    function startGame() {
+      clearInterval(timerInterval);
+      resultModal.classList.add('hide');
+      grid.innerHTML = '';
+      matchedPairs = 0;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      const difficulty = parseInt(difficultySelect.value);
+      if (difficulty === 4) {
+        grid.style.gridTemplateColumns = `repeat(4, 1fr)`;
+        grid.style.gridTemplateRows = `repeat(4, 1fr)`;
+        totalPairs = 8;
+        timeLimit = 60;
+      } else if (difficulty === 6) {
+        grid.style.gridTemplateColumns = `repeat(6, 1fr)`;
+        grid.style.gridTemplateRows = `repeat(6, 1fr)`;
+        totalPairs = 18;
+        timeLimit = 120;
+      } else {
+        grid.style.gridTemplateColumns = `repeat(8, 1fr)`;
+        grid.style.gridTemplateRows = `repeat(8, 1fr)`;
+        totalPairs = 32;
+        timeLimit = 180;
+      }
+      const allImages = Array.from({ length: 35 }, (_, i) => i + 1);
+      shuffleArray(allImages);
+      let selectedImages = allImages.slice(0, totalPairs);
+      let doubleImages = [];
+      selectedImages.forEach(imgNum => {
+        doubleImages.push(imgNum);
+        doubleImages.push(imgNum);
+      });
+      shuffleArray(doubleImages);
+      cardArray = doubleImages;
+      cardArray.forEach(imgNum => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const cardInner = document.createElement('div');
+        cardInner.classList.add('card-inner');
+        const cardFront = document.createElement('div');
+        cardFront.classList.add('card-front');
+        cardFront.style.backgroundImage = `url("slike-spomin/slika-${imgNum}.png")`;
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-back');
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+        card.appendChild(cardInner);
+        card.dataset.image = imgNum;
+        card.addEventListener('click', flipCard);
+        grid.appendChild(card);
+      });
+      startTimer();
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function flipCard() {
+      if (lockBoard) return;
+      if (this === firstCard) return;
+      this.classList.add('flipped');
+      if (!firstCard) {
+        firstCard = this;
+        return;
+      }
+      secondCard = this;
+      lockBoard = true;
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      const isMatch = firstCard.dataset.image === secondCard.dataset.image;
+      if (isMatch) {
+        disableCards();
+      } else {
+        unflipCards();
+      }
+    }
+
+    function disableCards() {
+      firstCard.removeEventListener('click', flipCard);
+      secondCard.removeEventListener('click', flipCard);
+      matchedPairs++;
+      resetBoard();
+      if (matchedPairs === totalPairs) {
+        endGame(true);
+      }
+    }
+
+    function unflipCards() {
+      setTimeout(() => {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        resetBoard();
+      }, 1000);
+    }
+
+    function resetBoard() {
+      [firstCard, secondCard] = [null, null];
+      lockBoard = false;
+    }
+
+    function startTimer() {
+      currentTime = timeLimit;
+      displayTime(currentTime);
+      timerInterval = setInterval(() => {
+        currentTime--;
+        displayTime(currentTime);
+        if (currentTime <= 0) {
+          clearInterval(timerInterval);
+          endGame(false);
+        }
+      }, 1000);
+    }
+
+    function displayTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = seconds % 60;
+      timerEl.textContent = `Čas: ${min}:${sec < 10 ? '0' + sec : sec}`;
+    }
+    const preloadImages = ['slike-spomin/zmaga.png', 'slike-spomin/zguba.png'];
+preloadImages.forEach((src) => {
+  const img = new Image();
+  img.src = src;
+});
+    function endGame(win) {
+      lockBoard = true;
+      clearInterval(timerInterval);
+      let usedSeconds = timeLimit - currentTime;
+      if (win) {
+        resultImage.src = "slike-spomin/zmaga.png";
+        resultText.textContent = "Čestitamo! Našli ste vse pare!";
+      } else {
+        resultImage.src = "slike-spomin/zguba.png";
+        resultText.textContent = "Čas je potekel. Poskusite znova! 🥺🥹";
+        usedSeconds = timeLimit;
+      }
+      finalTime.textContent = usedSeconds.toString();
+      resultModal.classList.remove('hide');
+    }
+
+    startBtn.addEventListener('click', startGame);
+    reloadBtn.addEventListener('click', () => {
+      window.location.reload();
+    });
+    closeModalBtn.addEventListener('click', () => {
+      resultModal.classList.add('hide');
+    });
+  </script>
+</body>
+</html>

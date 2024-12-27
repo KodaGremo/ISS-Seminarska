@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackJack Igra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e7d32;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .posoda {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px;
+        }
+        .škatla {
+            border: 2px solid #fff;
+            padding: 20px;
+            width: 300px;
+            min-height: 300px;
+            background-color: #3e8e41;
+            border-radius: 8px;
+        }
+        .karta {
+            display: inline-block;
+            width: 100px;
+            height: 150px;
+            margin: 10px;
+            background-color: #fff;
+            color: #000;
+            border: 2px solid #000;
+            text-align: center;
+            line-height: 150px;
+            font-size: 36px;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        #gumb-karte {
+            background-color: yellow;
+            color: black;
+        }
+        #gumb-stoj {
+            background-color: black;
+            color: red;
+        }
+        .skrit {
+            display: none;
+        }
+        #uvod {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 10;
+        }
+        #rezultat {        
+        max-width: 650px;
+        font-size: 24px;
+        margin-top: 20px;
+        font-weight: bold;
+        padding: 15px; 
+        border: 2px solid #000;
+        border-radius: 10px; 
+        background-color: #f0f8ff;
+        color: #000; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center; 
+        margin-left: auto;
+        margin-right: auto;
+        }
+
+        #konec-tocke, #zmaga-tocke {
+            font-size: 20px;
+            margin-top: 10px;
+            
+        }
+
+        nav ul li {
+    flex: 1;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s ease;
+}
+        
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul style="display: flex; list-style: none; margin: 0; padding: 0; background-color: #1b5e20;">
+            <li style="flex: 1; text-align: center; padding: 15px;">
+                <a href="/ISS-Seminarska/cindex.html" style="text-decoration: none; color: white; font-size: 1.2em; font-weight: bold; display: block; transition: background-color 0.3s, transform 0.3s ease;">
+                    Domov
+                </a>
+            </li>
+            <li style="flex: 1; text-align: center; padding: 15px;">
+                <a href="/ISS-Seminarska/games.html" style="text-decoration: none; color: white; font-size: 1.2em; font-weight: bold; display: block; transition: background-color 0.3s, transform 0.3s ease;">
+                    Igre
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div id="uvod">
+        <h2>Dobrodošli v Blackjack Vegasu!</h2>
+        <p>
+            Premagajte Mojstra Jureta, legendarnega mojstra Blackjacka, ki ga kličejo "neusmiljeni kralj kart," in dosezite 5000 € ali več,</br>
+            preden vas njegova strategija pošlje nazaj na letališče praznih žepov! Če izgubite ves denar, je igre konec,</br>
+            in Mojster Jure si bo privoščil svojo zmagovalno cigaro.</p>
+            <p style="color: red; font-family: 'Courier New', Courier, monospace; font-size: 1.2em; font-weight: bold; text-align: center;">
+                Ali ste vedeli? 99 % igralcev obupa tik preden zadenejo veliki dobitek. Ne bodite eden izmed njih – zaupajte svojim kartam in postanite legenda Vegasa!
+            </p>
+        <button id="zacni-igro">Začni igro</button>
+    </div>
+
+    <h1>BlackJack Igra</h1>
+    <p id="rezultat"></p>
+    <label for="stave">Znesek stave (min 10€, max 777€): </label>
+    <input type="number" id="stave" min="10" max="777" value="10">
+
+    <div class="posoda">
+        <div class="škatla" id="igralec-posoda">
+            <h2>Igralec</h2>
+            <div id="igralec-karte"></div>
+            <p id="igralec-rezultat">Rezultat: 0</p>
+            <p id="igralec-denar">Denar: 100€</p>
+        </div>
+        <div class="škatla" id="racunalnik-posoda">
+            <h2>Mojster Jure </h2>
+            <div id="racunalnik-karte"></div>
+            <p id="racunalnik-rezultat">Rezultat: 0</p>
+        </div>
+    </div>
+    <button id="gumb-karte" disabled>Nova Karta</button>
+    <button id="gumb-stoj" disabled>Stoj</button>
+   
+
+    <div id="konec-igre" class="skrit">
+        <h2>Konec Igre!</h2>
+        <p id="konec-tocke">Vaš rezultat: 0, Mojster Jure  rezultat: 0</p>
+        <button onclick="ponovnoZacni()">Igraj Znova</button>
+    </div>
+    <div id="zmaga" class="skrit">
+        <h2>Čestitamo! Zmagali ste!</h2>
+        <p id="zmaga-tocke">Vaš rezultat: 0, Mojster Jure  rezultat: 0</p>
+        <button onclick="ponovnoZacni()">Igraj Znova</button>
+    </div>
+
+    <script>
+        // Elementi DOM
+        const igralecKarte = document.getElementById("igralec-karte");
+        const igralecRezultat = document.getElementById("igralec-rezultat");
+        const igralecDenar = document.getElementById("igralec-denar");
+        const racunalnikKarte = document.getElementById("racunalnik-karte");
+        const racunalnikRezultat = document.getElementById("racunalnik-rezultat");
+        const stave = document.getElementById("stave");
+        const gumbKarte = document.getElementById("gumb-karte");
+        const gumbStoj = document.getElementById("gumb-stoj");
+        const rezultat = document.getElementById("rezultat");
+        const konecIgre = document.getElementById("konec-igre");
+        const konecTocke = document.getElementById("konec-tocke");
+        const zmaga = document.getElementById("zmaga");
+        const zmagaTocke = document.getElementById("zmaga-tocke");
+        const uvod = document.getElementById("uvod");
+        const zacniIgro = document.getElementById("zacni-igro");
+
+        let igralecKup = [];
+        let racunalnikKup = [];
+        let igralecDenarZnesek = 100;
+        let igraVTejku = false;
+
+        const nakljucnaKarta = () => Math.floor(Math.random() * 11) + 1;
+        const izracunajRezultat = (kup) => kup.reduce((a, b) => a + b, 0);
+
+        const osveziPrikaz = () => {
+            igralecKarte.innerHTML = igralecKup.map(karta => `<div class="karta">${karta}</div>`).join("");
+            racunalnikKarte.innerHTML = racunalnikKup.map(karta => `<div class="karta">${karta}</div>`).join("");
+            igralecRezultat.textContent = `Rezultat: ${izracunajRezultat(igralecKup)}`;
+            igralecDenar.textContent = `Denar: ${igralecDenarZnesek}€`;
+            racunalnikRezultat.textContent = `Rezultat: ${izracunajRezultat(racunalnikKup)}`;
+        };
+
+        const zakljuciIgro = (sporocilo, zmagaIgralec) => {
+            if (!igraVTejku) return;
+            igraVTejku = false;
+            let staveZnesek = Math.min(parseInt(stave.value), igralecDenarZnesek);
+
+            igralecDenarZnesek += zmagaIgralec ? staveZnesek : -staveZnesek;
+
+            osveziPrikaz();
+            rezultat.textContent = sporocilo;
+
+            gumbKarte.disabled = true;
+            gumbStoj.disabled = true;
+
+            setTimeout(() => {
+                const igralecRezultat = izracunajRezultat(igralecKup);
+                const racunalnikRezultat = izracunajRezultat(racunalnikKup);
+                if (igralecDenarZnesek >= 5000) {
+                    zmagaTocke.textContent = `Vaš rezultat: ${igralecRezultat}, Mojster Jure  rezultat: ${racunalnikRezultat}`;
+                    zmaga.classList.remove("skrit");
+                } else if (igralecDenarZnesek <= 0) {
+                    konecTocke.textContent = `Vaš rezultat: ${igralecRezultat}, Mojster Jure  rezultat: ${racunalnikRezultat}`;
+                    konecIgre.classList.remove("skrit");
+                } else ponovnoZacni();
+            }, 2000);
+        };
+
+        const racunalnikIgra = () => {
+            while (izracunajRezultat(racunalnikKup) < 17) racunalnikKup.push(nakljucnaKarta());
+
+            const igralecRezultat = izracunajRezultat(igralecKup);
+            const racunalnikRezultat = izracunajRezultat(racunalnikKup);
+
+            if (racunalnikRezultat > 21 || igralecRezultat > racunalnikRezultat) {
+                zakljuciIgro("Zmagali ste!", true);
+            } else if (racunalnikRezultat > igralecRezultat) {
+                zakljuciIgro("Izgubili ste.", false);
+            } else {
+                zakljuciIgro("Izenačeno!", false);
+            }
+        };
+
+        const ponovnoZacni = () => {
+            igraVTejku = true;
+            igralecKup = [nakljucnaKarta(), nakljucnaKarta()];
+            racunalnikKup = [nakljucnaKarta()];
+            rezultat.textContent = "";
+            konecIgre.classList.add("skrit");
+            zmaga.classList.add("skrit");
+            gumbKarte.disabled = false;
+            gumbStoj.disabled = false;
+            osveziPrikaz();
+        };
+
+        zacniIgro.addEventListener("click", () => {
+            uvod.style.display = "none";
+            ponovnoZacni();
+        });
+
+        gumbKarte.addEventListener("click", () => {
+            if (!igraVTejku) return;
+            igralecKup.push(nakljucnaKarta());
+            if (izracunajRezultat(igralecKup) > 21) zakljuciIgro("Presegli ste 21. Izgubili ste.", false);
+            osveziPrikaz();
+        });
+
+        gumbStoj.addEventListener("click", () => {
+            if (!igraVTejku) return;
+            racunalnikIgra();
+        });
+    </script>
+</body>
+</html>

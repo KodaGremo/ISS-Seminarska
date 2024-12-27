@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kačja Igra</title>
+  <style>
+   
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+   
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      background-color: #000000;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+   
+    nav {
+      width: 100%;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      background-color: #1b5e20;
+    }
+
+    nav li {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-size: 1.2em;
+      font-weight: bold;
+      display: block;
+      transition: background-color 0.3s, transform 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: #43a047;
+      transform: scale(1.1);
+    }
+
+   
+    #platnoIgre {
+      background-color: #34495e;
+      border: 2px solid #ecf0f1;
+      margin-top: 20px;
+    }
+
+   
+    #rezultat {
+      font-size: 24px;
+      margin: 20px;
+    }
+
+   
+    #oknoKonec {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+
+    #vsebinaKonec {
+      background-color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      color: #2c3e50;
+      width: 400px;
+    }
+
+    .gumbModal {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: #2c3e50;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    #gumbPonovniZagon {
+      background-color: #2ecc71;
+    }
+
+    .gumbModal:hover {
+      opacity: 0.9;
+    }
+
+   
+    #oknoNavodila {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2;
+    }
+
+    #vsebinaNavodila {
+      color: white;
+      text-align: center;
+      padding: 20px;
+      border: 2px solid white;
+      border-radius: 10px;
+      background-color: #1c1c1c;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="/ISS-Seminarska/index.html">Domov</a></li>
+      <li><a href="/ISS-Seminarska/games.html">Igre</a></li>
+    </ul>
+  </nav>
+
+
+  <div id="oknoNavodila">
+    <div id="vsebinaNavodila">
+      <h1>Dobrodošli v Kačji igri!</h1>
+      <p>Navodila za igranje:</p>
+      <ul>
+        <li>Premikajte kačo s puščicami: gor, dol, levo, desno.</li>
+        <li>Rdeče jabolko: +1 točka.</li>
+        <li>Rumeno jabolko: +5 točk in kača zraste za 5 delov.</li>
+        <li>Črno jabolko: Takoj zmaga!</li>
+        <li>Če zadaneš steno ali se zaletiš v sebe, igra se konča.</li>
+      </ul>
+      <button id="gumbNavodila">Začni igro!</button>
+    </div>
+  </div>
+
+  <h1 id="rezultat">Rezultat: 0</h1>
+  <canvas id="platnoIgre" width="600" height="600"></canvas>
+
+
+  <div id="oknoKonec">
+    <div id="vsebinaKonec">
+      <h2>Konec igre!</h2>
+      <p>Vaš rezultat: <span id="koncniRezultat"></span></p>
+      <button id="gumbPonovniZagon" class="gumbModal">Ponovni zagon</button>
+    </div>
+  </div>
+
+  <script>
+    const platno = document.getElementById("platnoIgre");
+    const ctx = platno.getContext("2d");
+    const prikazRezultata = document.getElementById("rezultat");
+    const oknoKonec = document.getElementById("oknoKonec");
+    const koncniRezultat = document.getElementById("koncniRezultat");
+    const gumbPonovniZagon = document.getElementById("gumbPonovniZagon");
+    const oknoNavodila = document.getElementById("oknoNavodila");
+    const gumbNavodila = document.getElementById("gumbNavodila");
+
+   
+    const velikostPolja = 20;
+
+   
+    const hitrosti = { nizka: 200, srednja: 150, visoka: 100 };
+    let trenutnoHitrost = hitrosti.srednja;
+
+   
+    let kacica, smer, rezultat, igra, hrana;
+
+   
+    const jabolka = [
+      { tip: "RDEČE",  barva: "#e74c3c", vrednost: 1,     sansa: 0.89 },
+      { tip: "RUMENO", barva: "#f1c40f", vrednost: 5,     sansa: 0.1  },
+      { tip: "ČRNO",   barva: "#000000", vrednost: "ZMAGA", sansa: 0.01 }
+    ];
+
+   
+    gumbNavodila.addEventListener("click", () => {
+      oknoNavodila.style.display = "none";
+      zacniIgro();
+    });
+
+   
+    gumbPonovniZagon.addEventListener("click", () => {
+      oknoKonec.style.display = "none";
+      zacniIgro();
+    });
+
+   
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft"  && smer !== "DESNO") smer = "LEVO";
+      if (event.key === "ArrowUp"    && smer !== "DOL")   smer = "GOR";
+      if (event.key === "ArrowRight" && smer !== "LEVO")  smer = "DESNO";
+      if (event.key === "ArrowDown"  && smer !== "GOR")   smer = "DOL";
+    });
+
+   
+    function zacniIgro() {
+      rezultat = 0;
+      kacica = [{ x: 9 * velikostPolja, y: 9 * velikostPolja }];       smer = "DESNO";
+      hrana = generirajHrano();
+      prikazRezultata.innerText = "Rezultat: 0";
+
+      if (igra) clearInterval(igra);
+      igra = setInterval(narisiIgro, trenutnoHitrost);
+    }
+
+   
+    function generirajHrano() {
+      const tip = izberiJabolko();
+      return {
+        ...tip,
+        x: Math.floor(Math.random() * (platno.width / velikostPolja)) * velikostPolja,
+        y: Math.floor(Math.random() * (platno.height / velikostPolja)) * velikostPolja
+      };
+    }
+
+    function izberiJabolko() {
+      const nakljucno = Math.random();
+      let kumulativno = 0;
+      for (const j of jabolka) {
+        kumulativno += j.sansa;
+        if (nakljucno < kumulativno) return j;
+      }
+    }
+
+   
+    function narisiIgro() {
+            ctx.fillStyle = "#34495e";
+      ctx.fillRect(0, 0, platno.width, platno.height);
+
+            kacica.forEach((del, i) => {
+        ctx.fillStyle = i === 0 ? "#2ecc71" : "#27ae60";
+        ctx.fillRect(del.x, del.y, velikostPolja, velikostPolja);
+      });
+
+            ctx.fillStyle = hrana.barva;
+      ctx.fillRect(hrana.x, hrana.y, velikostPolja, velikostPolja);
+
+            const novaGlava = { ...kacica[0] };
+      if (smer === "LEVO")  novaGlava.x -= velikostPolja;
+      if (smer === "GOR")   novaGlava.y -= velikostPolja;
+      if (smer === "DESNO") novaGlava.x += velikostPolja;
+      if (smer === "DOL")   novaGlava.y += velikostPolja;
+
+            if (
+        novaGlava.x < 0 || novaGlava.y < 0 ||
+        novaGlava.x >= platno.width || novaGlava.y >= platno.height ||
+        trk(novaGlava, kacica)
+      ) {
+        konecIgre();
+        return;
+      }
+
+            if (novaGlava.x === hrana.x && novaGlava.y === hrana.y) {
+        if (hrana.tip === "ČRNO") {
+          zmaga();
+          return;
+        }
+        rezultat += hrana.vrednost;
+
+        if (hrana.tip === "RUMENO") {
+                    for (let i = 0; i < 5; i++) {
+            kacica.push({ ...kacica[kacica.length - 1] });
+          }
+        }
+                hrana = generirajHrano();
+      } else {
+                kacica.pop();
+      }
+
+            kacica.unshift(novaGlava);
+
+            prikazRezultata.innerText = `Rezultat: ${rezultat}`;
+    }
+
+   
+    function trk(glava, telo) {
+      return telo.some(del => del.x === glava.x && del.y === glava.y);
+    }
+
+   
+    function konecIgre() {
+      clearInterval(igra);
+      koncniRezultat.innerText = rezultat;
+      oknoKonec.style.display = "flex";
+    }
+
+   
+    function zmaga() {
+      rezultat += 100;
+      konecIgre();
+    }
+  </script>
+
+</body>
+</html>
