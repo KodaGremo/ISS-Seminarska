@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popravljen video in besedilo</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            color: white;
+        }
+
+        .ozadni-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .vsebina {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            max-width: 80%;
+            margin: auto;
+        }
+
+        .gumb {
+            display: inline-block;
+            width: 200px;
+            height: 50px;
+            margin: 20px auto;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #6c63ff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .gumb:hover {
+            background-color: #5a54e6;
+            transform: scale(1.1);
+        }
+
+        .prikaz-stanj {
+            font-size: 30px;
+            margin-top: 20px;
+        }
+
+        .prikaz-stanj span {
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="video-overlay"></div>
+    <div class="vsebina">
+        <h1 style="color: brown;">Po ustvarjanju tega HTML-ja imam zdaj...</h1>
+        <button class="gumb" onclick="zamenjajVideo()">Moje težave so:</button>
+        <div id="prikazStanj" class="prikaz-stanj"></div>
+    </div>
+    <video id="ozadniVideo" class="ozadni-video" autoplay loop muted>
+        <source src="slike-video-itd/10130349-hd_1920_1080_30fps.mp4" type="video/mp4">
+    </video>
+    <script>
+       const vseTezave = [
+    "Akne", "AIDS", "Alergije", "Sindrom Alice v čudežni deželi (AIWS)", "Alzheimerjeva bolezen",
+    "Abscesi zadnjika", "Rak zadnjika", "Srbenje zadnjika", "Razpoka zadnjika", "Anksiozne motnje", "Artritis",
+    "Astma", "Astigmatizem", "Avtizem", "Avtoimunske bolezni", "Sindrom avto-pivovarne",
+    "Pomanjkanje pozornosti (ADHD)", "Motnja avtističnega spektra (ASD)", "Azbestoza",
+    "Slab zadah", "Bakterijska vaginoza", "Benigna hiperplazija prostate (BPH)", "Bipolarna motnja",
+    "Telesni vonji", "Rak na kosteh", "Motnja postavitve kosti", "Rak na črevesju", "Napihnjenost", "Rak možganov",
+    "Demenca", "Demenca", "Demenca", "Poškodba možganov", "Tumorji možganov", "Bronhitis", "Rak dojke", 
+    "Kandidoza", "Siva mrena", "Sindrom karpalnega kanala", "Demenca", "Demenca", 
+    "Spremembe v gibanju črevesja", "Celiakija", "Rak materničnega vratu", "Demenca",
+    "Okužba prsnega koša", "Bolečina v prsih", "Norice", "Klamidija", "Sindrom kronične utrujenosti (CFS)",
+    "Kronična bolezen", "Herpes na ustnicah", "Rak na debelem črevesju", "Koma", "Prirojena neobčutljivost za bolečino",
+    "Vnetje očesne veznice", "Zaprtje", "Prehlad", "KOPB", "Kašelj", "Huda depresija",
+    "Crohnova bolezen", "Koronavirus", "Cistična fibroza", "Dehidracija", "Demenca", 
+    "Demenca", "Diabetes", "Driska", "Depresija", "Downov sindrom", "Suha usta", 
+    "Bolečina v ušesih", "Motnje hranjenja", "Ebola", "Ekcem", "Endometrioza", "Epilepsija",
+    "Demenca", "Erektilna disfunkcija", "Rak na očeh", "Motnje oči", "Utrujenost", "Fibroidi",
+    "Fibromialgija", "Sindrom tujega naglasa", "Napihovanje", "Gripa", "Zastrupitev s hrano",
+    "Glivična okužba nohtov", "Rak žolčnika", "Žolčni kamni", "Genitalni herpes", "Gonoreja",
+    "Demenca", "Bolezen dlesni", "Gravesova bolezen", "Halucinacije", "Hashimotov tiroiditis", "Seneni nahod",
+    "Izguba sluha", 
+
+   
+    "Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis D", "Hepatitis E",
+
+   
+    "Majhno-celični rak pljuč", "Nedrobnocelični rak pljuč",
+
+   
+    "Diabetes tipa 1", "Diabetes tipa 2", "Gestacijski diabetes",
+
+  
+    "Kronično srčno popuščanje", "Akutni srčni infarkt", "Angina pektoris",
+
+  
+    "HPV nizkega tveganja", "HPV visokega tveganja",
+
+  
+    "Bazalnocelični karcinom", "Skvamoznocelični karcinom", "Melanom",
+
+   
+    "HIV - začetna faza", "HIV - latentna faza", "HIV - AIDS faza",
+
+
+    "Parkinsonova bolezen - zgodnja faza", "Parkinsonova bolezen - napredna faza",
+
+  
+    "Glivična okužba nohtov na nogah", "Glivična okužba nohtov na rokah", "Glivična okužba lasišča",
+
+
+    "Lokaliziran rak prostate", "Napredni rak prostate", "Metastatski rak prostate",
+
+    "Lokaliziran rak trebušne slinavke", "Metastatski rak trebušne slinavke",
+
+
+    "Revmatoidni artritis", "Lupus", "Multipla skleroza", "Crohnova bolezen",
+
+
+    "Akutna okužba ledvic", "Kronična okužba ledvic",
+
+    "Demenca", "Demenca", "Demenca"
+];
+
+
+        let zamenjanVideo = false;
+
+        function zamenjajVideo() {
+            const videoElement = document.getElementById("ozadniVideo");
+
+            if (!zamenjanVideo) {
+                videoElement.querySelector("source").src = "slike-video-itd/Computer breaking Meme.mp4";
+                videoElement.load();
+                zamenjanVideo = true;
+            }
+
+            const minStanj = 3;
+            const maxStanj = 9;
+            const steviloStanj = Math.floor(Math.random() * (maxStanj - minStanj + 1)) + minStanj;
+            const nakljucnaStanja = vseTezave.sort(() => 0.5 - Math.random()).slice(0, steviloStanj);
+
+            const prikazStanj = document.getElementById("prikazStanj");
+            prikazStanj.innerHTML = "";
+            nakljucnaStanja.forEach(stanje => {
+                const stanjeElement = document.createElement("span");
+                const nakljucnaBarva = nakljucnaBarvaTeksta();
+                stanjeElement.textContent = stanje;
+                stanjeElement.style.color = nakljucnaBarva;
+                prikazStanj.appendChild(stanjeElement);
+            });
+        }
+
+        function nakljucnaBarvaTeksta() {
+            const crke = '0123456789ABCDEF';
+            let barva = '#';
+            for (let i = 0; i < 6; i++) {
+                barva += crke[Math.floor(Math.random() * 16)];
+            }
+            return barva;
+        }
+    </script>
+</body>
+</html>
